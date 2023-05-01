@@ -1,0 +1,20 @@
+{
+  "name": "azurai_api",
+  "version": "0.1.0",
+  "description": "azure openai service demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=dev node index.js -s service/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "azurai",
+    "api"
+  ],
+  "author": "Darren Liew",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^3.2.1",
+    "picos": "^0.10.3"
+  }
+}

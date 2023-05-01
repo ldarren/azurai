@@ -1,0 +1,4 @@
+###
+# @prompt openai_api_key
+GET https://api.openai.com/v1/models
+Authorization: Bearer {{openai_api_key}}

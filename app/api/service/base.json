@@ -1,0 +1,30 @@
+{
+	"mod": {
+		"web": {
+			"mod": "@web",
+			"host": "0.0.0.0",
+			"port": "$PORT"
+		},
+		"sse": {
+			"mod": "@sse"
+		},
+		"auth": {
+			"mod": "@basicAuth"
+		},
+		"sys": {
+			"mod": "@sys"
+		},
+		"timer": {
+			"mod": "@timer"
+		},
+		"util":{
+			"mod": "util"
+		},
+        "llm": {
+            "mod": "llm",
+            "vendor": "openai",
+            "model": "gpt-3.5-turbo",
+            "apiKey": "$mod_llm_api-key"
+        }
+    }
+}
