@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { Stack, IconButton } from "@fluentui/react";
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import DOMPurify from "dompurify";
 
 import styles from "./Answer.module.css";
@@ -58,7 +60,7 @@ export const Answer = ({
             </Stack.Item>
 
             <Stack.Item grow>
-                <div className={styles.answerText} dangerouslySetInnerHTML={{ __html: sanitizedAnswerHtml }}></div>
+                <ReactMarkdown className={styles.answerText} children={sanitizedAnswerHtml} remarkPlugins={[remarkGfm]} />
             </Stack.Item>
 
             {!!parsedAnswer.citations.length && (
