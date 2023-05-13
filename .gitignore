@@ -2,6 +2,7 @@
 *_env
 env.json
 .DS_Store
+db/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
