@@ -35,4 +35,9 @@ module.exports = {
 		})
 		return this.next()
 	},
+
+	push(array, item){
+		array.push(item)
+		this.next()
+	}
 }

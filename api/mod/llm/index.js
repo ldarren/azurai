@@ -33,7 +33,7 @@ function LLM({model, apiKey}){
 }
 
 LLM.prototype = {
-	async simpleChat(history, overrides = {}){
+	async chat(history, overrides = {}){
 		console.log('#### chat:req ######', JSON.stringify(history))
 
 		// STEP 1: Generate an optimized keyword search query based on the chat history and the last question
@@ -49,7 +49,7 @@ LLM.prototype = {
 
 		return res
 	},
-	async simpleAsk(prompt, overrides = {}){
+	async ask(prompt, overrides = {}){
 		console.log('#### ask:req ######', JSON.stringify(prompt))
 
 		// STEP 1: Generate an optimized keyword search query based on the chat history and the last question
@@ -65,11 +65,11 @@ LLM.prototype = {
 
 		return res
 	},
-	mergeHistory(question, history){
+	summarize(question, history){
 		const prompt = mergeTemplate
 			.replace("${question}", question)
 			.replace("${history}", history)
-		return this.simpleAsk(prompt, {
+		return this.ask(prompt, {
 			model: "text-davinci-003",
 			prompt,
 			max_tokens: 256,
@@ -78,7 +78,7 @@ LLM.prototype = {
 			stop: ["Observation:"],
 		})
 	},
-	async answerQuestion(question, tools){
+	async chain(question, tools){
 		// construct the prompt, with our question and the tools that the chain can use
 		const toolNames = Object.keys(tools)
 		let prompt = promptTemplate
@@ -92,7 +92,7 @@ LLM.prototype = {
 
 		// allow the LLM to iterate until it finds a final answer
 		while (true) {
-			const res = await this.simpleAsk(prompt, {
+			const res = await this.ask(prompt, {
 				model: "text-davinci-003",
 				prompt,
 				max_tokens: 256,
@@ -115,6 +115,10 @@ LLM.prototype = {
 				return text.match(/Final Answer: (.*)/)?.[1]
 			}
 		}
+	},
+	async embed(input, model = 'text-embedding-ada-002'){
+		const res = await this.openai.createEmbedding({ model, input })
+		return res.data.data[0].embedding
 	}
 }
 
@@ -123,26 +127,26 @@ module.exports = {
 		return new LLM(cfg)
 	},
 	async chat(llm, history, overrides, output){
-		const res = await llm.simpleChat(history, overrides)
+		const res = await llm.chat(history, overrides)
 		const completion = res.data
 
 		Object.assign(output, {usage: res.usage, data_points: '', answer: completion.choices[0].message.content, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
 		return this.next()
 	},
 	async ask(llm, question, overrides, output){
-		const res = await llm.simpleAsk(question, overrides)
+		const res = await llm.ask(question, overrides)
 		const completion = res.data
 
 		Object.assign(output, {usage: res.usage, data_points: '', answer: completion.choices[0].text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
 		return this.next()
 	},
-	async rag(llm, question, history, output){
+	async rag(llm, question, history, tools, output){
 		let q = question
 		if (history.length > 0) {
-			const res = await llm.mergeHistory(question, history)
+			const res = await llm.summarize(question, history)
 			q = res.data.choices[0].text
 		}
-		const res = await llm.answerQuestion(q)
+		const res = await llm.chain(q, tools)
 		const completion = res.data
 
 		Object.assign(output, {usage: res.usage, data_points: '', answer: completion.choices[0].text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})

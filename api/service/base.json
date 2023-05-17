@@ -20,11 +20,17 @@
 		"util":{
 			"mod": "util"
 		},
-        "llm": {
-            "mod": "llm",
-            "vendor": "openai",
-            "model": "gpt-3.5-turbo",
-            "apiKey": "$mod_llm_api-key"
-        }
-    }
+		"llm": {
+			"mod": "llm",
+			"vendor": "openai",
+			"model": "gpt-3.5-turbo",
+			"apiKey": "$mod_llm_api-key"
+		},
+		"hnsw": {
+			"mod": "hnsw",
+			"desc": "A useful tool to search internal company information",
+			"jsondb": "../db/db.json",
+			"vectordb": "../db/vector.hnsw"
+		}
+	}
 }
