@@ -1,7 +1,5 @@
 const { Configuration, OpenAIApi } = require('openai')
-const promptTemplate = require('./prompt.txt')
-const mergeTemplate = require('./merge.txt')
-//const follow_up_questions_prompt_content = require('./follow_up_questions_prompt_content.txt')
+const pico = require('pico-common')
 
 function convertHistory2Messages(history, approx_max_tokens=1000) {
 	const messages = [{role: 'system', content: 'if not mentioned otherwise, all output format should be in html'}]
@@ -24,12 +22,14 @@ function convertHistory2Messages(history, approx_max_tokens=1000) {
 	return -1 === index ? messages : messages.slice(index)
 }
 
-function LLM({model, apiKey}){
+function LLM({model, apiKey}, {merge, prompt}){
 	this.model = model
 	const configuration = new Configuration({
 		apiKey,
 	})
 	this.openai = new OpenAIApi(configuration)
+	this.mergeTemplate = merge
+	this.promptTemplate = prompt
 }
 
 LLM.prototype = {
@@ -61,12 +61,13 @@ LLM.prototype = {
 			n: 1,
 			// stop: ['\n']
 		}, overrides))
-		console.log('#### ask:res.data ######', JSON.stringify(res))
+		console.log('#### ask:res.data ######', JSON.stringify(res.data))
 
 		return res
 	},
 	summarize(question, history){
-		const prompt = mergeTemplate
+console.log('######merge template######', this.mergeTemplate)
+		const prompt = this.mergeTemplate
 			.replace("${question}", question)
 			.replace("${history}", history)
 		return this.ask(prompt, {
@@ -81,7 +82,8 @@ LLM.prototype = {
 	async chain(question, tools){
 		// construct the prompt, with our question and the tools that the chain can use
 		const toolNames = Object.keys(tools)
-		let prompt = promptTemplate
+console.log('######prompt template######', this.promptTemplate)
+		let prompt = this.promptTemplate
 			.replace("${question}", question)
 			.replace(
 				"${tools}",
@@ -124,7 +126,7 @@ LLM.prototype = {
 
 module.exports = {
 	setup(host, cfg, rsc, paths){      
-		return new LLM(cfg)
+		return new LLM(cfg, rsc.llm)
 	},
 	async chat(llm, history, overrides, output){
 		const res = await llm.chat(history, overrides)

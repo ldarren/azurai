@@ -29,8 +29,9 @@
 		"hnsw": {
 			"mod": "hnsw",
 			"desc": "A useful tool to search internal company information",
-			"jsondb": "../db/db.json",
-			"vectordb": "../db/vector.hnsw"
+			"dimensions": 1536,
+			"jsondb": "./db/db.json",
+			"vectordb": "./db/vector.hnsw"
 		}
 	}
 }

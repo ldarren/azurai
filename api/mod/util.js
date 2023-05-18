@@ -38,6 +38,6 @@ module.exports = {
 
 	push(array, item){
 		array.push(item)
-		this.next()
+		return this.next()
 	}
 }

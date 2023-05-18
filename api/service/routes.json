@@ -15,8 +15,8 @@
 		],
 		"/chain": [
 			["web.bodyParser", "_.req", "_.body"],
-			["util.push", "_.tools", "$.hnsw"].
-			["llm.rag", "$.llm", "_.body.question", "_.body.history", "_.tools", "_.output"],
+			["util.push", "_.:tools", "$.hnsw"],
+			["llm.rag", "$.llm", "_.body.question", "_.body.history", "_.:tools", "_.output"],
 			[["web.output"], "_.res", "_.output"]
 		]
 	}

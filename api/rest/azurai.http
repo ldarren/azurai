@@ -1,1 +1,11 @@
 GET http://localhost:5001/chat http/1.1
+
+###
+
+POST http://localhost:5001/chain http/1.1
+Content-Type: application/json
+
+{
+    "question": "today date",
+    "history": []
+}
