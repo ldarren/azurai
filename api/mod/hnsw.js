@@ -11,12 +11,12 @@ function HNSW(db, index, desc){
 HNSW.prototype = {
 	execute(embedding, neighbors = 3){
 		// searching k-nearest neighbor data points.
-		const numNeighbors = 3;
 		const result = this.index.searchKnn(embedding, neighbors);
 		console.log('###result:', embedding, result)
 		console.table(result);
-		console.log('snippet:', this.db[result.neighbors[0]])
-		return result
+		const snippet = this.db[result.neighbors[0]]
+		console.log('snippet:', snippet)
+		return snippet
 	}
 }
 

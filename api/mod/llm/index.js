@@ -111,10 +111,12 @@ console.log('######prompt template######', this.promptTemplate)
 			if (action) {
 				// execute the action specified by the LLMs
 				const actionInput = text.match(/Action Input: "?(.*)"?/)?.[1]
-				const result = await tools[action.trim()].execute(actionInput)
-				prompt += `Observation: ${result}\n`
+				const embedding = await this.embed(actionInput)
+				const snippet = await tools[action.trim()].execute(embedding)
+				prompt += `Observation: ${snippet.s}\n`
+console.log('#####Observation:', prompt)
 			} else {
-				return text.match(/Final Answer: (.*)/)?.[1]
+				return {usage: res.usage, text: text.match(/Final Answer: (.*)/)?.[1]}
 			}
 		}
 	},
@@ -149,9 +151,8 @@ module.exports = {
 			q = res.data.choices[0].text
 		}
 		const res = await llm.chain(q, tools)
-		const completion = res.data
 
-		Object.assign(output, {usage: res.usage, data_points: '', answer: completion.choices[0].text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
+		Object.assign(output, {usage: res.usage, data_points: '', answer: res.text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
 		return this.next()
 	},
 }
