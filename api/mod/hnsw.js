@@ -33,7 +33,7 @@ async function loadHNSW(cfg){
 }
 
 module.exports = {
-	setup(host, cfg, rsc, paths){
+	setup(cfg, rsc, paths){
 		return loadHNSW(cfg)
 	}
 }

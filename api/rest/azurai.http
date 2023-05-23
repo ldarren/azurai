@@ -1,6 +1,7 @@
+### Azurai Chat
 GET http://localhost:5001/chat http/1.1
 
-###
+### Azurai 
 
 POST http://localhost:5001/chain http/1.1
 Content-Type: application/json
@@ -9,3 +10,17 @@ Content-Type: application/json
     "question": "today date",
     "history": []
 }
+
+### Serp API
+# register a new search engine here https://programmablesearchengine.google.com/controlpanel/create
+# get a api key at google cloud console
+# query doc: https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list
+
+https://www.googleapis.com/customsearch/v1
+?key={{$dotenv %G_API_KEY}}
+&cx={{$dotenv %G_SERP_ENG}}
+&safe=active
+&dateRestrict=y1
+&num=1
+&fields=queries,items(title,link,snippet)
+&q=best open source LLM

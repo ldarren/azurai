@@ -127,7 +127,7 @@ console.log('#####Observation:', prompt)
 }
 
 module.exports = {
-	setup(host, cfg, rsc, paths){      
+	setup(cfg, rsc, paths){      
 		return new LLM(cfg, rsc.llm)
 	},
 	async chat(llm, history, overrides, output){

@@ -1,5 +1,5 @@
-const merge = require('service/merge.txt')
-const prompt = require('service/prompt.txt')
+const merge = require('prompt/merge.tpl')
+const prompt = require('prompt/index.tpl')
 
 return {
 	rsc: {

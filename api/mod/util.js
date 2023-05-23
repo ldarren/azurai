@@ -3,8 +3,8 @@ const ALLOW_ORIGIN = process.env.mod_web_ac_allow_origin
 const MAX_AGE = process.env.mod_web_ac_max_age
 
 module.exports = {
-	setup(host, cfg, rsc, paths){
-		return this
+	setup(cfg, rsc, paths){
+		return module.exports
 	},
 
 	handleOption(req, res){

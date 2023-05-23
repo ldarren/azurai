@@ -1,22 +1,26 @@
 {
 	"routes": {
-		"/1.0/ping": [
+		"/1/ping": [
 			[["web.output", "text/plain", "text"], "_.res", "pong"]
 		],
-		"/chat": [
+		"/1/chat": [
 			["web.bodyParser", "_.req", "_.body"],
 			["llm.chat", "$.llm", "_.body.history", "_.body.overrides", "_.output"],
 			[["web.output"], "_.res", "_.output"]
 		],
-		"/ask": [
+		"/1/ask": [
 			["web.bodyParser", "_.req", "_.body"],
 			["llm.ask", "$.llm", "_.body.question", "_.body.overrides", "_.output"],
 			[["web.output"], "_.res", "_.output"]
 		],
-		"/chain": [
+		"/1/chain": [
 			["web.bodyParser", "_.req", "_.body"],
 			["util.push", "_.:tools", "$.hnsw"],
 			["llm.rag", "$.llm", "_.body.question", "_.body.history", "_.:tools", "_.output"],
+			[["web.output"], "_.res", "_.output"]
+		],
+		"/1/serp": [
+			["web.bodyParser", "_.req", "_.body"],
 			[["web.output"], "_.res", "_.output"]
 		]
 	}
