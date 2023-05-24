@@ -35,6 +35,11 @@ async function loadHNSW(cfg){
 module.exports = {
 	setup(cfg, rsc, paths){
 		return loadHNSW(cfg)
+	},
+	execute(hnsw, embedding, output){
+		const res = hnsw.execute(embedding)
+		Object.assign(output, res)
+		return this.next()
 	}
 }
 

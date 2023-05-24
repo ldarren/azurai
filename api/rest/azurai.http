@@ -1,14 +1,29 @@
 ### Azurai Chat
-GET http://localhost:5001/chat http/1.1
+GET http://localhost:5001/1/chat http/1.1
 
-### Azurai 
-
-POST http://localhost:5001/chain http/1.1
+### Azurai chain commands
+POST http://localhost:5001/1/chain http/1.1
 Content-Type: application/json
 
 {
     "question": "today date",
     "history": []
+}
+
+### Azurai serp commands
+POST http://localhost:5001/1/serp http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date"
+}
+
+### Azurai hnsw commands
+POST http://localhost:5001/1/hnsw http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date"
 }
 
 ### Serp API

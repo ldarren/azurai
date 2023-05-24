@@ -155,4 +155,9 @@ module.exports = {
 		Object.assign(output, {usage: res.usage, data_points: '', answer: res.text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
 		return this.next()
 	},
+	async embed(llm, query, output){
+		const res = await llm.embed(query)
+		output.push(...res)
+		return this.next()
+	}
 }
