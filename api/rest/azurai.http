@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ### Azurai serp commands
-POST http://localhost:5001/1/serp http/1.1
+POST http://localhost:5001/1/tools/serp http/1.1
 Content-Type: application/json
 
 {
@@ -19,11 +19,11 @@ Content-Type: application/json
 }
 
 ### Azurai hnsw commands
-POST http://localhost:5001/1/hnsw http/1.1
+POST http://localhost:5001/1/tools/hnsw http/1.1
 Content-Type: application/json
 
 {
-    "query": "today date"
+    "query": "employment guide"
 }
 
 ### Serp API

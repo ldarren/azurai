@@ -20,6 +20,13 @@ module.exports = {
 		return this.next()
 	},
 
+	router(key){
+		return async function(method, params){
+			await this.next(null, `${method}/${params[key]}`)
+			return this.next()
+		}
+	},
+
 	branchByContentType(map, def){
 		return function(req){
 			const ct = req.headers[ACCEPT]
