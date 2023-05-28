@@ -1,6 +1,7 @@
 const pico = require('pico-common')
 
 function SERP(cfg){
+	this.name = cfg.mod
 	this.description = cfg.desc
 	this.host = cfg.host
 	this.params = cfg.params

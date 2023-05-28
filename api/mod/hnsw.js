@@ -1,8 +1,8 @@
 const fs = require('node:fs/promises')
 const { HierarchicalNSW } = require('hnswlib-node')
-const { Configuration, OpenAIApi } = require('openai')
 
-function HNSW(db, index, desc){
+function HNSW(name, db, index, desc){
+	this.name = name
 	this.db = db
 	this.index = index
 	this.description = desc
@@ -29,7 +29,7 @@ async function loadHNSW(cfg){
 	const index = new HierarchicalNSW('l2', cfg.dimensions)
 	index.readIndexSync(cfg.vectordb)
 
-	return new HNSW(db, index, cfg.desc)
+	return new HNSW(cfg.mod, db, index, cfg.desc)
 }
 
 module.exports = {

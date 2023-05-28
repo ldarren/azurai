@@ -79,17 +79,16 @@ console.log('######merge template######', this.mergeTemplate)
 			stop: ["Observation:"],
 		})
 	},
-	async chain(question, tools){
-		// construct the prompt, with our question and the tools that the chain can use
-		const toolNames = Object.keys(tools)
+	async chain(ctx, question, retrievals){
+		// construct the prompt, with our question and the retrievals that the chain can use
 console.log('######prompt template######', this.promptTemplate)
 		let prompt = this.promptTemplate
 			.replace("${question}", question)
 			.replace(
-				"${tools}",
-				toolNames.map(toolname => `${toolname}: ${tools[toolname].description}`).join("\n")
+				"${retrievals}",
+				retrievals.map(retrieval => `${retrieval.name}: ${retrieval.description}`).join("\n")
 			)
-			.replace("${toolNames}", toolNames)
+			.replace("${retrievalNames}", retrievals.map(r => r.name))
 
 
 		// allow the LLM to iterate until it finds a final answer
@@ -110,11 +109,12 @@ console.log('######prompt template######', this.promptTemplate)
 			const action = text.match(/Action: (.*)/)?.[1]
 			if (action) {
 				// execute the action specified by the LLMs
-				const actionInput = text.match(/Action Input: "?(.*)"?/)?.[1]
-				const embedding = await this.embed(actionInput)
-				const snippet = await tools[action.trim()].execute(embedding)
-				prompt += `Observation: ${snippet.s}\n`
-console.log('#####Observation:', prompt)
+				const query = text.match(/Action Input: "?(.*)"?/)?.[1]
+				const observation = {}
+console.log('#####Observation start:', query)
+				await ctx.next(null, `POST/${action.trim()}`, {body: {query}, output: observation})
+				prompt += `Observation: ${observation.s}\n`
+console.log('#####Observation end:', prompt)
 			} else {
 				return {usage: res.usage, text: text.match(/Final Answer: (.*)/)?.[1]}
 			}
@@ -144,20 +144,20 @@ module.exports = {
 		Object.assign(output, {usage: res.usage, data_points: '', answer: completion.choices[0].text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
 		return this.next()
 	},
-	async rag(llm, question, history, tools, output){
+	async embed(llm, query, output){
+		const res = await llm.embed(query)
+		output.push(...res)
+		return this.next()
+	},
+	async rag(llm, question, history, retrievals, output){
 		let q = question
 		if (history.length > 0) {
 			const res = await llm.summarize(question, history)
 			q = res.data.choices[0].text
 		}
-		const res = await llm.chain(q, tools)
+		const res = await llm.chain(this, q, retrievals)
 
 		Object.assign(output, {usage: res.usage, data_points: '', answer: res.text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
-		return this.next()
-	},
-	async embed(llm, query, output){
-		const res = await llm.embed(query)
-		output.push(...res)
 		return this.next()
 	}
 }

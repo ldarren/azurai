@@ -42,7 +42,7 @@
 				"cx": "$mod_serp_engine",
 				"safe": "active",
 				"dateRestrict": "y1",
-				"num": 1,
+				"num": 10,
 				"fields": "queries,items(title,link,snippet)"
 			}
 		}
