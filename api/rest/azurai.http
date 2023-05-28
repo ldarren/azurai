@@ -26,6 +26,27 @@ Content-Type: application/json
     "query": "employment guide"
 }
 
+### File Upload
+POST http://localhost:5001/1/upload HTTP/1.1
+Content-Type: multipart/form-data; boundary=MfnBoundry
+
+--MfnBoundry
+Content-Disposition: form-data; name="description"
+
+some text
+--MfnBoundry
+Content-Disposition: form-data; name="files"; filename="Benefit_Options.pdf"
+Content-Type: application/pdf
+
+< ../db/Benefit_Options.pdf
+
+--MfnBoundry
+Content-Disposition: form-data; name="files"; filename="employee_handbook.pdf"
+Content-Type: application/pdf
+
+< ../db/employee_handbook.pdf
+--MfnBoundry--
+
 ### Serp API
 # register a new search engine here https://programmablesearchengine.google.com/controlpanel/create
 # get a api key at google cloud console

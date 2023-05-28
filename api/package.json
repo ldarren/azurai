@@ -1,7 +1,7 @@
 {
   "name": "azurai_api",
   "version": "0.2.0",
-  "description": "azure openai service demo",
+  "description": "Azurai the LLM state machine",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=dev node index.js -s service/index.js",

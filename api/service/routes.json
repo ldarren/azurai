@@ -31,6 +31,10 @@
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
 			[["util.router", "name"], "_.req.method", "$.params"]
+		],
+		"/1/upload": [
+			[["web.output", "text/plain", "text"], "_.res", "_.output"],
+			["web.parse", "_.req", "_.output"]
 		]
 	}
 }
