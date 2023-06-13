@@ -112,7 +112,7 @@ console.log('######prompt template######', this.promptTemplate)
 				const query = text.match(/Action Input: "?(.*)"?/)?.[1]
 				const observation = {}
 console.log('#####Observation start:', query)
-				await ctx.next(null, `POST/${action.trim()}`, {body: {query}, output: observation})
+				await ctx.next(null, `GET/${action.trim()}`, {body: {query}, output: observation})
 				prompt += `Observation: ${observation.s}\n`
 console.log('#####Observation end:', prompt)
 			} else {

@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.7",
+    "@opendocsg/pdf2md": "^0.1.25",
     "hnswlib-node": "^1.4.2",
     "openai": "^3.2.1",
     "pdfreader": "^3.0.0",

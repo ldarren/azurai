@@ -11,20 +11,24 @@
 		"/1/ask": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
-			["llm.ask", "$.llm", "_.body.question", "_.body.overrides", "_.output"]
+			["llm.ask", "$.llm", "_.body.query", "_.body.overrides", "_.output"]
 		],
 		"/1/chain": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
 			["util.push", "_.:retrievals", "$.hnsw"],
 			["util.push", "_.:retrievals", "$.serp"],
-			["llm.rag", "$.llm", "_.body.question", "_.body.history", "_.:retrievals", "_.output"]
+			["llm.rag", "$.llm", "_.body.query", "_.body.history", "_.:retrievals", "_.output"]
 		],
-		"POST/hnsw": [
+		"GET/hnsw": [
 			["llm.embed", "$.llm", "_.body.query", "_.:embedding"],
 			["hnsw.execute", "$.hnsw", "_.:embedding", "_.output"]
 		],
-		"POST/serp": [
+		"POST/hnsw": [
+			["llm.embed", "$.llm", "_.body.section", "_.:embedding"],
+			["hnsw.insert", "_.:embedding"]
+		],
+		"GET/serp": [
 			["serp.execute", "$.serp", "_.body.query", "_.output"]
 		],
 		"/1/retrievals/:name": [
@@ -34,7 +38,11 @@
 		],
 		"/1/upload": [
 			[["web.output", "text/plain", "text"], "_.res", "_.output"],
-			["web.parse", "_.req", "_.output"]
+			["web.parse", "_.req", "_.upload"],
+			["util.log", "_.upload"],
+			["md.parse", "_.upload.files.0.type", "_.upload.files.0.filename", "_.text"],
+			["md.split", "_.text.md", "_.:sections"],
+			["util.branchSeq", "POST/hnsw", "_.:sections"]
 		]
 	}
 }

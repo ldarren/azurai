@@ -1,5 +1,18 @@
+### Azurai Ask
+POST http://localhost:5001/1/ask http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date?"
+}
+
 ### Azurai Chat
-GET http://localhost:5001/1/chat http/1.1
+POST http://localhost:5001/1/chat http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date?"
+}
 
 ### Azurai chain commands
 POST http://localhost:5001/1/chain http/1.1
@@ -47,7 +60,7 @@ Content-Type: application/pdf
 < ../db/employee_handbook.pdf
 --MfnBoundry--
 
-### Serp API
+### Google Custom Search JSON API
 # register a new search engine here https://programmablesearchengine.google.com/controlpanel/create
 # get a api key at google cloud console
 # query doc: https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list

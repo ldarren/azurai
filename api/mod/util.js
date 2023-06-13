@@ -36,6 +36,20 @@ module.exports = {
 		}
 	},
 
+	async branchSeq(route, list, inputKey = 'input', outputKey = 'output', otherKeys = []){
+		for (const input of list){
+			await this.next(null, route, Object.assign({[inputKey]: input, [outputKey]: {}},pico.extract( this.data, otherKeys)))
+		}
+		return this.next()
+	},
+
+	async branchPar(route, list, inputKey = 'input', outputKey = 'output', otherKeys = []){
+		for (const input of list){
+			this.next(null, route, Object.assign({[inputKey]: input, [outputKey]: {}},pico.extract( this.data, otherKeys)))
+		}
+		return this.next()
+	},
+
 	async wait(sec){
 		await new Promise((resolve, reject) => {
 			setTimeout(resolve, sec)
@@ -46,5 +60,10 @@ module.exports = {
 	push(array, item){
 		array.push(item)
 		return this.next()
-	}
+	},
+
+	log(obj){
+		console.log(obj)
+		return this.next()
+	},
 }

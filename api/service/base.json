@@ -45,6 +45,9 @@
 				"num": 10,
 				"fields": "queries,items(title,link,snippet)"
 			}
+		},
+		"md": {
+			"mod": "md"
 		}
 	}
 }

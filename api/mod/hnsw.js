@@ -6,6 +6,7 @@ function HNSW(name, db, index, desc){
 	this.db = db
 	this.index = index
 	this.description = desc
+	this.label = Math.max(0, ...Object.keys(db))
 }
 
 HNSW.prototype = {
@@ -17,6 +18,11 @@ HNSW.prototype = {
 		const snippet = this.db[result.neighbors[0]]
 		console.log('snippet:', snippet)
 		return snippet
+	},
+	insert(fname, snippet, embedding){
+		const i = ++this.label
+		this.index.addPoint(embedding, i)
+		this.db[i] = {f: fname, s: snippet}
 	}
 }
 
@@ -39,6 +45,10 @@ module.exports = {
 	execute(hnsw, embedding, output){
 		const res = hnsw.execute(embedding)
 		Object.assign(output, res)
+		return this.next()
+	},
+	insert(hnsw, fname, snippet, embedding){
+		const res = hnsw.insert(fname, snippet, embedding)
 		return this.next()
 	}
 }
