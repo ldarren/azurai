@@ -1,6 +1,6 @@
 {
   "name": "azurai_api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Azurai the LLM state machine",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "@dqbd/tiktoken": "^1.0.7",
     "@opendocsg/pdf2md": "^0.1.25",
     "hnswlib-node": "^1.4.2",
+    "markdown-ast": "^0.3.0",
     "openai": "^3.2.1",
     "pdfreader": "^3.0.0",
     "picos": "^0.10.4"
