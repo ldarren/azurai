@@ -30,6 +30,8 @@
 			"mod": "hnsw",
 			"desc": "A useful tool to search internal company information",
 			"dimensions": 1536,
+			"space": "l2",
+			"maxElements": 9999,
 			"jsondb": "./db/db.json",
 			"vectordb": "./db/vector.hnsw"
 		},

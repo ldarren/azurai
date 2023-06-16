@@ -1,8 +1,8 @@
 const fs = require('node:fs/promises')
 const { HierarchicalNSW } = require('hnswlib-node')
 
-function HNSW(name, db, index, desc){
-	this.name = name
+function HNSW(cfg, db, index, desc){
+	this.cfg = cfg
 	this.db = db
 	this.index = index
 	this.description = desc
@@ -19,23 +19,26 @@ HNSW.prototype = {
 		console.log('snippet:', snippet)
 		return snippet
 	},
-	insert(fname, snippet, embedding){
+	async insert(fname, snippet, embedding){
 		const i = ++this.label
 		this.index.addPoint(embedding, i)
 		this.db[i] = {f: fname, s: snippet}
+		await this.index.writeIndex(this.cfg.vectordb) 
+		await fs.writeFile(this.cfg.jsondb, JSON.stringify(this.db))
 	}
 }
 
 async function loadHNSW(cfg){
 	// loading db
 	const json = await fs.readFile(cfg.jsondb, {flag: 'a+'})
-	const db = json ? JSON.parse(json) : {}
+	const db = json.length ? JSON.parse(json) : {}
 
 	// loading index.
-	const index = new HierarchicalNSW('l2', cfg.dimensions)
-	index.readIndexSync(cfg.vectordb)
+	const index = new HierarchicalNSW(cfg.space, cfg.dimensions)
+	if (json.length) index.readIndexSync(cfg.vectordb)
+  else index.initIndex(cfg.maxElements)
 
-	return new HNSW(cfg.mod, db, index, cfg.desc)
+	return new HNSW(cfg, db, index, cfg.desc)
 }
 
 module.exports = {
@@ -47,8 +50,8 @@ module.exports = {
 		Object.assign(output, res)
 		return this.next()
 	},
-	insert(hnsw, fname, snippet, embedding){
-		const res = hnsw.insert(fname, snippet, embedding)
+	async insert(hnsw, fname, snippet, embedding){
+		const res = await hnsw.insert(fname, snippet, embedding)
 		return this.next()
 	}
 }

@@ -26,7 +26,7 @@
 		],
 		"POST/hnsw": [
 			["llm.embed", "$.llm", "_.section", "_.:embedding"],
-			["hnsw.insert", "_.fname", "_.section", "_.:embedding"]
+			["hnsw.insert", "$.hnsw", "_.fname", "_.section", "_.:embedding"]
 		],
 		"GET/serp": [
 			["serp.execute", "$.serp", "_.body.query", "_.output"]
@@ -34,14 +34,14 @@
 		"/1/retrievals/:name": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
-			[["util.router", "name"], "_.req.method", "$.params"]
+			[["util.router", "name"], "GET", "$.params"]
 		],
 		"/1/upload": [
 			[["web.output", "text/plain", "text"], "_.res", "_.output"],
 			["web.parse", "_.req", "_.upload"],
-			["util.flat", "_.upload", {"type": ["upload", "files", 0, "tyoe"], "saved": ["upload", "files", 0, "saved"], "fname": ["upload", "files", 0, "filename"]}, "$.data"],
-			["md.parse", "_.type", "_.saved", "_.text"],
-			["md.split", "_.text.md", "_.:sections"],
+			["util.flat", "_.upload", {"type": ["files", 0, "type"], "saved": ["files", 0, "saved"], "fname": ["files", 0, "filename"]}, "$.data"],
+			["md.parse", "_.type", "_.saved", "_.parsed"],
+			["md.split", "_.parsed.md", "_.:sections"],
 			["util.branchSeq", "POST/hnsw", "_.:sections", "section", "output", ["fname"]]
 		]
 	}

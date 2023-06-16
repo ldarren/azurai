@@ -21,6 +21,7 @@ module.exports = {
 			break
 		}
 		Object.assign(output, {[key]: md})
+
 		return this.next()
 	},
 
