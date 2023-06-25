@@ -1,7 +1,7 @@
 {
   "name": "azurai_api",
-  "version": "0.1.0",
-  "description": "azure openai service demo",
+  "version": "0.2.2",
+  "description": "Azurai the LLM state machine",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=dev node index.js -s service/index.js",
@@ -15,9 +15,11 @@
   "license": "MIT",
   "dependencies": {
     "@dqbd/tiktoken": "^1.0.7",
+    "@opendocsg/pdf2md": "^0.1.25",
     "hnswlib-node": "^1.4.2",
-    "openai": "^3.2.1",
+    "markdown-ast": "^0.3.0",
+    "openai": "^3.3.0",
     "pdfreader": "^3.0.0",
-    "picos": "^0.10.3"
+    "picos": "^0.10.4"
   }
 }

@@ -18,5 +18,17 @@
     "search.exclude": {
         "**/node_modules": true,
         "static": true
+    },
+    "rest-client.environmentVariables": {
+        "$shared": {
+        },
+        "dev": {
+            "G_API_KEY": "G_API_KEY_DEV",
+            "G_SERP_ENG": "G_SERP_ENG_DEV"
+        },
+        "prod": {
+            "G_API_KEY": "G_API_KEY_DEV",
+            "G_SERP_ENG": "G_SERP_ENG_DEV"
+        },
     }
 }

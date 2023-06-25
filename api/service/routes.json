@@ -1,17 +1,48 @@
 {
 	"routes": {
-		"/1.0/ping": [
+		"/1/ping": [
 			[["web.output", "text/plain", "text"], "_.res", "pong"]
 		],
-		"/chat": [
-            ["web.bodyParser", "_.req", "_.body"],
-            ["llm.chat", "$.llm", "_.body.history", "_.body.overrides", "_.output"],
-			[["web.output"], "_.res", "_.output"]
+		"/1/chat": [
+			[["web.output"], "_.res", "_.output"],
+			["web.bodyParser", "_.req", "_.body"],
+			["llm.chat", "$.llm", "_.body.history", "_.body.overrides", "_.output"]
 		],
-		"/ask": [
-            ["web.bodyParser", "_.req", "_.body"],
-            ["llm.ask", "$.llm", "_.body.question", "_.body.overrides", "_.output"],
-			[["web.output"], "_.res", "_.output"]
+		"/1/ask": [
+			[["web.output"], "_.res", "_.output"],
+			["web.bodyParser", "_.req", "_.body"],
+			["llm.ask", "$.llm", "_.body.query", "_.body.overrides", "_.output"]
+		],
+		"/1/chain": [
+			[["web.output"], "_.res", "_.output"],
+			["web.bodyParser", "_.req", "_.body"],
+			["util.push", "_.:retrievals", "$.hnsw"],
+			["util.push", "_.:retrievals", "$.serp"],
+			["llm.rag", "$.llm", "_.body.query", "_.body.history", "_.:retrievals", "_.output"]
+		],
+		"GET/hnsw": [
+			["llm.embed", "$.llm", "_.body.query", "_.:embedding"],
+			["hnsw.execute", "$.hnsw", "_.:embedding", "_.output"]
+		],
+		"POST/hnsw": [
+			["llm.embed", "$.llm", "_.section", "_.:embedding"],
+			["hnsw.insert", "$.hnsw", "_.fname", "_.section", "_.:embedding"]
+		],
+		"GET/serp": [
+			["serp.execute", "$.serp", "_.body.query", "_.output"]
+		],
+		"/1/retrievals/:name": [
+			[["web.output"], "_.res", "_.output"],
+			["web.bodyParser", "_.req", "_.body"],
+			[["util.router", "name"], "GET", "$.params"]
+		],
+		"/1/upload": [
+			[["web.output", "text/plain", "text"], "_.res", "_.output"],
+			["web.parse", "_.req", "_.upload"],
+			["util.flat", "_.upload", {"type": ["files", 0, "type"], "saved": ["files", 0, "saved"], "fname": ["files", 0, "filename"]}, "$.data"],
+			["md.parse", "_.type", "_.saved", "_.parsed"],
+			["md.split", "_.parsed.md", "_.:sections"],
+			["util.branchSeq", "POST/hnsw", "_.:sections", "section", "output", ["fname"]]
 		]
 	}
 }

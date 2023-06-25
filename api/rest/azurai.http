@@ -1,1 +1,75 @@
-GET http://localhost:5001/chat http/1.1
+### Azurai Ask
+POST http://localhost:5001/1/ask http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date?"
+}
+
+### Azurai Chat
+POST http://localhost:5001/1/chat http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date?"
+}
+
+### Azurai chain commands
+POST http://localhost:5001/1/chain http/1.1
+Content-Type: application/json
+
+{
+    "question": "today date",
+    "history": []
+}
+
+### Azurai serp commands
+POST http://localhost:5001/1/retrievals/serp http/1.1
+Content-Type: application/json
+
+{
+    "query": "today date?"
+}
+
+### Azurai hnsw commands
+POST http://localhost:5001/1/retrievals/hnsw http/1.1
+Content-Type: application/json
+
+{
+    "query": "Comparison of Plans"
+}
+
+### File Upload
+POST http://localhost:5001/1/upload HTTP/1.1
+Content-Type: multipart/form-data; boundary=MfnBoundry
+
+--MfnBoundry
+Content-Disposition: form-data; name="description"
+
+some text
+--MfnBoundry
+Content-Disposition: form-data; name="files"; filename="Benefit_Options.pdf"
+Content-Type: application/pdf
+
+< ../db/Benefit_Options.pdf
+
+--MfnBoundry
+Content-Disposition: form-data; name="files"; filename="employee_handbook.pdf"
+Content-Type: application/pdf
+
+< ../db/employee_handbook.pdf
+--MfnBoundry--
+
+### Google Custom Search JSON API
+# register a new search engine here https://programmablesearchengine.google.com/controlpanel/create
+# get a api key at google cloud console
+# query doc: https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list
+
+https://www.googleapis.com/customsearch/v1
+?key={{$dotenv %G_API_KEY}}
+&cx={{$dotenv %G_SERP_ENG}}
+&safe=active
+&dateRestrict=y1
+&num=1
+&fields=queries,items(title,link,snippet)
+&q=best open source LLM

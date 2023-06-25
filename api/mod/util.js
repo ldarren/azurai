@@ -1,10 +1,16 @@
+const pObj = require('pico-common').export('pico/obj')
+
 const ACCEPT = 'accept'
 const ALLOW_ORIGIN = process.env.mod_web_ac_allow_origin
 const MAX_AGE = process.env.mod_web_ac_max_age
 
+function extract(obj, keys){
+	return keys.reduce((acc, key) => Object.assign(acc, {[key]: obj[key]}), {})
+}
+
 module.exports = {
-	setup(host, cfg, rsc, paths){
-		return this
+	setup(cfg, rsc, paths){
+		return module.exports
 	},
 
 	handleOption(req, res){
@@ -20,6 +26,13 @@ module.exports = {
 		return this.next()
 	},
 
+	router(key){
+		return async function(method, params){
+			await this.next(null, `${method}/${params[key]}`)
+			return this.next()
+		}
+	},
+
 	branchByContentType(map, def){
 		return function(req){
 			const ct = req.headers[ACCEPT]
@@ -29,10 +42,50 @@ module.exports = {
 		}
 	},
 
+	async branchSeq(route, list, inputKey = 'input', outputKey = 'output', otherKeys = []){
+		const data = extract(this.data, otherKeys)
+		for (const input of list){
+			await this.next(null, route, Object.assign({[inputKey]: input, [outputKey]: {}}, data))
+		}
+		return this.next()
+	},
+
+	async branchPar(route, list, inputKey = 'input', outputKey = 'output', otherKeys = []){
+		const data = extract(this.data, otherKeys)
+		for (const input of list){
+			this.next(null, route, Object.assign({[inputKey]: input, [outputKey]: {}}, data))
+		}
+		return this.next()
+	},
+
 	async wait(sec){
 		await new Promise((resolve, reject) => {
 			setTimeout(resolve, sec)
 		})
 		return this.next()
 	},
+
+	push(array, item){
+		array.push(item)
+		return this.next()
+	},
+
+	log(obj){
+		console.log(obj)
+		return this.next()
+	},
+
+	/**
+	 * flatten deep nested structure
+	 * @param {obj} src - source object
+	 * @param {object} map - {"filename": ["upload", "files", 0, "filename"]}
+	 * @param {obj dst - destination
+	 */
+	flat(src, map, dst){
+		const keys = Object.keys(map)
+		keys.forEach(key => {
+			dst[key] = pObj.dot(src, map[key])
+		})
+		return this.next()
+	}
 }
