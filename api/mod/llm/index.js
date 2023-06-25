@@ -79,7 +79,7 @@ console.log('######merge template######', this.mergeTemplate)
 			stop: ["Observation:"],
 		})
 	},
-	async chain(ctx, question, retrievals){
+	async rag(ctx, question, retrievals, model = 'text-davinci-003'){
 		// construct the prompt, with our question and the retrievals that the chain can use
 console.log('######prompt template######', this.promptTemplate)
 		let prompt = this.promptTemplate
@@ -94,7 +94,7 @@ console.log('######prompt template######', this.promptTemplate)
 		// allow the LLM to iterate until it finds a final answer
 		while (true) {
 			const res = await this.ask(prompt, {
-				model: "text-davinci-003",
+				model,
 				prompt,
 				max_tokens: 256,
 				temperature: 0.7,
@@ -155,7 +155,7 @@ module.exports = {
 			const res = await llm.summarize(question, history)
 			q = res.data.choices[0].text
 		}
-		const res = await llm.chain(this, q, retrievals)
+		const res = await llm.rag(this, q, retrievals)
 
 		Object.assign(output, {usage: res.usage, data_points: '', answer: res.text, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
 		return this.next()

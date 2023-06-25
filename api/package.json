@@ -18,7 +18,7 @@
     "@opendocsg/pdf2md": "^0.1.25",
     "hnswlib-node": "^1.4.2",
     "markdown-ast": "^0.3.0",
-    "openai": "^3.2.1",
+    "openai": "^3.3.0",
     "pdfreader": "^3.0.0",
     "picos": "^0.10.4"
   }
