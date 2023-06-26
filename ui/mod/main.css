@@ -1,0 +1,28 @@
+:root{
+	--main-bg: #eaff7b;
+	--main-fg: black;
+}
+html{
+	font-size:62.5%;
+	font-family:"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;
+	color:var(--main-bg);
+}
+html,body{
+	height:100%;
+}
+*{
+	padding:0;
+	margin:0;
+}
+body{
+	display:flex;
+	flex-direction:row;
+}
+.hidden{
+	display:none !important;
+}
+.truncate{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

@@ -1,0 +1,8 @@
+.__{
+	animation-duration: 0.001s;
+	animation-name: frameresize1;
+}
+@keyframes frameresize1 {
+	from { clip: rect(1px, auto, auto, auto) }
+	to { clip: rect(0px, auto, auto, auto) }
+}

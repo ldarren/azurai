@@ -1,5 +1,43 @@
 [
-	["p/View", "view", [
-		["options", "map", {"el": ".__", "content":"A hello from 'aui'!"}]
+	["models", "type", "po/Collection", [
+		"data", 1, "options"
+	]],
+	["Frame","view",[
+		[ "options", "map", { "el": ".__" } ],
+		[ "css", "file", "main.css" ],
+		[ "css", "file", "Frame.css" ],
+		[ "css", "file", "example.css" ],
+		[ "html", "file", "Frame.html" ],
+		[ "groups", "models", [
+			["data","list",[
+				{ "id": 1, "name": "AAA", "desc": "the tail of your dump file indicates that you have" },
+				{ "id": 2, "name": "BBB", "desc": "Try using forward slash" },
+				{ "id": 3, "name": "CCC", "desc": "When running this on a file that is" }
+			]]
+		]],
+		["pages","map",{
+			"void": ["Void","view",[
+				[ "options", "map", { "id": "pane1", "className": "page void" } ],
+				[ "tpl", "file", "Void.asp" ],
+				[ "css", "file", "Void.css" ]
+			]],
+			"users": ["Users","view",[
+				[ "options", "map", { "id":"pane0", "className": "page" } ],
+				[ "Header", "view", [
+					[ "options", "map", { "tagName": "header" } ],
+					[ "tpl", "file", "Header.asp" ],
+					[ "css", "file", "Header.css" ],
+					[ "data", "map", {
+						"leftText": "back",
+						"title": "Users",
+						"subtitle": "A Subtitle"
+					}]
+				]]
+			]]
+		}],
+		["routes","map",{
+			"users/:id":["users","void" ],
+			"":["users","void"]
+		}]
 	]]
 ]

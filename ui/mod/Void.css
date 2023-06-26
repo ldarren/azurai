@@ -1,0 +1,11 @@
+.__ .void{
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	flex:1 1 100%;
+	text-align:center;
+}
+.__ .void p{
+	font-size:1.5rem;
+	color:white;
+}
