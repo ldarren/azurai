@@ -1,9 +1,9 @@
-var router = require('po/router')
-var specMgr = require('p/specMgr')
+const router = require('po/router')
+const specMgr = require('p/specMgr')
 
 function pageChanged(evt, payload, params){
 	this.clear()
-	var spec = []
+	const spec = []
 	for (var i=0, k; (k=payload[i]); i++){
 		spec.push(this.specMap[k])
 	}

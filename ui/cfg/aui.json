@@ -2,42 +2,55 @@
 	["models", "type", "po/Collection", [
 		"data", 1, "options"
 	]],
-	["Frame","view",[
-		[ "options", "map", { "el": ".__" } ],
-		[ "css", "file", "main.css" ],
-		[ "css", "file", "Frame.css" ],
-		[ "css", "file", "example.css" ],
-		[ "html", "file", "Frame.html" ],
-		[ "groups", "models", [
-			["data","list",[
-				{ "id": 1, "name": "AAA", "desc": "the tail of your dump file indicates that you have" },
-				{ "id": 2, "name": "BBB", "desc": "Try using forward slash" },
-				{ "id": 3, "name": "CCC", "desc": "When running this on a file that is" }
+	["p/View","view",[
+		["options", "map", {"el": ".__"}],
+		["css", "file", "main.css"],
+		["css", "file", "Frame.css"],
+		["css", "file", "example.css"],
+		["html", "file", "Frame.html"],
+		["Menu", "view", [
+			["options", "map", {"el":"#menu"}],
+			["menuItems", "models", [
+				["data", "list", [
+					{"id": 1, "name": "Accounts", "icon": "U+1F465", "bg": "#9376E0"},
+					{"id": 2, "name": "Recruits", "icon": "U+002B", "bg": "#E893CF"},
+					{"id": 3, "name": "Orientation", "icon": "U+1F4D6", "bg": "#F3BCC8"},
+					{"id": 4, "name": "Probabtion", "icon": "U+1F5D2", "bg": "#F6FFA6"}
+				]]
+			]],
+			["MenuItem", "view", [
+				[ "tpl", "file", "MenuItem.asp" ]
 			]]
 		]],
-		["pages","map",{
-			"void": ["Void","view",[
-				[ "options", "map", { "id": "pane1", "className": "page void" } ],
-				[ "tpl", "file", "Void.asp" ],
-				[ "css", "file", "Void.css" ]
-			]],
-			"users": ["Users","view",[
-				[ "options", "map", { "id":"pane0", "className": "page" } ],
-				[ "Header", "view", [
-					[ "options", "map", { "tagName": "header" } ],
-					[ "tpl", "file", "Header.asp" ],
-					[ "css", "file", "Header.css" ],
-					[ "data", "map", {
-						"leftText": "back",
-						"title": "Users",
-						"subtitle": "A Subtitle"
-					}]
+		["Frame", "view", [
+			["options", "map", {"el":"#frame"}],
+			["pages","map",{
+				"void": ["Void","view",[
+					[ "options", "map", { "id": "pane1", "className": "page void" } ],
+					[ "tpl", "file", "Void.asp" ],
+					[ "css", "file", "Void.css" ]
+				]],
+				"accounts": ["Accounts","view",[
+					[ "options", "map", { "id":"pane0", "className": "page" } ],
+					[ "Header", "view", [
+						[ "options", "map", { "tagName": "header" } ],
+						[ "tpl", "file", "Header.asp" ],
+						[ "css", "file", "Header.css" ],
+						[ "data", "map", {
+							"leftText": "back",
+							"title": "Users",
+							"subtitle": "A Subtitle"
+						}]
+					]]
 				]]
-			]]
-		}],
-		["routes","map",{
-			"users/:id":["users","void" ],
-			"":["users","void"]
-		}]
+			}],
+			["routes","map",{
+				"accounts/:id":["accounts","void" ],
+				"recruits/:id":["accounts","void" ],
+				"orientations/:id":["accounts","void" ],
+				"probabtion/:id":["accounts","void" ],
+				"":["accounts","void"]
+			}]
+		]]
 	]]
 ]
