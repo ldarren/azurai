@@ -1,5 +1,5 @@
 [
-	["models", "type", "po/Collection", [
+	["models", "type", "ext/Collection", [
 		"data", 1, "options"
 	]],
 	["p/View","view",[
@@ -12,14 +12,15 @@
 			["options", "map", {"el":"#menu"}],
 			["menuItems", "models", [
 				["data", "list", [
-					{"id": 1, "name": "Accounts", "icon": "U+1F465", "bg": "#9376E0"},
-					{"id": 2, "name": "Recruits", "icon": "U+002B", "bg": "#E893CF"},
-					{"id": 3, "name": "Orientation", "icon": "U+1F4D6", "bg": "#F3BCC8"},
-					{"id": 4, "name": "Probabtion", "icon": "U+1F5D2", "bg": "#F6FFA6"}
+					{"id": 1, "name": "Accounts", "icon": "1F465", "bg": "purple", "link":"accounts"},
+					{"id": 2, "name": "Recruits", "icon": "002B", "bg": "pink", "link": "recruits"},
+					{"id": 3, "name": "Orientation", "icon": "1F4D6", "bg": "peach", "link": "orientations"},
+					{"id": 4, "name": "Probabtion", "icon": "1fac2", "bg": "passion", "link": "probabtions"}
 				]]
 			]],
 			["MenuItem", "view", [
-				[ "tpl", "file", "MenuItem.asp" ]
+				["options", "map", {"tag":"a","class":"button", "href":"javascript:;"}],
+				["tpl", "file", "MenuItem.asp"]
 			]]
 		]],
 		["Frame", "view", [
@@ -38,17 +39,60 @@
 						[ "css", "file", "Header.css" ],
 						[ "data", "map", {
 							"leftText": "back",
-							"title": "Users",
+							"title": "Accounts",
+							"subtitle": "A Subtitle"
+						}]
+					]]
+				]],
+				"recruits": ["Accounts","view",[
+					[ "options", "map", { "id":"pane0", "className": "page" } ],
+					[ "Header", "view", [
+						[ "options", "map", { "tagName": "header" } ],
+						[ "tpl", "file", "Header.asp" ],
+						[ "css", "file", "Header.css" ],
+						[ "data", "map", {
+							"leftText": "back",
+							"title": "Recruits",
+							"subtitle": "A Subtitle"
+						}]
+					]]
+				]],
+				"orientations": ["Accounts","view",[
+					[ "options", "map", { "id":"pane0", "className": "page" } ],
+					[ "Header", "view", [
+						[ "options", "map", { "tagName": "header" } ],
+						[ "tpl", "file", "Header.asp" ],
+						[ "css", "file", "Header.css" ],
+						[ "data", "map", {
+							"leftText": "back",
+							"title": "Orientations",
+							"subtitle": "A Subtitle"
+						}]
+					]]
+				]],
+				"probabtions": ["Accounts","view",[
+					[ "options", "map", { "id":"pane0", "className": "page" } ],
+					[ "Header", "view", [
+						[ "options", "map", { "tagName": "header" } ],
+						[ "tpl", "file", "Header.asp" ],
+						[ "css", "file", "Header.css" ],
+						[ "data", "map", {
+							"leftText": "back",
+							"title": "Probabtions",
 							"subtitle": "A Subtitle"
 						}]
 					]]
 				]]
 			}],
 			["routes","map",{
+				"accounts":["accounts","void" ],
 				"accounts/:id":["accounts","void" ],
-				"recruits/:id":["accounts","void" ],
-				"orientations/:id":["accounts","void" ],
-				"probabtion/:id":["accounts","void" ],
+				"recruits":["recruits","void" ],
+				"recruits/:id":["recruits","void" ],
+				"orientations":["orientations","void" ],
+				"orientations/:id":["orientations","void" ],
+				"probabtions":["probabtions","void" ],
+				"probabtions/:id":["probabtions","void" ],
 				"":["accounts","void"]
 			}]
 		]]

@@ -28,6 +28,20 @@
 	background:#62bcfa;
 }
 
+.button{
+  color: black;
+  padding: 15px 15px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+	width: 150px;
+}
+
+.bg-lite-purple{ background-color: #9376E0 }
+.bg-lite-pink{ background-color: #E893CF }
+.bg-lite-peach{ background-color: #F3BCC8 }
+.bg-lite-passion{ background-color: #F6FFA6 }
+
 @media (max-width:1024px){
 	.__{
 			animation-name: frameresize2;

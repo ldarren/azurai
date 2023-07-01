@@ -16,6 +16,7 @@ pico.run({
 	baseurl: window.location.href,
 	paths:{
 		'~': './mod/',
+		ext: './ext/',
 		root: './',
 		main: './main/',
 		cfg: './cfg/',
