@@ -13,7 +13,7 @@ function pageChanged(evt, payload, params){
 return {
 	deps: {
 		pages: 'map',
-		routes: 'map'
+		routes: 'map',
 	},
 	create: function(deps, params){
 		this.super.create.call(this, deps, params)

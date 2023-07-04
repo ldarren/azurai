@@ -24,11 +24,15 @@
         },
         "dev": {
             "G_API_KEY": "G_API_KEY_DEV",
-            "G_SERP_ENG": "G_SERP_ENG_DEV"
+            "G_SERP_ENG": "G_SERP_ENG_DEV",
+            "GH_CLIENT_ID": "GH_CLIENT_ID_DEV",
+            "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_DEV"
         },
         "prod": {
             "G_API_KEY": "G_API_KEY_DEV",
-            "G_SERP_ENG": "G_SERP_ENG_DEV"
+            "G_SERP_ENG": "G_SERP_ENG_DEV",
+            "GH_CLIENT_ID": "GH_CLIENT_ID_DEV",
+            "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_DEV"
         },
     }
 }

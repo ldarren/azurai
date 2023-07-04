@@ -1,0 +1,26 @@
+### GH Authorize
+# @no-redirect
+https://github.com/login/oauth/authorize
+?scope=user:email
+&client_id={{$dotenv %GH_CLIENT_ID}}
+
+### GH Get Token From Auth Code
+POST https://github.com/login/oauth/access_token
+Content-Type: application/x-www-form-urlencoded
+User-Agent: azurai/0.1.0
+
+client_id={{$dotenv %GH_CLIENT_ID}}
+&client_secret={{$dotenv %GH_CLIENT_SECRET}}
+&code=9162a00cd1b076a0f769
+&accept=json
+
+### GH Get Token From Refresh Token
+POST https://github.com/login/oauth/access_token
+Content-Type: application/x-www-form-urlencoded
+User-Agent: azurai/0.1.0
+
+client_id={{$dotenv %GH_CLIENT_ID}}
+&client_secret={{$dotenv %GH_CLIENT_SECRET}}
+&grant_type=refresh_token
+&refresh_token=9162a00cd1b076a0f769
+&accept=json
