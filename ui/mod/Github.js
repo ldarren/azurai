@@ -6,7 +6,6 @@ return {
 		tpl: 'file'
 	},
 	create(deps){
-	console.log('>>>', deps.env)
 		this.el.innerHTML = deps.tpl(deps.env)
 	},
 	slots:{

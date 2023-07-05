@@ -4,7 +4,8 @@
   "description": "chat and train",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:prod": "cp cfg/aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env prod"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,8 @@
   "homepage": "https://github.com/ldarren/azurai/tree/main#readme",
   "dependencies": {
     "pico-client": "^0.8.2"
+  },
+  "devDependencies": {
+    "pico-args": "^1.0.14"
   }
 }

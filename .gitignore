@@ -1,9 +1,11 @@
 .azure
 *.pdf
 *_env
+cfg/aui.*.json
 env.json
 .DS_Store
 db/
+bin/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
