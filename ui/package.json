@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:local": "cp cfg/aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env local",
-    "build:dev": "cp aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env dev"
+    "build:local": "cp cfg/aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env local && cp bin/index.dev.html bin/aui/index.html",
+    "build:dev": "cp aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env dev && cp bin/index.dev.html bin/aui/index.html"
   },
   "repository": {
     "type": "git",
