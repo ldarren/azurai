@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:prod": "cp cfg/aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env prod"
+    "build:local": "cp cfg/aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env local",
+    "build:dev": "cp aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env dev"
   },
   "repository": {
     "type": "git",

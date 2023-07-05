@@ -1,7 +1,7 @@
 .azure
 *.pdf
 *_env
-cfg/aui.*.json
+aui.*.json
 env.json
 .DS_Store
 db/
