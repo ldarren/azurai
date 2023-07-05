@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "chat and train",
   "main": "index.js",
+  "engines": {
+    "npm": ">=9.0.0 <20.0.0",
+    "node": ">=18.0.0 <20.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:local": "cp cfg/aui.dev.json cfg/aui.env.json && pico-client-build --bundle aui --env local",
@@ -27,7 +31,8 @@
   },
   "homepage": "https://github.com/ldarren/azurai/tree/main#readme",
   "dependencies": {
-    "pico-client": "^0.8.2"
+    "pico-client": "^0.8.2",
+    "pico-common": "^0.15.1"
   },
   "devDependencies": {
     "pico-args": "^1.0.14"
