@@ -1,2 +1,6 @@
-We're going to now talk to the GitHub API. Ready?
-<a href="https://github.com/login/oauth/authorize?scope=user:email&client_id=<%d.GH_CLIENT_ID%>">Click here</a> to begin!
+<span class="github-btn">
+    <a class="gh-btn" href="#" rel="noopener noreferrer" target="_blank">
+        <span class="gh-ico" aria-hidden="true"></span>
+        <span class="gh-text"></span>
+    </a>
+</span>

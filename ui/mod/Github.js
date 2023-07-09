@@ -2,19 +2,16 @@ const router=require('po/router')
 
 return {
 	deps: {
-		env: 'map',
+		ghSession: 'session',
 		tpl: 'file'
 	},
 	create(deps){
-		this.el.innerHTML = deps.tpl(deps.env)
+		this.el.innerHTML = deps.tpl()
 	},
-	slots:{
-		click:function(from,sender,name){
-			switch(name){
-			case 'back':
-				router.go('organizations')
-				break
-			}
+	events:{
+		'click a':function(evt, target){
+			evt.preventDefault()
+			this.deps.ghSession.authorize()
 		}
 	}
 }

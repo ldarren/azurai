@@ -3,16 +3,19 @@
 	--main-fg: black;
 }
 html{
-	font-size:62.5%;
-	font-family:"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 14px;
 	color:var(--main-bg);
 }
 html,body{
 	height:100%;
 }
 *{
-	padding:0;
-	margin:0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
 	box-sizing: border-box;
 }
 body{

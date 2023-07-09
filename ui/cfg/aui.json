@@ -2,12 +2,19 @@
 	["models", "type", "ext/NoCacheColl", [
 		"data", 1, "options"
 	]],
+	["session", "type", "ext/Session", [
+		"data", 1, "options", "env"
+	]],
 	["p/View","view",[
 		["options", "map", {"el": ".__"}],
 		["css", "file", "main.css"],
 		["css", "file", "Frame.css"],
 		["css", "file", "example.css"],
 		["html", "file", "Frame.html"],
+		["env", "ref", "env"],
+		["ghSession", "session", [
+			["env", "ref", "env"]
+		]],
 		["List", "view", [
 			["options", "map", {"el":"#menu"}],
 			["coll", "models", [
@@ -26,6 +33,7 @@
 		["Frame", "view", [
 			["options", "map", {"el":"#frame"}],
 			["env", "ref", "env"],
+			["ghSession", "ref", "ghSession"],
 			["pages","map",{
 				"void": ["Void","view",[
 					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
@@ -35,6 +43,7 @@
 				"accounts": ["Accounts","view",[
 					["options", "map", {"id":"pane0", "class": "page"}],
 					["env", "ref", "env"],
+					["ghSession", "ref", "ghSession"],
 					["Header", "view", [
 						["options", "map", {"tag": "header" }],
 						["tpl", "file", "Header.asp"],
@@ -47,8 +56,11 @@
 					]],
 					["Scrollable", "view", [
 						["env", "ref", "env"],
+						["ghSession", "ref", "ghSession"],
 						["Github", "view", [
 							["env", "ref", "env"],
+							["css", "file", "Github.css"],
+							["ghSession", "ref", "ghSession"],
 							["tpl", "file", "Github.asp"]
 						]]
 					]]

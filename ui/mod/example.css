@@ -2,7 +2,7 @@
 	animation-name:unset;
 }
 #menu{
-	flex: 4rem 0 0;
+	flex: 10rem 0 0;
 	display:flex;
 	flex-direction:column;
 	background:black;
