@@ -50,6 +50,11 @@
 		},
 		"md": {
 			"mod": "md"
+		},
+		"gh": {
+			"mod": "gh",
+			"clientId": "$mod_gh_client-id",
+			"clientSecret": "$mod_gh_client-secret"
 		}
 	}
 }

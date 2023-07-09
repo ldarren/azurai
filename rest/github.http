@@ -1,5 +1,11 @@
 ### GH Authorize
 # @no-redirect
+http://localhost:5001/1/accounts/github/authorize
+?scope=user:email
+&client_id={{$dotenv %GH_CLIENT_ID}}
+
+### GH Authorize
+# @no-redirect
 https://github.com/login/oauth/authorize
 ?scope=user:email
 &client_id={{$dotenv %GH_CLIENT_ID}}

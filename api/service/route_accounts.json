@@ -1,0 +1,13 @@
+{
+	"routes": {
+		"/1/accounts/github/authorize": [
+			[["web.output"], "_.res", null, null, "_.head"],
+			["gh.authorize", "_.head"]
+		],
+		"/1/accounts/github/token": [
+			[["web.output"], "_.res", "_.output"],
+			["web.bodyParser", "_.req", "_.body"],
+			["gh.token", "_.body", "_.output"]
+		]
+	}
+}
