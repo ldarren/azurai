@@ -1,6 +1,6 @@
 [
 	["env", "map", {
-		"DOMAIN":"http://localhost:8888",
+		"DOMAIN":"http://localhost:5001",
 		"GH_CLIENT_ID":"get your client id from https://github.com/settings/developers"
 	}]
 ]
