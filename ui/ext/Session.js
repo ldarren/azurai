@@ -25,7 +25,7 @@ return {
             const urlObj = new URL(window.location.href)
             urlObj.search = ''
             router.go(urlObj.toString())
-            const res = await ajax('get', env.DOMAIN + '/1/accounts/github/token', {code}, {headers})
+            const res = await ajax('post', env.DOMAIN + '/1/accounts/github/token', {code}, {headers})
             console.log('>>>>', res)
         }
     },
