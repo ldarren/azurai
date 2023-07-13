@@ -11,7 +11,9 @@ this.load = () => {
 	if (env){
 		psUtil.env(pObj.flatten(env))
 	}
+	console.log('process.env', process.env)
 	pObj.replace(base, process.env)
+	console.log('base', base)
 	pObj.extends(out, [base, rsc, routeLLM, routeAccounts])
 }
 return out
