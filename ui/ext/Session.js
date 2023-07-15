@@ -1,10 +1,6 @@
 const Collection = inherit('po/Collection')
 const router = require('po/router')
 
-const headers = {
-    'Content-Type': 'application/json'
-}
-
 async function ajax(method, url, data, options){
     return new Promise((resolve, reject) => {
         pico.ajax(method, url, data, options, (err, state, resBody, xhr) => {
@@ -18,16 +14,14 @@ async function ajax(method, url, data, options){
 return {
     async init(env){
         this.client_id = env.GH_CLIENT_ID
-        const urlParams = new URLSearchParams(window.location.search)
-        const code = urlParams.get('code')
+        const urlObj = new URL(window.location.href)
+        const code = urlObj.searchParams.get('code')
 
         if (code){
-            const urlObj = new URL(window.location.href)
-            urlObj.search = ''
-            router.go(urlObj.toString())
-            const res = await ajax('post', env.DOMAIN + '/1/accounts/github/token', {code}, {headers})
+            const res = await ajax('post', env.DOMAIN + '/1/accounts/github/token', {code})
             console.log('>>>>', res)
         }
+        urlObj.search = ''
     },
     authorize(){
         const params = new URLSearchParams({

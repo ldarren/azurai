@@ -18,12 +18,10 @@
   "author": "Darren Liew",
   "license": "MIT",
   "dependencies": {
-    "@dqbd/tiktoken": "^1.0.7",
     "@opendocsg/pdf2md": "^0.1.25",
-    "hnswlib-node": "^1.4.2",
+    "hnswlib-node": "^2.0.0",
     "markdown-ast": "^0.3.0",
     "openai": "^3.3.0",
-    "pdfreader": "^3.0.0",
-    "picos": "^0.10.5"
+    "picos": "^0.10.8"
   }
 }

@@ -10,10 +10,30 @@ let client_secret = ''
 
 const ajax = (method, url, data, options) => {
 	return new Promise((resolve, reject) => {
-		pico.ajax(method, url, data, options, (err, state, body, res) => {
+		pico.ajax(method, url, data, options, (err, state, text, res) => {
 			if (4 !== state) return
-			if (err) return reject(err)
-			resolve([res, body])
+			if (err) return reject({
+				status: err.code,
+				message: err.error
+			})
+			const ct = (res.headers['content-type'] || '').split(';')
+			let body
+			switch(ct[0]){
+			case 'application/x-www-form-urlencoded':
+				body = qs.parse(text)
+				if (body.error)
+					return reject({
+						status: 400,
+						message: body.error_description,
+						params: body
+					})
+				return resolve(body)
+			case 'application/json':
+				body = JSON.parse(text)
+				resolve(body)
+				break
+			}
+			resolve(text)
 		})
 	})
 }
@@ -41,15 +61,9 @@ module.exports = {
 			client_secret,
 			accept: 'json'
 		})
-		const [res, body] = await ajax('GET', 'https://github.com/login/oauth/access_token', reqBody)
-		if (200 !== res.statusCode) return this.next({status:400})
-		const ct = (res.headers['content-type'] || '').split(';')
-		if(ct[0] === 'application/x-www-form-urlencoded'){
-			const err = qs.parse(body)
-			return this.next({status: 400, message: err})
-		}
-		const obj = JSON.parse(body)
-		Object.assign(output, obj)
+		const body = await ajax('GET', 'https://github.com/login/oauth/access_token', reqBody)
+		if (!body) this.next({status: 400, message: err})
+		Object.assign(output, body)
 		return this.next()
     }
 }

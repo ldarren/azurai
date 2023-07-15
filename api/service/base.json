@@ -3,6 +3,7 @@
 		"web": {
 			"mod": "@web",
 			"host": "0.0.0.0",
+			"cors": "*",
 			"port": "$PORT"
 		},
 		"sse": {

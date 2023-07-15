@@ -12,6 +12,9 @@ Content-Type: application/json
     "code":"9162a00cd1b076a0f769"
 }
 
+### Azurai GH Get Token From Auth Code Options
+OPTIONS http://localhost:5001/1/accounts/github/token
+
 ### GH Authorize
 # @no-redirect
 https://github.com/login/oauth/authorize
