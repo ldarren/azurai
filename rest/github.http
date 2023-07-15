@@ -5,7 +5,7 @@ http://localhost:5001/1/accounts/github/authorize
 &client_id={{$dotenv %GH_CLIENT_ID}}
 
 ### Azurai GH Get Token From Auth Code
-POST https://azurai-api-dev.onrender.com/1/accounts/github/token
+POST http://localhost:5001/1/accounts/github/token
 Content-Type: application/json
 
 {

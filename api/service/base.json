@@ -24,7 +24,7 @@
 			"mod": "llm",
 			"vendor": "openai",
 			"model": "gpt-3.5-turbo",
-			"apiKey": "$mod_llm_api-key"
+			"apiKey": "$mod_llm_api_key"
 		},
 		"hnsw": {
 			"mod": "hnsw",
@@ -40,7 +40,7 @@
 			"desc": "useful for when you need to find something on or summarize a webpage",
 			"host": "$mod_serp_host",
 			"params": {
-				"key": "$mod_serp_api-key",
+				"key": "$mod_serp_api_key",
 				"cx": "$mod_serp_engine",
 				"safe": "active",
 				"dateRestrict": "y1",
@@ -53,8 +53,8 @@
 		},
 		"gh": {
 			"mod": "gh",
-			"clientId": "$mod_gh_client-id",
-			"clientSecret": "$mod_gh_client-secret"
+			"clientId": "$mod_gh_client_id",
+			"clientSecret": "$mod_gh_client_secret"
 		}
 	}
 }
