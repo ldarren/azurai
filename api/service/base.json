@@ -56,6 +56,17 @@
 			"mod": "gh",
 			"clientId": "$mod_gh_client_id",
 			"clientSecret": "$mod_gh_client_secret"
+		},
+		"pg": {
+			"mod": "pg",
+			"user": "postgres",
+			"host": "localhost",
+			"database": "nodedemo",
+			"password": "yourpassword",
+			"port": 5432,
+			"max": 10,
+			"connectionTimeoutMillis": 0,
+			"idleTimeoutMillis": 10000
 		}
 	}
 }

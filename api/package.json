@@ -1,6 +1,6 @@
 {
   "name": "azurai_api",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Azurai the LLM state machine",
   "main": "index.js",
   "engines": {
@@ -22,6 +22,7 @@
     "hnswlib-node": "^2.0.0",
     "markdown-ast": "^0.3.0",
     "openai": "^3.3.0",
+    "pg": "^8.11.1",
     "picos": "^0.10.8"
   }
 }

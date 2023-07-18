@@ -44,26 +44,26 @@ module.exports = {
         client_secret = cfg.clientSecret
     },
     async authorize(output){
-		const reqBody = {
-			scope: 'user:email',
-			client_id
-		}
-		const [res] = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers, redirect:0})
-		Object.assign(output, {
-			status: res.statusCode,
-			headers: res.headers
-		})
-		return this.next()
+			const reqBody = {
+				scope: 'user:email',
+				client_id
+			}
+			const [res] = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers, redirect:0})
+			Object.assign(output, {
+				status: res.statusCode,
+				headers: res.headers
+			})
+			return this.next()
     },
     async token(input, output){
-		const reqBody = Object.assign({}, input, {
-			client_id,
-			client_secret,
-			accept: 'json'
-		})
-		const body = await ajax('GET', 'https://github.com/login/oauth/access_token', reqBody)
-		if (!body) this.next({status: 400, message: err})
-		Object.assign(output, body)
-		return this.next()
+			const reqBody = Object.assign({}, input, {
+				client_id,
+				client_secret,
+				accept: 'json'
+			})
+			const body = await ajax('GET', 'https://github.com/login/oauth/access_token', reqBody)
+			if (!body) this.next({status: 400, message: err})
+			Object.assign(output, body)
+			return this.next()
     }
 }

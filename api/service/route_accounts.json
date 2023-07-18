@@ -7,7 +7,15 @@
 		"/1/accounts/github/token": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
-			["gh.token", "_.body", "_.output"]
+			["gh.token", "_.body", "_.cred"],
+			["gh.readUser", "_.cred", "_.ghuser"],
+			["util.validateUser", "_.ghuser"],
+			["util.saveUser", "_.ghuser", "_.cred", "_.user"],
+			["util.createJWT", "_.ghuser", "_.user", "_.output"]
+		],
+		"/1/github/repos/:repo": [
+			[["web.output"], "_.res", "_.output"],
+			["util.validateJWT", "_.req", "_.user"],
 		]
 	}
 }
