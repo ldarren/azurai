@@ -9,8 +9,8 @@
 		"sse": {
 			"mod": "@sse"
 		},
-		"auth": {
-			"mod": "@basicAuth"
+		"jwt": {
+			"mod": "auth"
 		},
 		"sys": {
 			"mod": "@sys"
@@ -58,7 +58,7 @@
 			"clientSecret": "$mod_gh_client_secret"
 		},
 		"pg": {
-			"mod": "pg",
+			"mod": "pg_pool",
 			"user": "postgres",
 			"host": "localhost",
 			"database": "nodedemo",

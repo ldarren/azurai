@@ -9,11 +9,17 @@ POST http://localhost:5001/1/accounts/github/token
 Content-Type: application/json
 
 {
-    "code":"9162a00cd1b076a0f769"
+    "code":"02cf1f6fb7fdbdd85ee6"
 }
 
 ### Azurai GH Get Token From Auth Code Options
 OPTIONS http://localhost:5001/1/accounts/github/token
+
+###
+GET https://api.github.com/user
+Accept: application/vnd.github+json
+Authorization: Bearer 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
+'X-GitHub-Api-Version': 2022-11-28
 
 ### GH Authorize
 # @no-redirect

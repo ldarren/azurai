@@ -45,7 +45,7 @@ module.exports = {
     },
     async authorize(output){
 			const reqBody = {
-				scope: 'user:email',
+				scope: 'user',
 				client_id
 			}
 			const [res] = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers, redirect:0})
@@ -65,5 +65,17 @@ module.exports = {
 			if (!body) this.next({status: 400, message: err})
 			Object.assign(output, body)
 			return this.next()
-    }
+    },
+		async readUser(cred, output){
+			const headers = {
+				'Accept': 'application/vnd.github+json',
+				'Authorization': 'Bearer ' + cred.access_token,
+				'X-GitHub-Api-Version': '2022-11-28',
+    		'User-Agent': 'azurai/0.1.0'
+			}
+			const body = await ajax('GET', 'https://api.github.com/user', null, {headers})
+			if (!body) this.next({status: 400, message: err})
+			Object.assign(output, body)
+			return this.next()
+		},
 }
