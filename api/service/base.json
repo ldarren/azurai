@@ -59,11 +59,12 @@
 		},
 		"pg": {
 			"mod": "pg_pool",
-			"user": "postgres",
-			"host": "localhost",
-			"database": "nodedemo",
-			"password": "yourpassword",
-			"port": 5432,
+			"user": "$mod_pg_user",
+			"password": "$mod_pg_password",
+			"host": "$mod_pg_host",
+			"port": "$mod_pg_port",
+			"database": "azurai",
+			"ssl": true,
 			"max": 10,
 			"connectionTimeoutMillis": 0,
 			"idleTimeoutMillis": 10000
