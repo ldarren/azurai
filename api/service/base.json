@@ -68,6 +68,13 @@
 			"max": 10,
 			"connectionTimeoutMillis": 0,
 			"idleTimeoutMillis": 10000
+		},
+		"redis": {
+			"mod": "redis",
+			"url": "$mod_redis_url",
+			"socket": {
+				"reconnectStrategy": 1000
+			}
 		}
 	}
 }

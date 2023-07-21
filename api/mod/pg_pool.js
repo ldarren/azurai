@@ -1,3 +1,4 @@
+// Use Client if need listen to trigger
 const { Pool } = require('pg')
 
 let pool

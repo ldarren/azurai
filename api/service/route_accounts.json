@@ -1,5 +1,9 @@
 {
 	"routes": {
+		"signin": [
+		],
+		"confirm": [
+		],
 		"/1/accounts/github/authorize": [
 			[["web.output"], "_.res", null, null, "_.head"],
 			["gh.authorize", "_.head"]
@@ -7,10 +11,16 @@
 		"/1/accounts/github/token": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
+			["redis.save", "darren", {"hello": "world"}],
+			["redis.read", "darren", "_.value"],
 			["gh.token", "_.body", "_.cred"],
 			["gh.readUser", "_.cred", "_.ghuser"],
 			["pg.user.validate", "_.ghuser"],
 			["pg.user.save", "_.ghuser", "_.cred", "_.user"],
+			["jwt.create", "_.user", "_.ghuser", "_.output"]
+		],
+		"/1/accounts/signup": [
+			[["web.output"], "_.res", "_.output"],
 			["jwt.create", "_.user", "_.ghuser", "_.output"]
 		],
 		"/1/github/repos/:repo": [
