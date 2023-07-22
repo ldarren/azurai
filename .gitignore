@@ -6,6 +6,9 @@ env.json
 .DS_Store
 db/
 bin/
+azurai.pem
+azurai.pub
+azurai.pem.pub
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

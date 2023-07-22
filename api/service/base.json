@@ -10,7 +10,9 @@
 			"mod": "@sse"
 		},
 		"jwt": {
-			"mod": "auth"
+			"mod": "auth",
+			"pem": "azurai.pem",
+			"pub": "azurai.pub"
 		},
 		"sys": {
 			"mod": "@sys"

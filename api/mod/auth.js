@@ -1,13 +1,16 @@
+const path = require('node:path')
 const pStr = require('pico-common').export('pico/string')
 const pJWT = require('pico-jwt')
 
+const iss = 'azurai'
 let jwt
 let ttl = 1000 * 60 * 30 // 30 min
 let rttl = 1000 * 60 * 60 * 24 // 24 hours
 
 module.exports = {
 	setup(cfg){
-		jwt = new pJWT('RS256', cfg.pem, cfg.pub)
+		const root = path.resolve(__dirname, '../')
+		jwt = new pJWT('RS256', path.resolve(root, cfg.pem), path.resolve(root, cfg.pub))
 		ttl = cfg.ttl || ttl
 		rttl = cfg.rttl || rttl
 	},
@@ -21,7 +24,7 @@ module.exports = {
 	async create(user, output){
 		const now = Date.now()
 		const access_token = jwt.create({
-			iss: 'azurai',
+			iss,
 			sub: user.id,
 			aud: user.role,
 			exp: now + ttl,
@@ -39,10 +42,10 @@ module.exports = {
 	async validate(req, output){
 		const auth = req.headers['authorization']
 		const bearer = auth.split(' ')
-		if ('Bearer' === bearer[0] && !jwt.verify(bearer[1])) {
+		const payload = jwt.payload(bearer[1])
+		if ('Bearer' === bearer[0] && payload.exp > Date.now() && !jwt.verify(bearer[1])) {
 			return this.next({code: 403})
 		}
-		const payload = jwt.payload(bearer[1])
 		Object.assign(output, {
 			id: payload.sub,
 			role: payload.role
