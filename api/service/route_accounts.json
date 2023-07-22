@@ -2,14 +2,14 @@
 	"routes": {
 		"signin": [
 			["pg.users.get", "_.account", "_.user"],
-			["pg.accounts.set", "github", null, "_.account", "_.cred"],
-			["jwt.create", "_.user", "_.account", "_.output"]
+			["pg.accounts.set", "github", "_.account", "_.user", "_.ghuser", "_.cred"],
+			["jwt.create", "_.user", "_.output"]
 		],
 		"confirm": [
 			["jwt.code", "confirm", "_.output"],
-			["util.assign", "_.ghuser", "_.value"],
-			["util.assign", "_.cred", "_.value"],
-			["redis.save", "_.ghuser.login", "_.value"]
+			["util.assign", "ghuser", "_.ghuser", "_.value"],
+			["util.assign", "cred", "_.cred", "_.value"],
+			["redis.save", "_.output.code", "_.value"]
 		],
 		"/1/accounts/github/authorize": [
 			[["web.output"], "_.res", null, null, "_.head"],
@@ -21,21 +21,21 @@
 			["gh.token", "_.body", "_.cred"],
 			["gh.readUser", "_.cred", "_.ghuser"],
 			["pg.accounts.get", "github", "_.ghuser", "_.account"],
-			["pg.user.validate", "_.account"]
+			["pg.users.validate", "_.account"]
 		],
 		"/1/accounts/signup": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
 			["redis.read", "_.body.key", "_.payload"],
-			["util.retrieve", "ghuser", "_.payload", "_.ghuser"],
-			["util.retrieve", "cred", "_.payload", "_.cred"],
-			["pg.accounts.set", "github", "_.ghuser", "_.account", "_.cred"],
-			["pg.users.get", "_.account", "_.user"],
-			["jwt.create", "_.user", "_.account", "_.output"]
+			["util.value", "ghuser", "_.payload", "_.ghuser"],
+			["util.value", "cred", "_.payload", "_.cred"],
+			["pg.users.set", "_.user"],
+			["pg.accounts.set", "github", "_.account", "_.user", "_.ghuser", "_.cred"],
+			["jwt.create", "_.user", "_.output"]
 		],
 		"/1/github/repos/:repo": [
 			[["web.output"], "_.res", "_.output"],
-			["jwt.validate", "_.req", "_.user", "_.ghuser"]
+			["jwt.validate", "_.req", "_.user"]
 		]
 	}
 }

@@ -11,12 +11,26 @@ module.exports = {
 	},
 	accounts: {
 		async get(type, ghuser, output){
-			const res = await pool.query('SELECT * FROM accounts WHERE id = $1 and type = $2 and s = $3;', [ghuser.login, type, 1])
+			const res = await pool.query('SELECT * FROM accounts WHERE id = $1 and type = $2 and s = 1;', [ghuser.login, type])
 			const account = res.rows[0]
 			Object.assign(output, account)
 			return this.next()
 		},
-		async set(){
+		async set(type, account, user = {}, ghuser = {}, cred = null){
+			const query = {
+				// give he query a unique name
+				name: 'accounts-upsert',
+				text: 'INSERT INTO accounts (id, type, user_id, cred, cby) VALUES($1, $2, $3, $4, $3) ON CONFLICT (id, type) DO UPDATE SET cred = EXCLUDED.cred, uby = EXCLUDED.cby, uat = NOW() RETURNING *;',
+				values: [
+					ghuser.login || account.id,
+					type,
+					user.id || account.user_id,
+					JSON.stringify(cred),
+				]
+			}
+			const res = await pool.query(query)
+			Object.assign(account, res.rows[0])
+			return this.next()
 		},
 	},
 	users: {
@@ -30,15 +44,17 @@ module.exports = {
 			}
 			return this.next()
 		},
-		async get(type, account, output){
-			const res = await pool.query('SELECT * FROM users WHERE id = $1 and s = $2;', [account.user_id, 1])
+		async get(account, output){
+			const res = await pool.query('SELECT * FROM users WHERE id = $1 and s = 1;', [account.user_id])
 			const user = res.rows[0]
 			Object.assign(output, user)
 			return this.next()
 		},
 		// create new user
-		async set(type, ghuser, cred){
-			await pool.query('INSERT INTO accounts (id, type, user_id, credentials) VALUES ($1, $2, $3, $4);', [ghuser.login, type, 0, JSON.stringify(cred)])
+		async set(output){
+			const res = await pool.query('INSERT INTO users (s) VALUES (1) RETURNING id;')
+			const user = res.rows[0]
+			Object.assign(output, user)
 			return this.next()
 		}
 	}

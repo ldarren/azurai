@@ -87,5 +87,15 @@ module.exports = {
 			dst[key] = pObj.dot(src, map[key])
 		})
 		return this.next()
-	}
+	},
+
+	assign(key, value, output){
+		Object.assign(output, {[key]: value})
+		return this.next()
+	},
+
+	value(key, object, output){
+		Object.assign(output, object[key])
+		return this.next()
+	},
 }
