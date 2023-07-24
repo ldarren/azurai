@@ -9,11 +9,11 @@ POST http://localhost:5001/1/accounts/github/token
 Content-Type: application/json
 
 {
-    "code":"77e1d620851132c112ed"
+    "code":"3b44491dff2277e1d620851132c112edbf9c5f58"
 }
 
 ### Azurai GH Get Token From Auth Code Options
-OPTIONS http://localhost:5001/1/accounts/github/token
+options http://localhost:5001/1/accounts/github/token
 
 ###
 GET https://api.github.com/user

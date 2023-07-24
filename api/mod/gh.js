@@ -1,5 +1,5 @@
 const qs = require('node:querystring')
-const pico = require('pico-common')
+const pUtil = require('picos-util')
 
 const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -10,7 +10,7 @@ let client_secret = ''
 
 const ajax = (method, url, data, options) => {
 	return new Promise((resolve, reject) => {
-		pico.ajax(method, url, data, options, (err, state, text, res) => {
+		pUtil.ajax(method, url, data, options, (err, state, text, res) => {
 			if (4 !== state) return
 			if (err) return reject({
 				status: err.code,

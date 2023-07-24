@@ -1,5 +1,5 @@
 const path = require('node:path')
-const pStr = require('pico-common').export('pico/string')
+const pStr = require('pico-common').export('pico/str')
 const pJWT = require('pico-jwt')
 
 const iss = 'azurai'
@@ -17,7 +17,7 @@ module.exports = {
 	code(type, output){
 		Object.assign(output, {
 			type,
-			code: pStr.random()
+			code: pStr.rand()
 		})
 		return this.next()
 	},
@@ -33,7 +33,7 @@ module.exports = {
 		Object.assign(output, {
 			access_token,
 			expiry: now + ttl,
-			refresh_token: pstr.random(),
+			refresh_token: pStr.rand(),
 			refresh_expiry: now + rttl
 		})
 		return this.next()

@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/ldarren/azurai/tree/main#readme",
   "dependencies": {
-    "lean-wrap": "^0.3.9",
+    "lean-wrap": "^0.3.10",
     "pico-client": "^0.8.2",
     "pico-common": "^0.15.1"
   },
