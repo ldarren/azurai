@@ -1,0 +1,15 @@
+.__ .confirm{
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	flex:1 1 100%;
+	text-align:center;
+}
+.__ .confirm p{
+	font-size:1.5rem;
+	color:white;
+}
+.__ .confirm div{
+	display:flex;
+	flex-direction:row;
+}

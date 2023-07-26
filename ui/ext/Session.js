@@ -6,7 +6,11 @@ async function ajax(method, url, data, options){
 		pico.ajax(method, url, data, options, (err, state, resBody, xhr) => {
 			if (4 !== state) return
 			if (err) return reject(err)
-			resolve(resBody)
+			try {
+				resolve(JSON.parse(resBody))
+			}catch(ex){
+				reject(ex)
+			}
 		})
 	})
 }
@@ -14,6 +18,7 @@ async function ajax(method, url, data, options){
 return {
 	async init(env){
 		this.client_id = env.GH_CLIENT_ID
+		this.domain = env.DOMAIN
 		const url = new URL(window.location.href)
 		const code = url.searchParams.get('code')
 
@@ -22,8 +27,9 @@ return {
 			const newurl = url.href
 			window.history.pushState({path:newurl}, '', newurl)
 
-			const res = await ajax('post', env.DOMAIN + '/1/accounts/github/token', {code})
-			console.log('>>>>', res)
+			const {body} = await ajax('post', this.domain  + '/1/accounts/github/token', {code})
+			console.log('>>>>', body)
+			router.go(`accounts/github/confirm/${body.code}`)
 		}
 	},
 	authorize(){
@@ -32,6 +38,11 @@ return {
 			client_id: this.client_id
 		})
 		window.location.href = 'https://github.com/login/oauth/authorize?' + params.toString()
+	},
+	async signup(type, code){
+		const {body} = await ajax('post', this.domain + '/1/accounts/signup', {type, code})
+		console.log('>>>>', body)
+		router.go(`accounts/github`)
 	},
 	token(){
 

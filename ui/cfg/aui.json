@@ -40,6 +40,12 @@
 					["tpl", "file", "Void.asp"],
 					["css", "file", "Void.css"]
 				]],
+				"confirm": ["Confirm","view",[
+					["options", "map", {"id": "pane1", "class": ["page", "confirm"]}],
+					["tpl", "file", "Confirm.asp"],
+					["css", "file", "Confirm.css"],
+					["ghSession", "ref", "ghSession"]
+				]],
 				"accounts": ["Accounts","view",[
 					["options", "map", {"id":"pane0", "class": "page"}],
 					["env", "ref", "env"],
@@ -107,7 +113,7 @@
 			}],
 			["routes","map",{
 				"accounts":["accounts","void" ],
-				"accounts/:id":["accounts","void" ],
+				"accounts/:id/confirm/:code":["accounts","confirm" ],
 				"recruits":["recruits","void" ],
 				"recruits/:id":["recruits","void" ],
 				"orientations":["orientations","void" ],
