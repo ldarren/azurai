@@ -13,9 +13,9 @@ module.exports = {
 		await client.setEx(KEY_CONFIRM + key, MIN10, JSON.stringify(value))
 		return this.next()
 	},
-	async read(key, output){
-		const value = await client.get(KEY_CONFIRM + key)
+	async readOnce(key, output){
+		const value = await client.getDel(KEY_CONFIRM + key)
 		Object.assign(output, JSON.parse(value))
 		return this.next()
-	}
+	},
 }

@@ -26,9 +26,8 @@
 		"/1/accounts/signup": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
-			["redis.read", "_.body.key", "_.payload"],
-			["util.value", "ghuser", "_.payload", "_.ghuser"],
-			["util.value", "cred", "_.payload", "_.cred"],
+			["redis.readOnce", "_.body.code", "_.payload"],
+			["jwt.readPayload", "_.payload", "_.ghuser", "_.cred"],
 			["pg.users.set", "_.user"],
 			["pg.accounts.set", "github", "_.account", "_.user", "_.ghuser", "_.cred"],
 			["jwt.create", "_.user", "_.output"]

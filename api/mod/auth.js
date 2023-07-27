@@ -21,6 +21,15 @@ module.exports = {
 		})
 		return this.next()
 	},
+	readPayload(payload, ghuser, cred){
+		const keys = Object.keys(payload)
+		if (keys.includes('ghuser') && keys.includes('cred')){
+			Object.assign(ghuser, payload['ghuser'])
+			Object.assign(cred, payload['cred'])
+			return this.next()
+		}
+		return this.next({status: 403})
+	},
 	async create(user, output){
 		const now = Date.now()
 		const access_token = jwt.create({
