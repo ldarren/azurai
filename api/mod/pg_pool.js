@@ -37,11 +37,11 @@ module.exports = {
 		// return sigin if ghuser already exist
 		async validate(account){
 			if (account.user_id) {
-				const user = res.rows[0]
-				this.next(null, `signin`, Object.assign({}, this.data, {user, account}))
+				await this.next(null, `signin`)
 			} else {
-				this.next(null, `confirm`)
+				await this.next(null, `confirm`)
 			}
+
 			return this.next()
 		},
 		async get(account, output){
