@@ -19,18 +19,6 @@ return {
 	async init(env){
 		this.client_id = env.GH_CLIENT_ID
 		this.domain = env.DOMAIN
-		const url = new URL(window.location.href)
-		const code = url.searchParams.get('code')
-
-		if (code){
-			url.searchParams.delete('code')
-			const newurl = url.href
-			window.history.pushState({path:newurl}, '', newurl)
-
-			const {body} = await ajax('post', this.domain  + '/1/accounts/github/token', {code})
-			console.log('>>>>', body)
-			router.go(`accounts/github/confirm/${body.code}`)
-		}
 	},
 	authorize(){
 		const params = new URLSearchParams({
@@ -42,9 +30,25 @@ return {
 	async signup(type, code){
 		const {body} = await ajax('post', this.domain + '/1/accounts/signup', {type, code})
 		console.log('>>>>', body)
-		router.go(`accounts/github`)
+		if (body.access_token) {
+			// signin
+			this.set(Object.assign({
+				id: 'cred'
+			}, body), true)
+			router.go(`accounts/github`)
+		}
 	},
-	token(){
-
-	}
+	async token(type, code){
+		const {body} = await ajax('post', this.domain  + `/1/accounts/${type}/token`, {code})
+		if (body.access_token) {
+			// signin
+			this.set(Object.assign({
+				id: 'cred'
+			}, body), true)
+			router.go(`accounts/${type}`)
+		} else if (body.code) {
+			// ask for signup confirmation
+			router.go(`accounts/${type}/confirm/${body.code}`)
+		}
+	},
 }

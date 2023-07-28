@@ -40,11 +40,22 @@
 					["tpl", "file", "Void.asp"],
 					["css", "file", "Void.css"]
 				]],
+				"authcode": ["AuthCode","view",[
+					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
+					["tpl", "file", "Void.asp"],
+					["css", "file", "Void.css"],
+					["ghSession", "ref", "ghSession"]
+				]],
 				"confirm": ["Confirm","view",[
 					["options", "map", {"id": "pane1", "class": ["page", "confirm"]}],
 					["tpl", "file", "Confirm.asp"],
 					["css", "file", "Confirm.css"],
 					["ghSession", "ref", "ghSession"]
+				]],
+				"github": ["Void","view",[
+					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
+					["tpl", "file", "Void.asp"],
+					["css", "file", "Void.css"]
 				]],
 				"accounts": ["Accounts","view",[
 					["options", "map", {"id":"pane0", "class": "page"}],
@@ -63,11 +74,11 @@
 					["Scrollable", "view", [
 						["env", "ref", "env"],
 						["ghSession", "ref", "ghSession"],
-						["Github", "view", [
+						["GithubSSO", "view", [
 							["env", "ref", "env"],
-							["css", "file", "Github.css"],
+							["css", "file", "GithubSSO.css"],
 							["ghSession", "ref", "ghSession"],
-							["tpl", "file", "Github.asp"]
+							["tpl", "file", "GithubSSO.asp"]
 						]]
 					]]
 				]],
@@ -113,7 +124,9 @@
 			}],
 			["routes","map",{
 				"accounts":["accounts","void" ],
-				"accounts/:id/confirm/:code":["accounts","confirm" ],
+				"accounts/github":["accounts","github" ],
+				"accounts/:type/callback":["accounts","authcode" ],
+				"accounts/:type/confirm/:code":["accounts","confirm" ],
 				"recruits":["recruits","void" ],
 				"recruits/:id":["recruits","void" ],
 				"orientations":["orientations","void" ],
