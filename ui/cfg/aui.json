@@ -52,14 +52,21 @@
 					["css", "file", "Confirm.css"],
 					["ghSession", "ref", "ghSession"]
 				]],
-				"github": ["Void","view",[
-					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
-					["tpl", "file", "Void.asp"],
-					["css", "file", "Void.css"]
+				"github": ["Github","view",[
+					["options", "map", {"id": "pane1", "class": ["page"]}],
+					["ghSession", "ref", "ghSession"],
+					["repos", "models", []],
+					["List", "view", [
+						["options", "map", {"el":"#menu"}],
+						["coll", "ref", "repos"],
+						["Row", "view", [
+							["options", "map", {"tag":"a","class":"button", "href":"javascript:;"}],
+							["tpl", "file", "Repo.asp"]
+						], "Repo"]
+					]]
 				]],
 				"accounts": ["Accounts","view",[
 					["options", "map", {"id":"pane0", "class": "page"}],
-					["env", "ref", "env"],
 					["ghSession", "ref", "ghSession"],
 					["Header", "view", [
 						["options", "map", {"tag": "header" }],
@@ -72,10 +79,8 @@
 						}]
 					]],
 					["Scrollable", "view", [
-						["env", "ref", "env"],
 						["ghSession", "ref", "ghSession"],
 						["GithubSSO", "view", [
-							["env", "ref", "env"],
 							["css", "file", "GithubSSO.css"],
 							["ghSession", "ref", "ghSession"],
 							["tpl", "file", "GithubSSO.asp"]

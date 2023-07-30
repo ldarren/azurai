@@ -33,7 +33,7 @@ const ajax = (method, url, data, options) => {
 				resolve(body)
 				break
 			}
-			resolve(text)
+			resolve(res)
 		})
 	})
 }
@@ -43,12 +43,12 @@ module.exports = {
         client_id = cfg.clientId
         client_secret = cfg.clientSecret
     },
-    async authorize(output){
+    async authorize(query, output){
 			const reqBody = {
-				scope: 'user',
+				scope: encodeURIComponent(query.scope),
 				client_id
 			}
-			const [res] = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers, redirect:0})
+			const res = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers, redirect:0})
 			Object.assign(output, {
 				status: res.statusCode,
 				headers: res.headers
@@ -66,16 +66,28 @@ module.exports = {
 			Object.assign(output, body)
 			return this.next()
     },
-		async readUser(cred, output){
-			const headers = {
-				'Accept': 'application/vnd.github+json',
-				'Authorization': 'Bearer ' + cred.access_token,
-				'X-GitHub-Api-Version': '2022-11-28',
-    		'User-Agent': 'azurai/0.1.0'
-			}
-			const body = await ajax('GET', 'https://api.github.com/user', null, {headers})
-			if (!body) this.next({status: 400, message: err})
-			Object.assign(output, body)
-			return this.next()
-		},
+	async readUser(cred, output){
+		const headers = {
+			'Accept': 'application/vnd.github+json',
+			'Authorization': 'Bearer ' + cred.access_token,
+			'X-GitHub-Api-Version': '2022-11-28',
+			'User-Agent': 'azurai/0.1.0'
+		}
+		const body = await ajax('GET', 'https://api.github.com/user', null, {headers})
+		if (!body) this.next({status: 400, message: err})
+		Object.assign(output, body)
+		return this.next()
+	},
+	async readRepos(cred, output){
+		const headers = {
+			'Accept': 'application/vnd.github+json',
+			'Authorization': 'Bearer ' + cred.access_token,
+			'X-GitHub-Api-Version': '2022-11-28',
+			'User-Agent': 'azurai/0.1.0'
+		}
+		const body = await ajax('GET', 'https://api.github.com/user/repos', null, {headers})
+		if (!body) this.next({status: 400, message: err})
+		Object.assign(output, body)
+		return this.next()
+	},
 }

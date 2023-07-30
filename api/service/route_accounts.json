@@ -6,14 +6,15 @@
 			["jwt.create", "_.user", "_.output"]
 		],
 		"confirm": [
-			["jwt.code", "confirm", "_.output"],
+			["jwt.code", "github", "_.output"],
 			["util.assign", "ghuser", "_.ghuser", "_.value"],
 			["util.assign", "cred", "_.cred", "_.value"],
 			["redis.save", "_.output.code", "_.value"]
 		],
 		"/1/accounts/github/authorize": [
 			[["web.output"], "_.res", null, null, "_.head"],
-			["gh.authorize", "_.head"]
+			["web.parse", "_.req", "_.query"],
+			["gh.authorize", "_.query", "_.head"]
 		],
 		"/1/accounts/github/token": [
 			[["web.output"], "_.res", "_.output"],

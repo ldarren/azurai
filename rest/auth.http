@@ -1,8 +1,7 @@
-### Azurai GH Authorize
+### Azurai GH Authorize (not in used, call gh endpoint directly
 # @no-redirect
 http://localhost:5001/1/accounts/github/authorize
-?scope=user:email
-&client_id={{$dotenv %GH_CLIENT_ID}}
+?scope=repo%20project
 
 ### Azurai GH Get Token From Auth Code
 POST http://localhost:5001/1/accounts/github/token
@@ -20,6 +19,6 @@ POST http://localhost:5001/1/accounts/signup
 Content-Type: application/json
 
 {
-    "type": "confirm",
+    "type": "github",
     "code": "x6hokltylz"
 }

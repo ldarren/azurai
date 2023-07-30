@@ -1,5 +1,14 @@
-###
+### Get User
 GET https://api.github.com/user
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+'X-GitHub-Api-Version': 2022-11-28
+
+### GH get repo list
+GET https://api.github.com/user/repos
+?type=private
+&per_page=5
+&page=1
 Accept: application/vnd.github+json
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 'X-GitHub-Api-Version': 2022-11-28
@@ -7,7 +16,7 @@ Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 ### GH Authorize
 # @no-redirect
 https://github.com/login/oauth/authorize
-?scope=user:email
+?scope=repo%20project
 &client_id={{$dotenv %GH_CLIENT_ID}}
 
 ### GH Get Token From Auth Code

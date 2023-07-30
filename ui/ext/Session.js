@@ -22,10 +22,9 @@ return {
 	},
 	authorize(){
 		const params = new URLSearchParams({
-			scope: 'user:email',
-			client_id: this.client_id
+			scope: 'repo%20project',
 		})
-		window.location.href = 'https://github.com/login/oauth/authorize?' + params.toString()
+		window.location.href = this.domain + '/1/accounts/github/authorize?' + params.toString()
 	},
 	async signup(type, code){
 		const {body} = await ajax('post', this.domain + '/1/accounts/signup', {type, code})
