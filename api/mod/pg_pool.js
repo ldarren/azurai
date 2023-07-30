@@ -16,6 +16,12 @@ module.exports = {
 			Object.assign(output, account)
 			return this.next()
 		},
+		async list(user, output){
+			const res = await pool.query('SELECT * FROM accounts WHERE user_id = $1 and s = 1 and (eat is NULL or eat < now());', [user.id])
+			const accounts = res.rows
+			output.push(...accounts)
+			return this.next()
+		},
 		async set(type, account, user = {}, ghuser = {}, cred = null){
 			const query = {
 				// give he query a unique name

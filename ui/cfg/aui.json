@@ -80,9 +80,11 @@
 					]],
 					["Scrollable", "view", [
 						["ghSession", "ref", "ghSession"],
+						["aud", "list", []],
 						["GithubSSO", "view", [
 							["css", "file", "GithubSSO.css"],
 							["ghSession", "ref", "ghSession"],
+							["aud", "ref", "aud"],
 							["tpl", "file", "GithubSSO.asp"]
 						]]
 					]]

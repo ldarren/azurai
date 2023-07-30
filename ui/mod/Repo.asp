@@ -1,0 +1,1 @@
+<li><input type="radio" name="<%d.repo_name%>" id="<%d.id%>"></li>

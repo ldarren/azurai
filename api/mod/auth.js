@@ -30,12 +30,13 @@ module.exports = {
 		}
 		return this.next({status: 403})
 	},
-	async create(user, output){
+	async create(user, accounts, output){
+console.log('>>>>>', accounts)
 		const now = Date.now()
 		const access_token = jwt.create({
 			iss,
 			sub: user.id,
-			aud: user.role,
+			aud: accounts.map(a => a.type).join(','),
 			exp: now + ttl,
 			iat: now
 		})

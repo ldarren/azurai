@@ -3,7 +3,8 @@
 		"signin": [
 			["pg.users.get", "_.account", "_.user"],
 			["pg.accounts.set", "github", "_.account", "_.user", "_.ghuser", "_.cred"],
-			["jwt.create", "_.user", "_.output"]
+			["pg.accounts.list", "_.user", "_.:accounts"],
+			["jwt.create", "_.user", "_.:accounts", "_.output"]
 		],
 		"confirm": [
 			["jwt.code", "github", "_.output"],
@@ -31,7 +32,8 @@
 			["jwt.readPayload", "_.payload", "_.ghuser", "_.cred"],
 			["pg.users.set", "_.user"],
 			["pg.accounts.set", "github", "_.account", "_.user", "_.ghuser", "_.cred"],
-			["jwt.create", "_.user", "_.output"]
+			["pg.accounts.list", "_.user", "_.:accounts"],
+			["jwt.create", "_.user", "_.:accounts", "_.output"]
 		],
 		"/1/github/repos/:repo": [
 			[["web.output"], "_.res", "_.output"],

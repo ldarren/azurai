@@ -45,7 +45,7 @@ module.exports = {
     },
     async authorize(query, output){
 			const reqBody = {
-				scope: encodeURIComponent(query.scope),
+				scope: query.scope,
 				client_id
 			}
 			const res = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers, redirect:0})
