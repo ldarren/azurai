@@ -16,7 +16,7 @@ async function ajax(method, url, data, options){
 }
 
 return {
-	async init(env){
+	async init({env}){
 		this.client_id = env.GH_CLIENT_ID
 		this.domain = env.DOMAIN
 	},
@@ -50,4 +50,12 @@ return {
 			router.go(`accounts/${type}/confirm/${body.code}`)
 		}
 	},
+	ajax(method, href, body, options = {}){
+		const cred = this.get('cred')
+		const headers = Object.assign({}, {
+			Authorization: `Bearer ${cred.access_token}`
+		}, options.headers || {})
+		options.headers = headers
+		return ajax(method, this.domain + `/1/github` + href, body, options)
+	}
 }

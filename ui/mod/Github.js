@@ -1,10 +1,10 @@
 return {
     deps: {
-        ghSessions: 'session',
         repos: 'models',
         List: 'list'
     },
-    create(){
-    
+    create(deps, params){
+        deps.repos.retrieveRepositories()
+        deps.repos.callback.on('')
     }
 }

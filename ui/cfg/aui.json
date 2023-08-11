@@ -1,9 +1,6 @@
 [
-	["models", "type", "ext/NoCacheColl", [
+	["models", "type", "po/Collection", [
 		"data", 1, "options"
-	]],
-	["session", "type", "ext/Session", [
-		"data", 1, "options", "env"
 	]],
 	["p/View","view",[
 		["options", "map", {"el": ".__"}],
@@ -12,9 +9,9 @@
 		["css", "file", "example.css"],
 		["html", "file", "Frame.html"],
 		["env", "ref", "env"],
-		["ghSession", "session", [
+		["ghSession", "models", [
 			["env", "ref", "env"]
-		]],
+		], "ext/Session"],
 		["List", "view", [
 			["options", "map", {"el":"#menu"}],
 			["coll", "models", [
@@ -24,7 +21,7 @@
 					{"id": 3, "name": "Orientation", "icon": "1F4D6", "bg": "peach", "link": "orientations"},
 					{"id": 4, "name": "Probabtion", "icon": "1fac2", "bg": "passion", "link": "probabtions"}
 				]]
-			]],
+			], "ext/NoCacheColl"],
 			["Row", "view", [
 				["options", "map", {"tag":"a","class":"button", "href":"javascript:;"}],
 				["tpl", "file", "MenuItem.asp"]
@@ -55,7 +52,9 @@
 				"github": ["Github","view",[
 					["options", "map", {"id": "pane1", "class": ["page"]}],
 					["ghSession", "ref", "ghSession"],
-					["repos", "models", []],
+					["repos", "models", [
+						["session", "ref", "ghSession"]
+					], "ext/ghRepo"],
 					["List", "view", [
 						["options", "map", {"el":"#menu"}],
 						["coll", "ref", "repos"],
