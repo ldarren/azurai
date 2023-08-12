@@ -16,14 +16,12 @@ async function ajax(method, url, data, options){
 }
 
 return {
+    cache: null,
 	async init({session}){
         this._session = session
 	},
 	async retrieveRepositories(){
-		const {body} = await this._session.ajax('get', `/repositories`)
-		// signin
-		this.set(Object.assign({
-			id: 'repo'
-		}, body), true)
+		const {body} = await this._session.ajax('get', `/repos`)
+		this.set(body, true)
 	}
 }

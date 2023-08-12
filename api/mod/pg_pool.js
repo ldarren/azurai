@@ -16,6 +16,12 @@ module.exports = {
 			Object.assign(output, account)
 			return this.next()
 		},
+		async getByUserId(type, user, output){
+			const res = await pool.query('SELECT * FROM accounts WHERE user_id = $1 and type = $2 and s = 1;', [user.id, type])
+			const account = res.rows[0]
+			Object.assign(output, account)
+			return this.next()
+		},
 		async list(user, output){
 			const res = await pool.query('SELECT * FROM accounts WHERE user_id = $1 and s = 1 and (eat is NULL or eat < now());', [user.id])
 			const accounts = res.rows
@@ -40,16 +46,6 @@ module.exports = {
 		},
 	},
 	users: {
-		// return sigin if ghuser already exist
-		async validate(account){
-			if (account.user_id) {
-				await this.next(null, `signin`)
-			} else {
-				await this.next(null, `confirm`)
-			}
-
-			return this.next()
-		},
 		async get(account, output){
 			const res = await pool.query('SELECT * FROM users WHERE id = $1 and s = 1;', [account.user_id])
 			const user = res.rows[0]

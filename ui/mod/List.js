@@ -12,13 +12,14 @@ return {
 		Row:'view'
 	},
 	create:function(deps){
+		deps.coll.callback.on('add',function(evt, coll, id){
+			// eslint-disable-next-line
+			console.log('Coll.add',evt, coll.get(id))
+			this.spawn(deps.Row,{id},[['model','model','coll','id']])
+		},this)
 		deps.coll.callback.on('update',function(){
 			// eslint-disable-next-line
 			console.log('Coll.update',arguments)
-		},this)
-		deps.coll.models[1].callback.on('field.update',function(){
-			// eslint-disable-next-line
-			console.log('Model.update',arguments)
 		},this)
 
 		populate(this, deps.coll, deps.Row)

@@ -31,7 +31,6 @@ module.exports = {
 		return this.next({status: 403})
 	},
 	async create(user, accounts, output){
-console.log('>>>>>', accounts)
 		const now = Date.now()
 		const access_token = jwt.create({
 			iss,
@@ -46,6 +45,17 @@ console.log('>>>>>', accounts)
 			refresh_token: pStr.rand(),
 			refresh_expiry: now + rttl
 		})
+		return this.next()
+	},
+
+	// return sigin if ghuser already exist
+	async branch_sso(account){
+		if (account.user_id) {
+			await this.next(null, `signin`)
+		} else {
+			await this.next(null, `confirm`)
+		}
+
 		return this.next()
 	},
 

@@ -12,6 +12,9 @@
 		["ghSession", "models", [
 			["env", "ref", "env"]
 		], "ext/Session"],
+		["repo", "models", [
+			["env", "ref", "env"]
+		]],
 		["List", "view", [
 			["options", "map", {"el":"#menu"}],
 			["coll", "models", [
@@ -31,6 +34,7 @@
 			["options", "map", {"el":"#frame"}],
 			["env", "ref", "env"],
 			["ghSession", "ref", "ghSession"],
+			["repo", "ref", "repo"],
 			["pages","map",{
 				"void": ["Void","view",[
 					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
@@ -52,15 +56,18 @@
 				"github": ["Github","view",[
 					["options", "map", {"id": "pane1", "class": ["page"]}],
 					["ghSession", "ref", "ghSession"],
-					["repos", "models", [
+					["repo", "ref", "repo"],
+					["allrepos", "models", [
 						["session", "ref", "ghSession"]
 					], "ext/ghRepo"],
 					["List", "view", [
-						["options", "map", {"el":"#menu"}],
-						["coll", "ref", "repos"],
+						["options", "map", {"el":"#pane1"}],
+						["coll", "ref", "allrepos"],
+						["repo", "ref", "repo"],
 						["Row", "view", [
-							["options", "map", {"tag":"a","class":"button", "href":"javascript:;"}],
-							["tpl", "file", "Repo.asp"]
+							["options", "map", {"tag":"li"}],
+							["tpl", "file", "Repo.asp"],
+							["repo", "ref", "repo"]
 						], "Repo"]
 					]]
 				]],

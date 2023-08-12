@@ -1,10 +1,10 @@
 return {
     deps: {
-        repos: 'models',
+        allrepos: 'models',
         List: 'list'
     },
     create(deps, params){
-        deps.repos.retrieveRepositories()
-        deps.repos.callback.on('')
+        deps.allrepos.retrieveRepositories()
+        this.super.create.call(this, deps, params)
     }
 }
