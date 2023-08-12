@@ -3,13 +3,16 @@
 		"web": {
 			"mod": "@web",
 			"host": "0.0.0.0",
+			"cors": "*",
 			"port": "$PORT"
 		},
 		"sse": {
 			"mod": "@sse"
 		},
-		"auth": {
-			"mod": "@basicAuth"
+		"jwt": {
+			"mod": "auth",
+			"pem": "azurai.pem",
+			"pub": "azurai.pub"
 		},
 		"sys": {
 			"mod": "@sys"
@@ -24,7 +27,7 @@
 			"mod": "llm",
 			"vendor": "openai",
 			"model": "gpt-3.5-turbo",
-			"apiKey": "$mod_llm_api-key"
+			"apiKey": "$mod_llm_api_key"
 		},
 		"hnsw": {
 			"mod": "hnsw",
@@ -40,7 +43,7 @@
 			"desc": "useful for when you need to find something on or summarize a webpage",
 			"host": "$mod_serp_host",
 			"params": {
-				"key": "$mod_serp_api-key",
+				"key": "$mod_serp_api_key",
 				"cx": "$mod_serp_engine",
 				"safe": "active",
 				"dateRestrict": "y1",
@@ -50,6 +53,30 @@
 		},
 		"md": {
 			"mod": "md"
+		},
+		"gh": {
+			"mod": "gh",
+			"clientId": "$mod_gh_client_id",
+			"clientSecret": "$mod_gh_client_secret"
+		},
+		"pg": {
+			"mod": "pg_pool",
+			"user": "$mod_pg_user",
+			"password": "$mod_pg_password",
+			"host": "$mod_pg_host",
+			"port": "$mod_pg_port",
+			"database": "azurai",
+			"ssl": true,
+			"max": 10,
+			"connectionTimeoutMillis": 0,
+			"idleTimeoutMillis": 10000
+		},
+		"redis": {
+			"mod": "redis",
+			"url": "$mod_redis_url",
+			"socket": {
+				"reconnectStrategy": 1000
+			}
 		}
 	}
 }

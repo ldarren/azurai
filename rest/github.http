@@ -1,0 +1,59 @@
+### Get User
+GET https://api.github.com/user
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+### GET tree sha with branch api
+GET https://api.github.com/repos/ldarren/bluster/branches/develop
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+### GH get content by trees api
+GET https://api.github.com/repos/ldarren/bluster/git/trees/7f529cad76efc03936ad138fe47be9446e79d5ff
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+### GH get content
+GET https://api.github.com/repos/ldarren/bluster/git/blobs/d89ebc49b032e6e95dcf58f4326c07ac9c5fcf63
+Accept: application/vnd.github.raw
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+### GH get repo content
+GET https://api.github.com/user/repos
+?type=private
+&per_page=5
+&page=1
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+### GH Authorize
+# @no-redirect
+https://github.com/login/oauth/authorize
+?scope=repo%20project
+&client_id={{$dotenv %GH_CLIENT_ID}}
+
+### GH Get Token From Auth Code
+POST https://github.com/login/oauth/access_token
+Content-Type: application/x-www-form-urlencoded
+User-Agent: azurai/0.1.0
+
+client_id={{$dotenv %GH_CLIENT_ID}}
+&client_secret={{$dotenv %GH_CLIENT_SECRET}}
+&code=9162a00cd1b076a0f769
+&accept=json
+
+### GH Get Token From Refresh Token
+POST https://github.com/login/oauth/access_token
+Content-Type: application/x-www-form-urlencoded
+User-Agent: azurai/0.1.0
+
+client_id={{$dotenv %GH_CLIENT_ID}}
+&client_secret={{$dotenv %GH_CLIENT_SECRET}}
+&grant_type=refresh_token
+&refresh_token={{$dotenv %GH_REFRESH_TOKEN}}
+&accept=json

@@ -22,13 +22,29 @@
     "rest-client.environmentVariables": {
         "$shared": {
         },
-        "dev": {
+        "local": {
+            "BACKEND": "http://localhost:5001",
             "G_API_KEY": "G_API_KEY_DEV",
-            "G_SERP_ENG": "G_SERP_ENG_DEV"
+            "G_SERP_ENG": "G_SERP_ENG_DEV",
+            "GH_CLIENT_ID": "GH_CLIENT_ID_DEV",
+            "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_DEV",
+            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_DEV"
+        },
+        "dev": {
+            "BACKEND": "https://azurai-api-dev.onrender.com",
+            "G_API_KEY": "G_API_KEY_DEV",
+            "G_SERP_ENG": "G_SERP_ENG_DEV",
+            "GH_CLIENT_ID": "GH_CLIENT_ID_DEV",
+            "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_DEV",
+            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_DEV"
         },
         "prod": {
-            "G_API_KEY": "G_API_KEY_DEV",
-            "G_SERP_ENG": "G_SERP_ENG_DEV"
+            "BACKEND": "https://azurai-api.onrender.com",
+            "G_API_KEY": "G_API_KEY_PROD",
+            "G_SERP_ENG": "G_SERP_ENG_PROD",
+            "GH_CLIENT_ID": "GH_CLIENT_ID_PROD",
+            "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_PROD",
+            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_PROD"
         },
     }
 }

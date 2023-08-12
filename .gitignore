@@ -1,9 +1,14 @@
 .azure
 *.pdf
 *_env
+aui.*.json
 env.json
 .DS_Store
 db/
+bin/
+azurai.pem
+azurai.pub
+azurai.pem.pub
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -21,7 +26,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
