@@ -6,22 +6,22 @@
 			"cors": "*",
 			"port": "$PORT"
 		},
-		"sse": {
-			"mod": "@sse"
+		"gUtil": {
+			"mod": "@util"
+		},
+		"util":{
+			"mod": "util"
+		},
+		"agents": {
+			"mod": "agents"
+		},
+		"timer": {
+			"mod": "@timer"
 		},
 		"jwt": {
 			"mod": "auth",
 			"pem": "azurai.pem",
 			"pub": "azurai.pub"
-		},
-		"sys": {
-			"mod": "@sys"
-		},
-		"timer": {
-			"mod": "@timer"
-		},
-		"util":{
-			"mod": "util"
 		},
 		"llm": {
 			"mod": "llm",

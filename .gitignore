@@ -4,7 +4,7 @@
 aui.*.json
 env.json
 .DS_Store
-db/
+ref/
 bin/
 azurai.pem
 azurai.pub

@@ -59,5 +59,36 @@ module.exports = {
 			Object.assign(output, user)
 			return this.next()
 		}
+	},
+	agents: {
+		async list(user, output){
+			const res = await pool.query('SELECT * FROM agents WHERE cby = $1 and s = 1;', [user.id])
+			const agents = res.rows
+			output.push(...agents)
+			return this.next()
+		},
+		async get(agentId, user, output){
+			const res = await pool.query('SELECT * FROM agents WHERE id = $1 and cby = $2 and s = 1;', [agentId, user.id])
+			const agent = res.rows[0] ?? {}
+			Object.assign(output, agent)
+			return this.next()
+		},
+		async set(agent, user, output){
+			const res = await pool.query(`
+			INSERT INTO agents (id, name, summary, params, persona, s, cby)
+			VALUES ($1, $2, $3, $4, $5, $6, $7)
+			ON CONFLICT (id, cby)
+			DO UPDATE SET
+				name = EXCLUDED.name,
+				summary = XCLUDED.summary,
+				persona = COALESCE(EXCLUDED.persona, agents.persona),
+				s = COALESCE(EXCLUDED.s, agents.s),
+				uby = EXCLUDED.cby,
+				uat = NOW()
+			RETURNING *;`, [agent.id, agent.name, agent.summary, agent.params, agent.persona, agent.s, user.id])
+			const row = res.rows[0]
+			Object.assign(output, row)
+			return this.next()
+		},
 	}
 }
