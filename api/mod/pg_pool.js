@@ -67,28 +67,72 @@ module.exports = {
 			output.push(...agents)
 			return this.next()
 		},
-		async get(agentId, user, output){
-			const res = await pool.query('SELECT * FROM agents WHERE id = $1 and cby = $2 and s = 1;', [agentId, user.id])
+		async get(agentId, userId, output){
+			const res = await pool.query('SELECT * FROM agents WHERE id = $1 and cby = $2 and s = 1;', [agentId, userId])
 			const agent = res.rows[0] ?? {}
 			Object.assign(output, agent)
+			return this.next()
+		},
+		async insert(agent, user, output){
+			try{
+				const res = await pool.query(`
+					INSERT INTO agents (id, name, summary, params, persona, s, cby)
+					VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+					[agent.id, agent.name, agent.summary, agent.params, agent.persona, agent.s, user.id]
+				)
+				output.push(...res.rows)
+			}catch(ex){
+				console.error(ex)
+				return this.next({status: 400, message: ex.message})
+			}
+			return this.next()
+		},
+		async update(agent, user, output){
+			try{
+				const res = await pool.query(`
+					UPDATE agents SET
+					name = COALESCE($1, agents.name),
+					summary = COALESCE($2, agents.summary),
+					params = COALESCE($3, agents.params),
+					persona = COALESCE($4, agents.persona),
+					s = COALESCE($5, agents.s),
+					uby = $6,
+					uat = NOW() WHERE id = $7 and cby = $6 RETURNING *;`,
+					[agent.name, agent.summary, agent.params, agent.persona, agent.s, user.id, agent.id]
+				)
+				output.push(...res.rows)
+			}catch(ex){
+				console.error(ex)
+				return this.next({status: 404, message: ex.message})
+			}
 			return this.next()
 		},
 		async set(agent, user, output){
 			const res = await pool.query(`
 			INSERT INTO agents (id, name, summary, params, persona, s, cby)
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
-			ON CONFLICT (id, cby)
+			ON CONFLICT (id)
 			DO UPDATE SET
 				name = EXCLUDED.name,
-				summary = XCLUDED.summary,
+				summary = EXCLUDED.summary,
 				persona = COALESCE(EXCLUDED.persona, agents.persona),
 				s = COALESCE(EXCLUDED.s, agents.s),
 				uby = EXCLUDED.cby,
 				uat = NOW()
 			RETURNING *;`, [agent.id, agent.name, agent.summary, agent.params, agent.persona, agent.s, user.id])
-			const row = res.rows[0]
-			Object.assign(output, row)
+			output.push(...res.rows)
 			return this.next()
 		},
+		async delete(agent, user, output){
+			const res = await pool.query(`
+			UPDATE agents SET
+				s = 0,
+				uby = $1,
+				uat = NOW()
+			WHERE id = $2
+			RETURNING *;`, [user.id, agent.id])
+			Object.assign(output, res.rows[0])
+			return this.next()
+		}
 	}
 }

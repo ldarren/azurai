@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS users (
+	id BIGSERIAL PRIMARY KEY,
+  s SMALLINT DEFAULT 1,
+  cat TIMESTAMPTZ DEFAULT NOW(),
+  uat TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS accounts (
+  id VARCHAR(320) PRIMARY KEY,
+  user_id BIGINT,
+  type VARCHAR(8) NOT NULL,
+  cred JSON,
+  s SMALLINT DEFAULT 1,
+  cby BIGINT,
+  cat TIMESTAMPTZ DEFAULT NOW(),
+  uby BIGINT,
+  uat TIMESTAMPTZ DEFAULT NOW(),
+  eat TIMESTAMPTZ,
+	CONSTRAINT uniq_acc_id_type UNIQUE (id, type)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_accounts_user_id_type ON accounts (user_id, type);
+
+CREATE TABLE IF NOT EXISTS agents (
+  id VARCHAR(64) PRIMARY KEY,
+  name VARCHAR(64) NOT NULL,
+  summary VARCHAR,
+  params JSON,
+  persona VARCHAR,
+  s SMALLINT DEFAULT 1,
+  cby BIGINT NOT NULL,
+  cat TIMESTAMPTZ DEFAULT NOW(),
+  uby BIGINT,
+  uat TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_agents_name ON agents (name);
+CREATE INDEX IF NOT EXISTS index_agents_cby ON agents (cby, s);

@@ -1,36 +1,36 @@
 {
 	"routes": {
 		"POST/agents": [
-			["web.parse", "_.req", "_.agent"],
-			["agents.validate", "_.agent", "@.rcs.agent.param_spec"],
-			["pg.agents.set", "_.agent","_.user", "_.output"]
+			["web.parse", "_.req", "_.body"],
+			[["agents.validate", "@.rsc.agents.params_spec", "create"], "_.body", "_.agent"],
+			["pg.agents.insert", "_.agent","_.user", "_.:output"]
 		],
 		"PUT/agents": [
-			["web.parse", "_.req", "_.agent"],
-			["agents.validate", "_.agent", "@.rcs.agent.param_spec"],
-			["pg.agents.set", "_.agent","_.user", "_.output"]
+			["web.parse", "_.req", "_.body"],
+			[["agents.validate", "@.rsc.agents.params_spec", "update"], "_.body", "_.agent"],
+			["pg.agents.update", "_.agent","_.user", "_.:output"]
 		],
 		"GET/agents": [
-			[["web.output"], "_.res", "_.:output"],
-			["jwt.validate", "_.req", "_.user"],
 			["pg.agents.list", "_.user", "_.:output"]
 		],
 		"DELETE/agents/key": [
-			["agents.deleteBody", "_.params", "_.agent"],
-			["pg.agents.set", "_.agent","_.user", "_.output"]
+			["agents.deleteBody", "_.agent", "_.agent"],
+			["pg.agents.delete", "_.agent","_.user", "_.output"]
 		],
 		"GET/agents/key": [
-			["pg.agents.get", "_.params.id","_.user", "_.output"]
+			["pg.agents.get", "_.agent.id","_.user.id", "_.output"],
+			["agents.exist", "_.output"]
 		],
 		"/1/agents": [
-			[["web.output"], "_.res", "_.output"],
+			[["web.output"], "_.res", "_.:output"],
 			["jwt.validate", "_.req", "_.user"],
-			[["gUtil.router", "id", "agents", "key"], "_.req.method", "_.params"]
+			[["gUtil.router", "id", "agents", "/key"], "_.req.method", "$.params"]
 		],
 		"/1/agents/:id": [
 			[["web.output"], "_.res", "_.output"],
 			["jwt.validate", "_.req", "_.user"],
-			[["gUtil.router", "id", "agents", "key"], "_.req.method", "_.params"]
+			["util.assign", "id", "$.params.id", "_.agent"],
+			[["gUtil.router", "id", "agents", "/key"], "_.req.method", "_.agent"]
 		]
 	}
 }
