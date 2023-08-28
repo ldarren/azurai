@@ -13,8 +13,9 @@
 			["env", "ref", "env"]
 		], "ext/Session"],
 		["repo", "models", [
-			["env", "ref", "env"]
 		]],
+		["agents", "models", [
+		], "ext/agents"],
 		["List", "view", [
 			["options", "map", {"el":"#menu"}],
 			["coll", "models", [
@@ -33,13 +34,37 @@
 		["Frame", "view", [
 			["options", "map", {"el":"#frame"}],
 			["env", "ref", "env"],
-			["ghSession", "ref", "ghSession"],
-			["repo", "ref", "repo"],
+			["models", "refs", "models"],
 			["pages","map",{
 				"void": ["Void","view",[
 					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
 					["tpl", "file", "Void.asp"],
 					["css", "file", "Void.css"]
+				]],
+				"accounts": ["Accounts","view",[
+					["options", "map", {"id":"pane0", "class": "page"}],
+					["aud", "list", []],
+					["ghSession", "ref", "ghSession"],
+					["Header", "view", [
+						["options", "map", {"tag": "header" }],
+						["tpl", "file", "Header.asp"],
+						["css", "file", "Header.css"],
+						["data", "map", {
+							"leftText": "back",
+							"title": "Accounts",
+							"subtitle": "Repository Subscription"
+						}]
+					]],
+					["Scrollable", "view", [
+						["ghSession", "ref", "ghSession"],
+						["aud", "ref", "aud"],
+						["GithubSSO", "view", [
+							["css", "file", "GithubSSO.css"],
+							["ghSession", "ref", "ghSession"],
+							["aud", "ref", "aud"],
+							["tpl", "file", "GithubSSO.asp"]
+						]]
+					]]
 				]],
 				"authcode": ["AuthCode","view",[
 					["options", "map", {"id": "pane1", "class": ["page", "void"]}],
@@ -71,41 +96,48 @@
 						], "Repo"]
 					]]
 				]],
-				"accounts": ["Accounts","view",[
-					["options", "map", {"id":"pane0", "class": "page"}],
-					["ghSession", "ref", "ghSession"],
+				"recruits": ["Recruit","view",[
+					["options", "map", { "id":"pane0", "class": "page" } ],
+					["agents", "ref", "agents"],
 					["Header", "view", [
-						["options", "map", {"tag": "header" }],
-						["tpl", "file", "Header.asp"],
-						["css", "file", "Header.css"],
-						["data", "map", {
-							"leftText": "back",
-							"title": "Accounts",
-							"subtitle": "A Subtitle"
-						}]
-					]],
-					["Scrollable", "view", [
-						["ghSession", "ref", "ghSession"],
-						["aud", "list", []],
-						["GithubSSO", "view", [
-							["css", "file", "GithubSSO.css"],
-							["ghSession", "ref", "ghSession"],
-							["aud", "ref", "aud"],
-							["tpl", "file", "GithubSSO.asp"]
-						]]
-					]]
-				]],
-				"recruits": ["Accounts","view",[
-					[ "options", "map", { "id":"pane0", "class": "page" } ],
-					[ "Header", "view", [
 						[ "options", "map", { "tag": "header" } ],
 						[ "tpl", "file", "Header.asp" ],
 						[ "css", "file", "Header.css" ],
 						[ "data", "map", {
 							"leftText": "back",
 							"title": "Recruits",
-							"subtitle": "A Subtitle"
+							"subtitle": "Evolving Agent Personas",
+							"rightText": "add"
 						}]
+					]],
+					["List", "view", [
+						["options", "map", {"el":"#pane0"}],
+						["css", "file", "List.css"],
+						["coll", "ref", "agents"],
+						["Row", "view", [
+							["options", "map", {"tag":"li"}],
+							["tpl", "file", "AgentRow.asp"]
+						], "AgentRow"]
+					]]
+				]],
+				"agent": ["p/View","view",[
+					["options", "map", {"id": "pane1", "class": ["page"]}],
+					["agents", "ref", "agents"],
+					["Header", "view", [
+						[ "options", "map", { "tag": "header" } ],
+						[ "tpl", "file", "Header.asp" ],
+						[ "css", "file", "Header.css" ],
+						[ "data", "map", {
+							"leftText": "cancel",
+							"title": "Edit Agent",
+							"subtitle": "form",
+							"rightText": "save"
+						}]
+					]],
+					["AgentForm", "view", [
+						["tpl", "file", "AgentForm.asp"],
+						["css", "file", "AgentForm.css"],
+						["agents", "ref", "agents"]
 					]]
 				]],
 				"orientations": ["Accounts","view",[
@@ -136,17 +168,17 @@
 				]]
 			}],
 			["routes","map",{
-				"accounts":["accounts","void" ],
-				"accounts/github":["accounts","github" ],
-				"accounts/:type/callback":["accounts","authcode" ],
-				"accounts/:type/confirm/:code":["accounts","confirm" ],
-				"recruits":["recruits","void" ],
-				"recruits/:id":["recruits","void" ],
-				"orientations":["orientations","void" ],
-				"orientations/:id":["orientations","void" ],
-				"probabtions":["probabtions","void" ],
-				"probabtions/:id":["probabtions","void" ],
-				"":["accounts","void"]
+				"accounts":["accounts", "void"],
+				"accounts/github":["accounts", "github"],
+				"accounts/:type/callback":["accounts", "authcode"],
+				"accounts/:type/confirm/:code":["accounts", "confirm"],
+				"recruits":["recruits", "void"],
+				"recruits/:selected":["recruits", "agent"],
+				"orientations":["orientations", "void"],
+				"orientations/:id":["orientations", "void"],
+				"probabtions":["probabtions", "void"],
+				"probabtions/:id":["probabtions", "void"],
+				"":["accounts", "void"]
 			}]
 		]]
 	]]
