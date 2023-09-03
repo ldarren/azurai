@@ -78,12 +78,12 @@ module.exports = {
 				const res = await pool.query(`
 					INSERT INTO agents (id, name, summary, params, persona, s, cby)
 					VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
-					[agent.id, agent.name, agent.summary, agent.params, agent.persona, agent.s, user.id]
+					[agent.id, agent.name, agent.summary, agent.params, agent.persona, agent.s ?? 1, user.id]
 				)
 				output.push(...res.rows)
 			}catch(ex){
 				console.error(ex)
-				return this.next({status: 400, message: ex.message})
+				return this.next({status: 500, message: ex.message})
 			}
 			return this.next()
 		},
@@ -103,7 +103,7 @@ module.exports = {
 				output.push(...res.rows)
 			}catch(ex){
 				console.error(ex)
-				return this.next({status: 404, message: ex.message})
+				return this.next({status: 500, message: ex.message})
 			}
 			return this.next()
 		},

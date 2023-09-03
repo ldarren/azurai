@@ -56,6 +56,6 @@ return {
 			Authorization: `Bearer ${cred.access_token}`
 		}, options.headers || {})
 		options.headers = headers
-		return ajax(method, this.domain + `/1/github` + href, body, options)
+		return ajax(method, this.domain + href, body, options)
 	}
 }

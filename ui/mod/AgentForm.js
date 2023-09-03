@@ -4,6 +4,6 @@ return {
         agents: 'models'
     },
     create(deps, params){
-        this.el.innerHTML = deps.tpl(deps.agents.get(params.selected))
+        this.el.innerHTML = deps.tpl(deps.agents.get('new' === params.selected ? '' : params.selected))
     }
 }

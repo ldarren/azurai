@@ -7,7 +7,7 @@ return {
         this._session = session
 	},
 	async retrieveRepositories(){
-		const {body} = await this._session.ajax('get', `/repos`)
+		const {body} = await this._session.ajax('get', `/1/github/repos`)
 		this.set(body, true)
 	}
 }

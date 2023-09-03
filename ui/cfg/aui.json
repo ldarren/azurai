@@ -15,6 +15,7 @@
 		["repo", "models", [
 		]],
 		["agents", "models", [
+			["session", "ref", "ghSession"]
 		], "ext/agents"],
 		["List", "view", [
 			["options", "map", {"el":"#menu"}],
@@ -120,7 +121,7 @@
 						], "AgentRow"]
 					]]
 				]],
-				"agent": ["p/View","view",[
+				"agent": ["Agent","view",[
 					["options", "map", {"id": "pane1", "class": ["page"]}],
 					["agents", "ref", "agents"],
 					["Header", "view", [
@@ -135,6 +136,7 @@
 						}]
 					]],
 					["AgentForm", "view", [
+						["options", "map", {"tag": "form"}],
 						["tpl", "file", "AgentForm.asp"],
 						["css", "file", "AgentForm.css"],
 						["agents", "ref", "agents"]
