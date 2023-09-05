@@ -1,22 +1,27 @@
 const Collection = inherit('po/Collection')
 const router = require('po/router')
 
+function refresh(evt, coll, id){
+	if (id === 'cred') this.listAgents()
+}
+
 return {
-	async init({session}){
+	init({session}){
         this._session = session
 	},
     ready(){
         if (this._session.get('cred')){
 			this.listAgents()
         }else{
-			this._session.callback.on('add', (evt, coll, id) => {
-				if (id === 'cred') this.listAgents()
-			}, this)
+			this._session.callback.on('add', refresh, this)
         }
     },
+	fini(){
+		this._session.callback.off('add', refresh, this)
+	},
     async listAgents(){
 		const {body} = await this._session.ajax('get', `/1/agents`)
-		this.set(body, true)
+		this.set(body)
 		console.log('agents>list', body)
     },
     createAgent(){
@@ -55,11 +60,14 @@ return {
         Object.assign(curr, body)
 	},
     async deleteAgent(id){
-        if (!id) return
         const curr = this.get(id)
         if (!curr) return
-        const {body} = await this._session.ajax('delete', `/1/agents/${id}`, obj)
-		console.log('agents>delete', body)
-        Object.assign(curr, body)
+        if (id) {
+            const {body} = await this._session.ajax('delete', `/1/agents/${id}`, curr)
+            console.log('agents>delete', body)
+            Object.assign(curr, body)
+        }else{
+            curr.s = 0
+        }
     }
 }

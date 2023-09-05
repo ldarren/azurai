@@ -24,7 +24,7 @@
 					{"id": 1, "name": "Accounts", "icon": "1F465", "bg": "purple", "link":"accounts"},
 					{"id": 2, "name": "Recruits", "icon": "002B", "bg": "pink", "link": "recruits"},
 					{"id": 3, "name": "Orientation", "icon": "1F4D6", "bg": "peach", "link": "orientations"},
-					{"id": 4, "name": "Probabtion", "icon": "1fac2", "bg": "passion", "link": "probabtions"}
+					{"id": 4, "name": "Probation", "icon": "1fac2", "bg": "passion", "link": "probabtions"}
 				]]
 			], "ext/NoCacheColl"],
 			["Row", "view", [

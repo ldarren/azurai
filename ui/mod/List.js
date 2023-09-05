@@ -18,9 +18,9 @@ return {
 			console.log('Coll.add',evt, coll.get(id))
 			this.spawn(deps.Row,Object.assign({id}, params),[['model','model','coll','id']])
 		},this)
-		deps.coll.callback.on('update',function(){
+		deps.coll.callback.on('update',function(evt, coll, id){
 			// eslint-disable-next-line
-			console.log('Coll.update',arguments)
+			console.log('Coll.update',evt, coll.get(id).params)
 		},this)
 
 		populate(this, deps.coll, deps.Row, params)

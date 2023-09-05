@@ -34,3 +34,29 @@ CREATE TABLE IF NOT EXISTS agents (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_agents_name ON agents (name);
 CREATE INDEX IF NOT EXISTS index_agents_cby ON agents (cby, s);
+
+CREATE TABLE IF NOT EXISTS memories (
+  id VARCHAR(64) PRIMARY KEY,
+  agent_id VARCHAR(64) NOT NULL,
+  source VARCHAR NOT NULL,
+  type VARCHAR(16) NOT NULL,
+  s SMALLINT DEFAULT 1,
+  cby BIGINT NOT NULL,
+  cat TIMESTAMPTZ DEFAULT NOW(),
+  uby BIGINT,
+  uat TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS index_memories_agent_id ON memories (agent_id);
+
+CREATE TABLE IF NOT EXISTS memory_chunks (
+  id VARCHAR(64) PRIMARY KEY,
+  memory_id VARCHAR(64) NOT NULL,
+  chunk VARCHAR NOT NULL,
+  embedding vector(1536) NOT NULL,
+  s SMALLINT DEFAULT 1,
+  cby BIGINT NOT NULL,
+  cat TIMESTAMPTZ DEFAULT NOW(),
+  uby BIGINT,
+  uat TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS index_memory_chunk_memory_id ON memory_chunks (memory_id);
