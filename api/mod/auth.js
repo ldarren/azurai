@@ -28,7 +28,7 @@ module.exports = {
 			Object.assign(cred, payload['cred'])
 			return this.next()
 		}
-		return this.next({status: 403})
+		return this.next({status: 401})
 	},
 	async create(user, accounts, output){
 		const now = Date.now()
@@ -61,10 +61,11 @@ module.exports = {
 
 	async validate(req, output){
 		const auth = req.headers['authorization']
+		if (!auth) return this.next({status: 401})
 		const bearer = auth.split(' ')
 		const payload = jwt.payload(bearer[1])
 		if ('Bearer' === bearer[0] && payload.exp > Date.now() && !jwt.verify(bearer[1])) {
-			return this.next({code: 403})
+			return this.next({status: 401})
 		}
 		Object.assign(output, {
 			id: payload.sub,

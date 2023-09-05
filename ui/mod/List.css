@@ -1,0 +1,6 @@
+.page li {
+    background-color: darkblue;
+}
+.page li.selected{
+    background-color: yellow;
+}

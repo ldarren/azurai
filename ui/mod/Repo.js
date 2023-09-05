@@ -8,7 +8,12 @@ return {
 	},
 	create:function(deps){
 		const data = deps.model
-		this.el.innerHTML=deps.tpl(data)
+		this.el.innerHTML=deps.tpl({
+			id: data.id,
+			node_id: data.node_id,
+			full_name: data.full_name,
+			checked: !!deps.repo.get(data.id)
+		})
 	},
 	events: {
 		'click input': function(evt, target){

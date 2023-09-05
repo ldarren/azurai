@@ -13,7 +13,7 @@ return {
 	events:{
 		'click a':function(evt, target){
 			evt.preventDefault()
-			if (this.deps.aud.includes('github')) return this.go('accounts/github')
+			if (this.deps.aud.includes('github')) return router.go('accounts/github')
 			this.deps.ghSession.authorize()
 		}
 	}
