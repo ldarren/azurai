@@ -48,6 +48,8 @@ CREATE TABLE IF NOT EXISTS memories (
 );
 CREATE INDEX IF NOT EXISTS index_memories_agent_id ON memories (agent_id);
 
+CREATE EXTENSION vector;
+
 CREATE TABLE IF NOT EXISTS memory_chunks (
   id VARCHAR(64) PRIMARY KEY,
   memory_id VARCHAR(64) NOT NULL,

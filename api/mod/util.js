@@ -70,16 +70,16 @@ module.exports = {
 		return this.next()
 	},
 
-	log(obj){
-		console.log(obj)
+	log(...args){
+		console.log(...args)
 		return this.next()
 	},
 
 	/**
 	 * flatten deep nested structure
-	 * @param {obj} src - source object
+	 * @param {object} src - source object
 	 * @param {object} map - {"filename": ["upload", "files", 0, "filename"]}
-	 * @param {obj dst - destination
+	 * @param {object} dst - destination
 	 */
 	flat(src, map, dst){
 		const keys = Object.keys(map)

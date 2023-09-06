@@ -1,3 +1,8 @@
+### Embed a repo
+GET {{BACKEND}}/1/embed/ldarren/azurai/branches/main
+Content-Type: application/json
+Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
+
 ### Get User
 GET https://api.github.com/user
 Accept: application/vnd.github+json
@@ -5,19 +10,19 @@ Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
 
 ### GET tree sha with branch api
-GET https://api.github.com/repos/ldarren/bluster/branches/develop
+GET https://api.github.com/repos/ldarren/azurai/branches/main
 Accept: application/vnd.github+json
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
 
 ### GH get content by trees api
-GET https://api.github.com/repos/ldarren/bluster/git/trees/7f529cad76efc03936ad138fe47be9446e79d5ff
+GET https://api.github.com/repos/ldarren/azurai/git/trees/b17270fbab5236fb50a267024b4472895d41c330
 Accept: application/vnd.github+json
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
 
-### GH get content
-GET https://api.github.com/repos/ldarren/bluster/git/blobs/d89ebc49b032e6e95dcf58f4326c07ac9c5fcf63
+### GH get content blob
+GET https://api.github.com/repos/ldarren/azurai/git/blobs/d26b0445885228f7db98d268820aeea50775205c
 Accept: application/vnd.github.raw
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
