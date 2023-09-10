@@ -111,18 +111,21 @@ module.exports = {
 		Object.assign(output, body)
 		return this.next()
 	},
-	async treeRouter(cred, content, output){
-		for (const con of content.tree){
-			switch(con.type){
-				case 'tree':
-					await this.next(null, 'embed/content/tree', {parent: content, content: con, cred, ':output': output})
-					break
-				case 'blob':
-					await this.next(null, 'embed/content/blob', {parent: content, content: con, cred, ':output': output})
-					break
+	treeRouter(type){
+		return async (cred, content, ignores, output) => {
+			for (const con of content.tree){
+				if (ignores.includes(content.path)) continue
+				switch(con.type){
+					case 'tree':
+						await this.next(null, `embed/${type}/tree`, {parent: content, content: con, cred, ':output': output})
+						break
+					case 'blob':
+						await this.next(null, `embed/${type}/blob`, {parent: content, content: con, cred, ':output': output})
+						break
+				}
 			}
+			this.next()
 		}
-		this.next()
 	},
 	async readContent(cred, content, output, dir = ''){
 		const isBlob = content.type === 'blob'

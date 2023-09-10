@@ -93,6 +93,9 @@ return {
 					}
 				}
 			}
+		},
+		embed: {
+			ignores:['package-lock.json','node_modules','dist','build']
 		}
 	}
 }
