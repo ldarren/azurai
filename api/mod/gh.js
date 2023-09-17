@@ -112,15 +112,15 @@ module.exports = {
 		return this.next()
 	},
 	treeRouter(type){
-		return async (cred, content, ignores, output) => {
+		return async (cred, content, proj, ignores, output) => {
 			for (const con of content.tree){
 				if (ignores.includes(content.path)) continue
 				switch(con.type){
 					case 'tree':
-						await this.next(null, `embed/${type}/tree`, {parent: content, content: con, cred, ':output': output})
+						await this.next(null, `embed/${type}/tree`, {parent: content, content: con, cred, proj, ':output': output})
 						break
 					case 'blob':
-						await this.next(null, `embed/${type}/blob`, {parent: content, content: con, cred, ':output': output})
+						await this.next(null, `embed/${type}/blob`, {parent: content, content: con, cred, proj, ':output': output})
 						break
 				}
 			}

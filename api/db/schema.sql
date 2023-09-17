@@ -36,9 +36,15 @@ CREATE UNIQUE INDEX IF NOT EXISTS uniq_agents_name ON agents (name);
 CREATE INDEX IF NOT EXISTS index_agents_cby ON agents (cby, s);
 
 CREATE TABLE IF NOT EXISTS memories (
-  id VARCHAR(64) PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   agent_id VARCHAR(64) NOT NULL,
+-- projectName
+  project VARCHAR(256) NOT NULL,
+-- filePath
+  filepath VARCHAR(1024) NOT NULL,
+-- fileContents
   source VARCHAR NOT NULL,
+-- contentType
   type VARCHAR(16) NOT NULL,
   s SMALLINT DEFAULT 1,
   cby BIGINT NOT NULL,
@@ -46,13 +52,14 @@ CREATE TABLE IF NOT EXISTS memories (
   uby BIGINT,
   uat TIMESTAMPTZ DEFAULT NOW()
 );
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_memories_project_filepath ON memories (project, filepath);
 CREATE INDEX IF NOT EXISTS index_memories_agent_id ON memories (agent_id);
 
 CREATE EXTENSION vector;
 
 CREATE TABLE IF NOT EXISTS memory_chunks (
-  id VARCHAR(64) PRIMARY KEY,
-  memory_id VARCHAR(64) NOT NULL,
+  id BIGSERIAL PRIMARY KEY,
+  memory_id BIGINT NOT NULL,
   chunk VARCHAR NOT NULL,
   embedding vector(1536) NOT NULL,
   s SMALLINT DEFAULT 1,

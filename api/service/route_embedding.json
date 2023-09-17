@@ -3,16 +3,21 @@
 		"embed/index/tree": [
 			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
 			["gh.embed", "_.content", "_.:output"],
-			[["gh.treeRouter", "index"], "_.cred", "_.content", "@.rsc.embed.ignores", "_.:output"]
+			[["gh.treeRouter", "index"], "_.cred", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
 		"embed/index/blob": [
 			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
+			["embed.createCodeFileSummary", "_.proj", "_.content", "_.:prompts"],
+			["llm.chat", "_.:prompts", "_.proj"],
+			["embed.createCodeQuestions", "_.proj", "_.content", "_.prompts"],
+			["llm.chat", "_.:prompts", "_.proj"],
+			["pg.memories.save", "_.proj"],
 			["gh.embed", "_.content", "_.:output"]
 		],
 		"embed/estimate/tree": [
 			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
 			["gh.embed", "_.content", "_.:output"],
-			[["gh.treeRouter", "estimate"], "_.cred", "_.content", "@.rsc.embed.ignores", "_.:output"]
+			[["gh.treeRouter", "estimate"], "_.cred", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
 		"embed/estimate/blob": [
 			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
@@ -20,17 +25,19 @@
 		],
 		"/1/embed/estimate/:user/:repo/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],
+			["embed.createMemoryProjFromParams", "$.params", "_.proj"],
 			["jwt.validate", "_.req", "_.user"],
 			["pg.accounts.getByUserId", "github", "_.user", "_.account"],
 			["gh.readRepoTree", "_.account.cred", "$.params", "_.content"],
-			[["gh.treeRouter", "estimate"], "_.account.cred", "_.content", "@.rsc.embed.ignores", "_.:output"]
+			[["gh.treeRouter", "estimate"], "_.account.cred", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
 		"/1/embed/index/:user/:repo/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],
+			["embed.createMemoryProjFromParams", "$.params", "_.proj"],
 			["jwt.validate", "_.req", "_.user"],
 			["pg.accounts.getByUserId", "github", "_.user", "_.account"],
 			["gh.readRepoTree", "_.account.cred", "$.params", "_.content"],
-			[["gh.treeRouter", "index"], "_.account.cred", "_.content", "@.rsc.embed.ignores", "_.:output"]
+			[["gh.treeRouter", "index"], "_.account.cred", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		]
 	}
 }
