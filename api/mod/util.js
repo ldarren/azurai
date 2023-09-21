@@ -98,4 +98,9 @@ module.exports = {
 		Object.assign(output, object[key])
 		return this.next()
 	},
+
+	dup(org, output){
+		Object.assign(output, org)
+		return this.next()
+	}
 }

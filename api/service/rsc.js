@@ -97,7 +97,7 @@ return {
 		embed: {
 			ignores:['package-lock.json','node_modules','dist','build'],
 			filePrompts: {
-				system:"You are acting as a {contentType} documentation expert for a project called {projectName}.\nBelow is the {contentType} from a file located at \`{filePath}\`. Do not say \"this file is a part of the {projectName} project\".",
+				system:"You are acting as a {contentType} documentation expert for a project called {projectName}.\nBelow is the {contentType} from a file located at \`{path}\`. Do not say \"this file is a part of the {projectName} project\".",
 				user:
 "Write a detailed technical explanation of what this code does. \n\
 Focus on the high-level purpose of the code and how it may be used in the larger project.\n\
@@ -107,17 +107,17 @@ Output should be in markdown format.\n\
 Do not just list the methods and classes in this file.\
 \
 {contentType}:\
-{fileContents}"
+{text}"
 			},
 			questionPrompts: {
 				user:
 "You are acting as a {contentType} documentation expert for a project called {projectName}.\
-Below is the {contentType} from a file located at \`{filePath}\`. \
+Below is the {contentType} from a file located at \`{path}\`. \
 What are 3 questions that a {targetAudience} might have about this {contentType}? \
 Answer each question in 1-2 sentences. Output should be in markdown format.\
 \
 {contentType}:\
-{fileContents}\
+{text}\
 \
 Questions and Answers:"
 			},

@@ -102,9 +102,9 @@ module.exports = {
 		const headers = Object.assign({
 			'Authorization': 'Bearer ' + cred.access_token,
 		}, api_headers)
-		const repo = await ajax('GET', `https://api.github.com/repos/${params.user}/${params.repo}/branches/${params.branch}`, null, {headers})
+		const repo = await ajax('GET', `https://api.github.com/repos/${params.user}/${params.projectName}/branches/${params.branch}`, null, {headers})
 		const treeUrl = repo?.commit?.commit?.tree?.url
-		if (!treeUrl) return this.next({status: 404, message: `repos/${params.user}/${params.repo}/branches/${params.branch}: tree not found`})
+		if (!treeUrl) return this.next({status: 404, message: `repos/${params.user}/${params.projectName}/branches/${params.branch}: tree not found`})
 		const body = await ajax('GET', treeUrl, null, {headers})
 		if (!body) this.next({status: 400})
 		// TODO: handle body.truncated === true
@@ -112,7 +112,7 @@ module.exports = {
 		return this.next()
 	},
 	treeRouter(type){
-		return async (cred, content, proj, ignores, output) => {
+		return async function(cred, proj, content, ignores, output) {
 			for (const con of content.tree){
 				if (ignores.includes(content.path)) continue
 				switch(con.type){

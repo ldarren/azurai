@@ -1,8 +1,3 @@
-### Embed a repo
-GET {{BACKEND}}/1/embed/ldarren/azurai/branches/main
-Content-Type: application/json
-Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
-
 ### Get User
 GET https://api.github.com/user
 Accept: application/vnd.github+json

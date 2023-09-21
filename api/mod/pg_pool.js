@@ -134,5 +134,22 @@ module.exports = {
 			Object.assign(output, res.rows[0])
 			return this.next()
 		}
+	},
+	memories: {
+		async save(memory, user, output){
+			const res = await pool.query(`
+			INSERT INTO memories (agent_id, project, filepath, source, s, cby)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			ON CONFLICT (project, filepath)
+			DO UPDATE SET
+				agent_id = EXCLUDED.agent_id,
+				source = EXCLUDED.source,
+				s = COALESCE(EXCLUDED.s, memories.s),
+				uby = EXCLUDED.cby,
+				uat = NOW()
+			RETURNING *;`, [memory.agent_id, memory.projectName, memory.path, memory.text, memory.s, user.id])
+			output.push(...res.rows)
+			return this.next()
+		},
 	}
 }

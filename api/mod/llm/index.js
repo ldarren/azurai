@@ -45,7 +45,7 @@ LLM.prototype = {
 			n: 1,
 			// stop: ['\n']
 		}, overrides))
-		console.log('#### chat:res.data ######', JSON.stringify(res))
+		console.log('#### chat:res.data ######', JSON.stringify(res.data))
 
 		return res
 	},

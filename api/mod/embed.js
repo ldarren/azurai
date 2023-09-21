@@ -5,6 +5,7 @@ const replace = (tpl, obj) => {
     for (const key in obj){
         ret = ret.replaceAll(`{${key}}`, obj[key])
     }
+    return ret
 }
 
 const listFiles = (files) => {
@@ -33,34 +34,40 @@ module.exports = {
     createMemoryProjFromParams(params, output){
         Object.assign(output, {
             agent_id: '',
-            project: path.join(params.user, params.repo),
+            project: path.join(params.user, params.projectName),
         })
         return this.next()
     },
-    createCodeFileSummary(tpl, proj, content, output){
+    /*
+    contentType
+    projectName
+    path
+    text
+    */
+    createCodeFileSummary(tpl, params, output){
         output.push({
             role: 'system',
-            content: replace(tpl.system, proj)
+            content: replace(tpl.system, params)
         },{
             role: 'user',
-            content: replace(tpl.user, proj)
+            content: replace(tpl.user, params)
         })
         return this.next()
     },
-    createCodeQuestions(tpl, proj, content, output){
+    createCodeQuestions(tpl, params, output){
         output.push({
             role: 'user',
-            content: replace(tpl.user, proj)
+            content: replace(tpl.user, params)
         })
         return this.next()
     },
-    folderSummaryPrompt(tpl, proj, content, output){
+    folderSummaryPrompt(tpl, params, output){
         output.push({
             role: 'system',
-            content: replace(tpl.system, proj)
+            content: replace(tpl.system, params)
         },{
             role: 'user',
-            content: replace(tpl.user, proj)
+            content: replace(tpl.user, params)
         })
         return this.next()
     },

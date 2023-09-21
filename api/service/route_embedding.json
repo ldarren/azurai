@@ -6,12 +6,13 @@
 			[["gh.treeRouter", "index"], "_.cred", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
 		"embed/index/blob": [
-			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
-			["embed.createCodeFileSummary", "_.proj", "_.content", "_.:prompts"],
-			["llm.chat", "_.:prompts", "_.proj"],
-			["embed.createCodeQuestions", "_.proj", "_.content", "_.prompts"],
-			["llm.chat", "_.:prompts", "_.proj"],
-			["pg.memories.save", "_.proj"],
+			["util.dup", "_.proj", "_.fileParams"],
+			["gh.readContent", "_.cred", "_.content", "_.fileParams", "_.parent.path"],
+			["embed.createCodeFileSummary", "@.rsc.embed.filePrompts", "_.fileParams", "_.:summaryPrompts"],
+			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
+			["embed.createCodeQuestions", "@.rsc.embed.questionPrompts", "_.fileParams", "_.:questionPrompts"],
+			["llm.chat", "$.llm", "_.:questionPrompts", null, "_.questions"],
+			["pg.memories.save", "_.fileParams", "_.user", "_.realOutput"],
 			["gh.embed", "_.content", "_.:output"]
 		],
 		"embed/estimate/tree": [
@@ -23,7 +24,7 @@
 			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
 			["gh.embed", "_.content", "_.:output"]
 		],
-		"/1/embed/estimate/:user/:repo/branches/:branch": [
+		"/1/embed/estimate/:user/:projectName/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],
 			["embed.createMemoryProjFromParams", "$.params", "_.proj"],
 			["jwt.validate", "_.req", "_.user"],
@@ -31,7 +32,7 @@
 			["gh.readRepoTree", "_.account.cred", "$.params", "_.content"],
 			[["gh.treeRouter", "estimate"], "_.account.cred", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
-		"/1/embed/index/:user/:repo/branches/:branch": [
+		"/1/embed/index/:user/:projectName/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],
 			["embed.createMemoryProjFromParams", "$.params", "_.proj"],
 			["jwt.validate", "_.req", "_.user"],

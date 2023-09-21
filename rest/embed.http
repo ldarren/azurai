@@ -1,0 +1,14 @@
+### Embed a repo
+GET {{BACKEND}}/1/embed/ldarren/azurai/branches/main
+Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
+Content-Type: application/json
+
+### create agent
+POST {{BACKEND}}/1/embed/index/ldarren/azurai/branches/main
+Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+    "agent_id": 0,
+    "contentType": "code"
+}
