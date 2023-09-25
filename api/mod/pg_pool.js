@@ -136,20 +136,50 @@ module.exports = {
 		}
 	},
 	memories: {
-		async save(memory, user, output){
+		async save(memory, userId, output){
 			const res = await pool.query(`
-			INSERT INTO memories (agent_id, project, filepath, source, s, cby)
-			VALUES ($1, $2, $3, $4, $5, $6)
+			INSERT INTO memories (agent_id, project, filepath, source, type, s, cby)
+			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			ON CONFLICT (project, filepath)
 			DO UPDATE SET
-				agent_id = EXCLUDED.agent_id,
-				source = EXCLUDED.source,
+				agent_id = COALESCE(EXCLUDED.agent_id, memories.agent_id),
+				source =  COALESCE(EXCLUDED.source, memories.source),
+				type = COALESCE(EXCLUDED.type, memories.type),
 				s = COALESCE(EXCLUDED.s, memories.s),
 				uby = EXCLUDED.cby,
 				uat = NOW()
-			RETURNING *;`, [memory.agent_id, memory.projectName, memory.path, memory.text, memory.s, user.id])
-			output.push(...res.rows)
+			RETURNING *;`, [memory.agent_id, memory.projectName, memory.path, memory.text, memory.contentType, memory.s, userId])
+			Object.assign(output, res.rows[0])
 			return this.next()
 		},
+	},
+	memory_chunks: {
+		async save(memory_id, userId, chunk, output){
+			try{
+				const res = await pool.query(`
+					INSERT INTO memory_chunks (memory_id, chunk, s, cby)
+					VALUES ($1, $2, 1, $3) RETURNING *;`,
+					[memory_id, chunk, userId]
+				)
+				Object.assign(output, res.rows[0])
+			}catch(ex){
+				console.error(ex)
+				return this.next({status: 500, message: ex.message})
+			}
+			return this.next()
+		},
+		async delete(memory_id, userId, output){
+			try{
+				const res = await pool.query(`
+					UPDATE memory_chunks SET s = 0, uby = $1 where memory_id = $2`,
+					[userId, memory_id]
+				)
+				Object.assign(output, res.rows[0])
+			}catch(ex){
+				console.error(ex)
+				return this.next({status: 500, message: ex.message})
+			}
+			return this.next()
+		}
 	}
 }

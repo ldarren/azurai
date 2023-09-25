@@ -55,13 +55,13 @@ CREATE TABLE IF NOT EXISTS memories (
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_memories_project_filepath ON memories (project, filepath);
 CREATE INDEX IF NOT EXISTS index_memories_agent_id ON memories (agent_id);
 
-CREATE EXTENSION vector;
+CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE IF NOT EXISTS memory_chunks (
   id BIGSERIAL PRIMARY KEY,
   memory_id BIGINT NOT NULL,
   chunk VARCHAR NOT NULL,
-  embedding vector(1536) NOT NULL,
+  embedding vector(1536),
   s SMALLINT DEFAULT 1,
   cby BIGINT NOT NULL,
   cat TIMESTAMPTZ DEFAULT NOW(),

@@ -1,11 +1,12 @@
 const path = require('node:path')
 
 const replace = (tpl, obj) => {
-    let ret = tpl
-    for (const key in obj){
-        ret = ret.replaceAll(`{${key}}`, obj[key])
-    }
-    return ret
+console.log('>>>', tpl, obj)
+	let ret = tpl
+	for (const key in obj){
+		ret = ret.replaceAll(`{${key}}`, obj[key])
+	}
+	return ret
 }
 
 const listFiles = (files) => {
@@ -31,11 +32,13 @@ const listFolders = (folders) => {
 module.exports = {
 	async setup(){
     },
-    createMemoryProjFromParams(params, output){
+    createMemoryProjFromParams(params, body, output){
         Object.assign(output, {
             agent_id: '',
-            project: path.join(params.user, params.projectName),
-        })
+			targetAudience: 'smart developer',
+            contentType: 'code',
+            projectName: path.join(params.user, params.repo),
+        }, body)
         return this.next()
     },
     /*
