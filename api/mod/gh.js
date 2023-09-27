@@ -108,7 +108,8 @@ module.exports = {
 		const body = await ajax('GET', treeUrl, null, {headers})
 		if (!body) this.next({status: 400})
 		// TODO: handle body.truncated === true
-		Object.assign(output, body)
+		// handle root node has no path
+		Object.assign(output, {path: '/'}, body)
 		return this.next()
 	},
 	treeRouter(type){
@@ -118,17 +119,17 @@ module.exports = {
 				switch(con.type){
 					case 'tree':
 						await this.next(null, `embed/${type}/tree`, {parent: content, content: con, cred, user, proj, ':output': output})
+						return this.next()
 						break
 					case 'blob':
 						await this.next(null, `embed/${type}/blob`, {parent: content, content: con, cred, user, proj, ':output': output})
-						return this.next()
 						break
 				}
 			}
 			this.next()
 		}
 	},
-	async readContent(cred, content, output, dir = ''){
+	async readContent(cred, dir, content, output){
 		const isBlob = content.type === 'blob'
 		const headers = Object.assign({
 			'Authorization': 'Bearer ' + cred.access_token,

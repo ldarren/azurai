@@ -1,7 +1,6 @@
 const path = require('node:path')
 
 const replace = (tpl, obj) => {
-console.log('>>>', tpl, obj)
 	let ret = tpl
 	for (const key in obj){
 		ret = ret.replaceAll(`{${key}}`, obj[key])

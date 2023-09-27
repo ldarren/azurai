@@ -1,30 +1,37 @@
 {
 	"routes": {
 		"embed/index/tree": [
-			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
-			["gh.embed", "_.content", "_.:output"],
-			[["gh.treeRouter", "index"], "_.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.content"],
+			[["gh.treeRouter", "index"], "_.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"],
+			["util.dup", "_.proj", "_.fileParams"],
+			["pg.memories.readByPath", "_.parent.path", "_.user.id", "_.:memories"],
+			["util.extract", "_.:memories", "id", "_.:memoryIds"],
+			["pg.memory_chunks.readByMemoryIds", "_.:memoryIds", "_.user.id", "_.:chunks"],
+			["embed.folderSummaryPrompt", "@.rsc.embed.folderPrompts", "_.fileParams", "_.content", "_.:chunks", "_.:summaryPrompts"],
+			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
+			["pg.memory_chunks.save"],
+			["util.push", "_.:output", "_.output"]
 		],
 		"embed/index/blob": [
 			["util.dup", "_.proj", "_.fileParams"],
-			["gh.readContent", "_.cred", "_.content", "_.fileParams", "_.parent.path"],
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.fileParams"],
 			["embed.createCodeFileSummary", "@.rsc.embed.filePrompts", "_.fileParams", "_.:summaryPrompts"],
 			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
 			["embed.createCodeQuestions", "@.rsc.embed.questionPrompts", "_.fileParams", "_.:questionPrompts"],
 			["llm.chat", "$.llm", "_.:questionPrompts", null, "_.questions"],
-			["pg.memories.save", "_.fileParams", "_.user.id", "_.output"],
+			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content.path", "_.user.id", "_.output"],
 			["pg.memory_chunks.delete", "_.output.id", "_.user.id", "_.doutput"],
 			["pg.memory_chunks.save", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
 			["pg.memory_chunks.save", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
 			["util.push", "_.:output", "_.output"]
 		],
 		"embed/estimate/tree": [
-			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.content"],
 			["gh.embed", "_.content", "_.:output"],
 			[["gh.treeRouter", "estimate"], "_.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
 		"embed/estimate/blob": [
-			["gh.readContent", "_.cred", "_.content", "_.content", "_.parent.path"],
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.content"],
 			["gh.embed", "_.content", "_.:output"]
 		],
 		"/1/embed/estimate/:user/:repo/branches/:branch": [

@@ -102,5 +102,11 @@ module.exports = {
 	dup(org, output){
 		Object.assign(output, org)
 		return this.next()
+	},
+
+	extract(arr, key, outputs){
+		const list = arr.map(item => item[key])
+		outputs.push(...list)
+		return this.next()
 	}
 }

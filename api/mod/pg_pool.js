@@ -136,11 +136,17 @@ module.exports = {
 		}
 	},
 	memories: {
-		async save(memory, userId, output){
+		async readByPath(path, userId, outputs){
+			const res = await pool.query('SELECT * FROM memories WHERE path = $1 and cby = $2 and s = 1;', [path, userId])
+			outputs.push(...res.rows)
+			console.log('>>>', path, userId, outputs)
+			return this.next()
+		},
+		async save(memory, path, filename, userId, output){
 			const res = await pool.query(`
-			INSERT INTO memories (agent_id, project, filepath, source, type, s, cby)
-			VALUES ($1, $2, $3, $4, $5, $6, $7)
-			ON CONFLICT (project, filepath)
+			INSERT INTO memories (agent_id, project, path, filename, source, type, s, cby)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+			ON CONFLICT (project, path, filename)
 			DO UPDATE SET
 				agent_id = COALESCE(EXCLUDED.agent_id, memories.agent_id),
 				source =  COALESCE(EXCLUDED.source, memories.source),
@@ -148,12 +154,18 @@ module.exports = {
 				s = COALESCE(EXCLUDED.s, memories.s),
 				uby = EXCLUDED.cby,
 				uat = NOW()
-			RETURNING *;`, [memory.agent_id, memory.projectName, memory.path, memory.text, memory.contentType, memory.s, userId])
+			RETURNING *;`, [memory.agent_id, memory.projectName, path, filename, memory.text, memory.contentType, memory.s, userId])
 			Object.assign(output, res.rows[0])
 			return this.next()
 		},
 	},
 	memory_chunks: {
+		async readByMemoryIds(memoryIds, userId, outputs){
+			console.log('>>>', memoryIds, userId)
+			const res = await pool.query('SELECT * FROM memory_chunks WHERE memory_id in ANY ($1) and cby = $2 and s = 1;', [memoryIds, userId])
+			outputs.push(...res.rows)
+			return this.next()
+		},
 		async save(memory_id, userId, chunk, output){
 			try{
 				const res = await pool.query(`

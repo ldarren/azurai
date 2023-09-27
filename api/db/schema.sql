@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS memories (
 -- projectName
   project VARCHAR(256) NOT NULL,
 -- filePath
-  filepath VARCHAR(1024) NOT NULL,
+  path VARCHAR(1024) NOT NULL,
+-- filePath
+  filename VARCHAR(1024) NOT NULL,
 -- fileContents
   source VARCHAR NOT NULL,
 -- contentType
@@ -52,7 +54,7 @@ CREATE TABLE IF NOT EXISTS memories (
   uby BIGINT,
   uat TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE UNIQUE INDEX IF NOT EXISTS uniq_memories_project_filepath ON memories (project, filepath);
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_memories_project_filepaths ON memories (project, path, filename);
 CREATE INDEX IF NOT EXISTS index_memories_agent_id ON memories (agent_id);
 
 CREATE EXTENSION IF NOT EXISTS vector;
