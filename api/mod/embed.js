@@ -8,24 +8,30 @@ const replace = (tpl, obj) => {
 	return ret
 }
 
-const listFiles = (files) => {
-    files.map((file) => {
-        return `
-        Name: ${file.fileName}
-        Summary: ${file.summary}    
-    
-        `;
-    })
-}
-
-const listFolders = (folders) => {
-    folders.map((folder) => {
-        return `
-        Name: ${folder.folderName}
-        Summary: ${folder.summary}    
-    
-        `;
-    })
+const listChunks = (memories, chunks) => {
+    const files = []
+    const folders = []
+    const map = {}
+    for (const m of memories){
+        map[m.id] = {
+            name: m.name,
+            type: m.type
+        }
+    }
+    for (const c of chunks){
+        const m = map[c.memory_id]
+        if (!m) continue
+        m.summary = c.chunk
+    }
+    for (const key in map) {
+        const m = map[key]
+        if ('tree' === m.type){
+            folders.push(`\nName: ${m.name}\nSummary: ${m.summary}\n\n`)
+        }else{
+            files.push(`\nName: ${m.name}\nSummary: ${m.summary}\n\n`)
+        }
+    }
+    return [files, folders]
 }
 
 module.exports = {
@@ -63,13 +69,14 @@ module.exports = {
         })
         return this.next()
     },
-    folderSummaryPrompt(tpl, params, output){
-        output.push({
+    folderSummaryPrompt(tpl, params, memories, chunks, outputs){
+        const [fileList, folderList] = listChunks(memories, chunks)
+        outputs.push({
             role: 'system',
             content: replace(tpl.system, params)
         },{
             role: 'user',
-            content: replace(tpl.user, params)
+            content: replace(tpl.user, params).replace('{listFiles}', fileList).replace('{listFolders}', folderList)
         })
         return this.next()
     },

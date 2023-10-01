@@ -6,10 +6,12 @@
 			["util.dup", "_.proj", "_.fileParams"],
 			["pg.memories.readByPath", "_.parent.path", "_.user.id", "_.:memories"],
 			["util.extract", "_.:memories", "id", "_.:memoryIds"],
-			["pg.memory_chunks.readByMemoryIds", "_.:memoryIds", "_.user.id", "_.:chunks"],
-			["embed.folderSummaryPrompt", "@.rsc.embed.folderPrompts", "_.fileParams", "_.content", "_.:chunks", "_.:summaryPrompts"],
+			["pg.memory_chunks.readByMemoryIdsWithName", "_.:memoryIds", "_.user.id", "summary", "_.:chunks"],
+			["embed.folderSummaryPrompt", "@.rsc.embed.folderPrompts", "_.fileParams", "_.:memories", "_.:chunks", "_.:summaryPrompts"],
 			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
-			["pg.memory_chunks.save"],
+			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
+			["pg.memory_chunks.delete", "_.output.id", "_.user.id", "_.doutput"],
+			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
 			["util.push", "_.:output", "_.output"]
 		],
 		"embed/index/blob": [
@@ -19,10 +21,10 @@
 			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
 			["embed.createCodeQuestions", "@.rsc.embed.questionPrompts", "_.fileParams", "_.:questionPrompts"],
 			["llm.chat", "$.llm", "_.:questionPrompts", null, "_.questions"],
-			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content.path", "_.user.id", "_.output"],
+			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
 			["pg.memory_chunks.delete", "_.output.id", "_.user.id", "_.doutput"],
-			["pg.memory_chunks.save", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
-			["pg.memory_chunks.save", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
+			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
+			["pg.memory_chunks.save", "questions", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
 			["util.push", "_.:output", "_.output"]
 		],
 		"embed/estimate/tree": [
