@@ -153,7 +153,8 @@ module.exports = {
 				s = COALESCE(EXCLUDED.s, memories.s),
 				uby = EXCLUDED.cby,
 				uat = NOW()
-			RETURNING *;`, [memory.agent_id, memory.projectName, path, content.path, memory.text, content.type, memory.s, userId])
+			RETURNING *;`,
+			[memory.agent_id, memory.projectName, path, content.path, memory.text, content.type, memory.s, userId])
 			Object.assign(output, res.rows[0])
 			return this.next()
 		},
@@ -172,9 +173,16 @@ module.exports = {
 		async save(name, memory_id, userId, chunk, output){
 			try{
 				const res = await pool.query(`
-					INSERT INTO memory_chunks (name, memory_id, chunk, s, cby)
-					VALUES ($1, $2, $3, 1, $4) RETURNING *;`,
-					[name, memory_id, chunk, userId]
+					INSERT INTO memory_chunks (memory_id, name, chunk, s, cby)
+					VALUES ($1, $2, $3, 1, $4)
+					ON CONFLICT (memory_id, name)
+					DO UPDATE SET
+						chunk = COALESCE(EXCLUDED.chunk, memory_chunks.chunk),
+						s = COALESCE(EXCLUDED.s, memory_chunks.s),
+						uby = EXCLUDED.cby,
+						uat = NOW()
+					RETURNING *;`,
+					[memory_id, name, chunk, userId]
 				)
 				Object.assign(output, res.rows[0])
 			}catch(ex){

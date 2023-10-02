@@ -31,7 +31,10 @@ const listChunks = (memories, chunks) => {
             files.push(`\nName: ${m.name}\nSummary: ${m.summary}\n\n`)
         }
     }
-    return [files, folders]
+    return [
+		files.length ? files.join() : 'No files',
+		folders.length ? folders.join() : 'No subfolders'
+	]
 }
 
 module.exports = {

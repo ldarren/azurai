@@ -124,7 +124,7 @@ Questions and Answers:"
 			folderPrompts: {
 				system:
 "You are acting as a {contentType} documentation expert for a project called {projectName}.\
-You are currently documenting the folder located at \`{folderPath}\`. \
+You are currently documenting the folder located at \`{path}\`. \
 \
 Do not say \"this file is a part of the {projectName} project\".\
 Do not just list the files and folders.",

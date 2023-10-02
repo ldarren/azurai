@@ -4,7 +4,7 @@ Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
 Content-Type: application/json
 
 ### create an embed db
-POST {{BACKEND}}/1/embed/index/ldarren/azurai/branches/main
+POST {{BACKEND}}/1/embed/doc/ldarren/azurai/branches/main
 Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
 Content-Type: application/json
 

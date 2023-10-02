@@ -61,8 +61,8 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE IF NOT EXISTS memory_chunks (
   id SERIAL PRIMARY KEY,
-  name VARCHAR NOT NULL,
   memory_id INT NOT NULL,
+  name VARCHAR NOT NULL,
   chunk VARCHAR NOT NULL,
   embedding vector(1536),
   s SMALLINT DEFAULT 1,
@@ -71,4 +71,4 @@ CREATE TABLE IF NOT EXISTS memory_chunks (
   uby INT,
   uat TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE INDEX IF NOT EXISTS index_memory_chunk_memory_id ON memory_chunks (memory_id);
+CREATE UNIQUE INDEX IF NOT EXISTS uniq_memory_chunk_memory_id_name ON memory_chunks (memory_id, name);
