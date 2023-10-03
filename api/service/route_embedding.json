@@ -25,15 +25,6 @@
 			["pg.memory_chunks.save", "questions", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
 			["util.push", "_.:output", "_.output"]
 		],
-		"embed/estimate/tree": [
-			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.content"],
-			["gh.embed", "_.content", "_.:output"],
-			[["gh.treeRouter", "estimate"], "_.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
-		],
-		"embed/estimate/blob": [
-			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.content"],
-			["gh.embed", "_.content", "_.:output"]
-		],
 		"/1/embed/doc/:user/:repo/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],
 			["web.bodyParser", "_.req", "_.body"],
@@ -43,14 +34,14 @@
 			["gh.readRepoTree", "_.account.cred", "$.params", "_.content"],
 			[["gh.treeRouter", "doc"], "_.account.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
-		"/1/embed/estimate/:user/:repo/branches/:branch": [
-			[["web.output"], "_.res", "_.:output"],
-			["web.bodyParser", "_.req", "_.body"],
-			["embed.createMemoryProjFromParams", "$.params", "_.body", "_.proj"],
-			["jwt.validate", "_.req", "_.user"],
-			["pg.accounts.getByUserId", "github", "_.user", "_.account"],
-			["gh.readRepoTree", "_.account.cred", "$.params", "_.content"],
-			[["gh.treeRouter", "estimate"], "_.account.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
+		"embed/index/:code": [
+			[["util.onlyOnce", "embed/index/"], "_.chunk"],
+			["pg.readNewByUserId", "_.chunk"],
+			["llm.embed", "$.llm", "_.chunk", "_.:embedding"],
+			["pg.updateEmbeddingById", "_.chunk.id", "_.:embedding"]
+		],
+		"* * * * * *": [
+			["util.branchOnce", "embed/index/"]
 		]
 	}
 }

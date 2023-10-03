@@ -160,6 +160,31 @@ module.exports = {
 		},
 	},
 	memory_chunks: {
+		async updateEmbeddingById(id, embedding, output){
+			const res = await pool.query(`
+				UPDATE memory_chunks SET
+					embedding = $2
+					s = 2,
+					uby = 0,
+					uat = NOW()
+				WHERE id = $1
+				RETURNING *;`,
+			[id, embedding])
+			if (output) Object.assign(output, res.rows[0])
+			return this.next()
+		},
+		async readNewByUserId(output){
+			const res = await pool.query(`
+				UPDATE memory_chunks
+				SET s = 2, uby = 0, uat = NOW()
+				WHERE id = (
+					SELECT id
+					FROM memory_chunks
+					WHERE s = 1 LIMIT 1
+					FOR UPDATE SKIP LOCKED) RETURNING *;`)
+			Object.assign(output, res.rows[0])
+			return this.next()
+		},
 		async readByMemoryIdsWithName(memoryIds, userId, name, outputs){
 			const res = await pool.query('SELECT * FROM memory_chunks WHERE memory_id = ANY ($1) AND cby = $2 AND name = $3 AND s = 1;', [memoryIds, userId, name])
 			outputs.push(...res.rows)
@@ -191,7 +216,7 @@ module.exports = {
 			}
 			return this.next()
 		},
-		async delete(memory_id, userId, output){
+		async deleteByMemoryId(memory_id, userId, output){
 			try{
 				const res = await pool.query(`
 					UPDATE memory_chunks SET s = 0, uby = $1 where memory_id = $2`,
