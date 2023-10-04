@@ -1,13 +1,20 @@
 // Use Client if need listen to trigger
 const { Pool } = require('pg')
 
+let pgvector
 let pool
 
+async function register(client) {
+	await pgvector.registerType(client)
+}
+
 module.exports = {
-	setup(cfg){
+	async setup(cfg){
+		pgvector = await import('pgvector/pg')
 		const config = Object.assign({}, cfg)
 		config.port = parseInt(cfg.port)
 		pool = new Pool(cfg)
+		pool.on('connect', register)
 	},
 	accounts: {
 		async get(type, ghuser, output){
@@ -163,13 +170,13 @@ module.exports = {
 		async updateEmbeddingById(id, embedding, output){
 			const res = await pool.query(`
 				UPDATE memory_chunks SET
-					embedding = $2
+					embedding = $2,
 					s = 2,
 					uby = 0,
 					uat = NOW()
 				WHERE id = $1
 				RETURNING *;`,
-			[id, embedding])
+			[id, pgvector.toSql(embedding)])
 			if (output) Object.assign(output, res.rows[0])
 			return this.next()
 		},

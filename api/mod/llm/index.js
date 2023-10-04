@@ -135,6 +135,7 @@ module.exports = {
 	},
 	async embed(llm, query, output){
 		const res = await llm.embed(query)
+		output.length = 0
 		output.push(...res)
 		return this.next()
 	},

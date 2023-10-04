@@ -35,10 +35,11 @@
 			[["gh.treeRouter", "doc"], "_.account.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
 		],
 		"embed/index/:code": [
-			[["util.onlyOnce", "embed/index/"], "_.chunk"],
-			["pg.readNewByUserId", "_.chunk"],
-			["llm.embed", "$.llm", "_.chunk", "_.:embedding"],
-			["pg.updateEmbeddingById", "_.chunk.id", "_.:embedding"]
+			[["util.onlyOnce", "embed/index/"], "_.mc"],
+			["pg.memory_chunks.readNewByUserId", "_.mc"],
+			[["util.assert", "done", "id"], "_.mc"],
+			["llm.embed", "$.llm", "_.mc.chunk", "_.:embedding"],
+			["pg.memory_chunks.updateEmbeddingById", "_.mc.id", "_.:embedding"]
 		],
 		"* * * * * *": [
 			["util.branchOnce", "embed/index/"]

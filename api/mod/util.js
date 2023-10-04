@@ -37,7 +37,7 @@ module.exports = {
 	},
 
 	branchOnce(route){
-		this.next(null, route + Date.now().toString(36))
+		return this.next(null, route + Date.now().toString(36))
 	},
 
 	onlyOnce(route, key = 'id'){
@@ -48,12 +48,23 @@ module.exports = {
 			currentCode = this.params.code
 			payloadId = payload[key]
 
-			await this.next()
+			try {
+				await this.next()
+			} catch(ex){
+				console.error(ex)
+			} finally {
+				currentCode = 0
+				// no new payload exit recursive load
+				if (payloadId === payload[key]) return
+				this.next(null, route + Date.now().toString(36))
+			}
+		}
+	},
 
-			currentCode = 0
-			// no new payload exit recursive load
-			if (payloadId === payload[key]) return
-			this.next(null, route + Date.now().toString(36))
+	assert(error, id){
+		return function(obj){
+			if (!obj[id]) return this.next(error)
+			return this.next()
 		}
 	},
 
