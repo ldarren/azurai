@@ -5,6 +5,7 @@ const routeUtil = require('service/route_util.json')
 const routeAccounts = require('service/route_accounts.json')
 const routeAgents = require('service/route_agents.json')
 const routeEmbedding = require('service/route_embedding.json')
+const routeQuery = require('service/route_query.json')
 const routeLLM = require('service/route_llm.json')
 const rsc = require('service/rsc')
 const env = require('env.json')
@@ -22,7 +23,7 @@ this.load = () => {
 		routeAccounts,
 		routeAgents,
 		routeEmbedding,
-		routeLLM,
+		routeQuery,
 	])
 }
 return out

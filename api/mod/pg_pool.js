@@ -11,8 +11,7 @@ async function register(client) {
 module.exports = {
 	async setup(cfg){
 		pgvector = await import('pgvector/pg')
-		const config = Object.assign({}, cfg)
-		config.port = parseInt(cfg.port)
+		console.log('######', cfg)
 		pool = new Pool(cfg)
 		pool.on('connect', register)
 	},

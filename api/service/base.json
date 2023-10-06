@@ -64,11 +64,7 @@
 		},
 		"pg": {
 			"mod": "pg_pool",
-			"user": "$mod_pg_user",
-			"password": "$mod_pg_password",
-			"host": "$mod_pg_host",
-			"port": "$mod_pg_port",
-			"database": "azurai",
+			"connectionString": "$mod_pg_url",
 			"ssl": true,
 			"max": 10,
 			"connectionTimeoutMillis": 0,

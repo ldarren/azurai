@@ -1,0 +1,18 @@
+{
+	"routes": {
+        "query/function/retrieve": [
+            []
+        ],
+        "query/rag": [
+            [],
+            ["llm.rag2", "$.llm", "_.body.history", "_.body.overrides", "_.output"]
+        ],
+		"/1/query": [
+			[["web.output"], "_.res", "_.:output"],
+			["web.bodyParser", "_.req", "_.body"],
+            [],
+            [],
+            ["util.branch"]
+		]
+	}
+}
