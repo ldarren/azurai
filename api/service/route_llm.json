@@ -1,8 +1,5 @@
 {
 	"routes": {
-		"/1/ping": [
-			[["web.output", "text/plain", "text"], "_.res", "pong"]
-		],
 		"/1/chat": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],

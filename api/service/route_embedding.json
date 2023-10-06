@@ -1,0 +1,48 @@
+{
+	"routes": {
+		"embed/doc/tree": [
+			["util.dup", "_.proj", "_.fileParams"],
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.fileParams"],
+			[["gh.treeRouter", "doc"], "_.cred", "_.user", "_.proj", "_.fileParams", "@.rsc.embed.ignores", "_.:output"],
+			["pg.memories.readByPath", "_.parent.path", "_.user.id", "_.:memories"],
+			["util.extract", "_.:memories", "id", "_.:memoryIds"],
+			["pg.memory_chunks.readByMemoryIdsWithName", "_.:memoryIds", "_.user.id", "summary", "_.:chunks"],
+			["embed.folderSummaryPrompt", "@.rsc.embed.folderPrompts", "_.fileParams", "_.:memories", "_.:chunks", "_.:summaryPrompts"],
+			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
+			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
+			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
+			["util.push", "_.:output", "_.output"]
+		],
+		"embed/doc/blob": [
+			["util.dup", "_.proj", "_.fileParams"],
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.fileParams"],
+			["embed.createCodeFileSummary", "@.rsc.embed.filePrompts", "_.fileParams", "_.:summaryPrompts"],
+			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
+			["embed.createCodeQuestions", "@.rsc.embed.questionPrompts", "_.fileParams", "_.:questionPrompts"],
+			["llm.chat", "$.llm", "_.:questionPrompts", null, "_.questions"],
+			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
+			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
+			["pg.memory_chunks.save", "questions", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
+			["util.push", "_.:output", "_.output"]
+		],
+		"/1/embed/doc/:user/:repo/branches/:branch": [
+			[["web.output"], "_.res", "_.:output"],
+			["web.bodyParser", "_.req", "_.body"],
+			["embed.createMemoryProjFromParams", "$.params", "_.body", "_.proj"],
+			["jwt.validate", "_.req", "_.user"],
+			["pg.accounts.getByUserId", "github", "_.user", "_.account"],
+			["gh.readRepoTree", "_.account.cred", "$.params", "_.content"],
+			[["gh.treeRouter", "doc"], "_.account.cred", "_.user", "_.proj", "_.content", "@.rsc.embed.ignores", "_.:output"]
+		],
+		"embed/index/:code": [
+			[["util.onlyOnce", "embed/index/"], "_.mc"],
+			["pg.memory_chunks.readNewByUserId", "_.mc"],
+			[["util.assert", "done", "id"], "_.mc"],
+			["llm.embed", "$.llm", "_.mc.chunk", "_.:embedding"],
+			["pg.memory_chunks.updateEmbeddingById", "_.mc.id", "_.:embedding"]
+		],
+		"* * * * * *": [
+			["util.branchOnce", "embed/index/"]
+		]
+	}
+}

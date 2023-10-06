@@ -5,19 +5,19 @@ Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
 
 ### GET tree sha with branch api
-GET https://api.github.com/repos/ldarren/bluster/branches/develop
+GET https://api.github.com/repos/ldarren/azurai/branches/main
 Accept: application/vnd.github+json
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
 
 ### GH get content by trees api
-GET https://api.github.com/repos/ldarren/bluster/git/trees/7f529cad76efc03936ad138fe47be9446e79d5ff
+GET https://api.github.com/repos/ldarren/azurai/git/trees/b17270fbab5236fb50a267024b4472895d41c330
 Accept: application/vnd.github+json
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
 
-### GH get content
-GET https://api.github.com/repos/ldarren/bluster/git/blobs/d89ebc49b032e6e95dcf58f4326c07ac9c5fcf63
+### GH get content blob
+GET https://api.github.com/repos/ldarren/azurai/git/blobs/d26b0445885228f7db98d268820aeea50775205c
 Accept: application/vnd.github.raw
 Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
 X-GitHub-Api-Version: 2022-11-28
@@ -34,7 +34,7 @@ X-GitHub-Api-Version: 2022-11-28
 ### GH Authorize
 # @no-redirect
 https://github.com/login/oauth/authorize
-?scope=repo%20project
+?scope=repo%20project%20pages
 &client_id={{$dotenv %GH_CLIENT_ID}}
 
 ### GH Get Token From Auth Code
@@ -57,3 +57,65 @@ client_id={{$dotenv %GH_CLIENT_ID}}
 &grant_type=refresh_token
 &refresh_token={{$dotenv %GH_REFRESH_TOKEN}}
 &accept=json
+
+### GH Get Pages
+GET https://api.github.com/repos/ldarren/azurai/pages
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+User-Agent: azurai/0.1.0
+
+### GH Create Pages
+POST https://api.github.com/repos/ldarren/azurai/pages
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+User-Agent: azurai/0.1.0
+
+{"source":{"branch":"feature/md-and-vector","path":"/docs"}}
+
+### GH Update Pages
+PUT https://api.github.com/repos/ldarren/azurai/pages
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+User-Agent: azurai/0.1.0
+
+{"source":{"branch":"feature/md-and-vector","path":"/docs"}}
+
+### GH Delete Pages
+DELETE https://api.github.com/repos/ldarren/azurai/pages
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+User-Agent: azurai/0.1.0
+
+### GH Create/Update Content
+PUT https://api.github.com/repos/ldarren/azurai/contents/docs/index.html
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+{
+    "message":"my commit message",
+    "committer":{"name":"Darren Liew","email":"ldarren@github.com"},
+    "content":"dGhpcyBpcyBhIG5ldyB1cGRhdGUgb2YgaW5kZXguaHRtbA==",
+    "sha":"0d5a690c8fad5e605a6e8766295d9d459d65de42",
+    "branch":"main"
+}
+
+### GH Get Content Sha
+GET https://api.github.com/repos/ldarren/azurai/contents/docs/index.html
+?ref=feature/md-and-vector
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+### GH Create Branch
+# sha is the commit sha to be branched of
+POST https://api.github.com/repos/ldarren/azurai/git/refs
+Accept: application/vnd.github+json
+Authorization: Bearer {{$dotenv %GH_ACCESS_TOKEN}}
+X-GitHub-Api-Version: 2022-11-28
+
+{"ref":"refs/heads/featureA","sha":"bb70b4207565568ee1fe96980b2298f944358619"}

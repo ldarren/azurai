@@ -1,10 +1,10 @@
 {
   "name": "azurai_api",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Azurai the LLM state machine",
   "main": "index.js",
   "engines": {
-    "npm": ">=9.0.0 <20.0.0",
+    "npm": ">=9.0.0 <10.0.0",
     "node": ">=18.0.0 <20.0.0"
   },
   "scripts": {
@@ -23,6 +23,7 @@
     "markdown-ast": "^0.3.0",
     "openai": "^3.3.0",
     "pg": "^8.11.1",
+    "pgvector": "^0.1.5",
     "pico-jwt": "^0.3.3",
     "picos": "^0.10.8",
     "redis": "^4.6.7"

@@ -13,32 +13,10 @@ module.exports = {
 		return module.exports
 	},
 
-	handleOption(req, res){
-		if (!ALLOW_ORIGIN) return this.next()
-		res.setHeader('Access-Control-Allow-Origin', ALLOW_ORIGIN)
-		res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE, OPTIONS')
-		res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type')
-		res.setHeader('Access-Control-Max-Age', MAX_AGE)
-		if ('OPTIONS' === req.method){
-			res.statusCode = 204
-			return res.end()
-		}
-		return this.next()
-	},
-
 	router(key){
 		return async function(method, params){
 			await this.next(null, `${method}/${params[key]}`)
 			return this.next()
-		}
-	},
-
-	branchByContentType(map, def){
-		return function(req){
-			const ct = req.headers[ACCEPT]
-			const route = map[ct] || map[def]
-			if (!route) return this.next(`no route for ${ACCEPT}: ${ct}`)
-			return this.next(null, route)
 		}
 	},
 
@@ -58,6 +36,38 @@ module.exports = {
 		return this.next()
 	},
 
+	branchOnce(route){
+		return this.next(null, route + Date.now().toString(36))
+	},
+
+	onlyOnce(route, key = 'id'){
+		let currentCode = 0
+		let payloadId = 0
+		return async function(payload){
+			if (currentCode && currentCode !== this.params.code) return
+			currentCode = this.params.code
+			payloadId = payload[key]
+
+			try {
+				await this.next()
+			} catch(ex){
+				console.error(ex)
+			} finally {
+				currentCode = 0
+				// no new payload exit recursive load
+				if (payloadId === payload[key]) return
+				this.next(null, route + Date.now().toString(36))
+			}
+		}
+	},
+
+	assert(error, id){
+		return function(obj){
+			if (!obj[id]) return this.next(error)
+			return this.next()
+		}
+	},
+
 	async wait(sec){
 		await new Promise((resolve, reject) => {
 			setTimeout(resolve, sec)
@@ -70,16 +80,16 @@ module.exports = {
 		return this.next()
 	},
 
-	log(obj){
-		console.log(obj)
+	log(...args){
+		console.log(...args)
 		return this.next()
 	},
 
 	/**
 	 * flatten deep nested structure
-	 * @param {obj} src - source object
+	 * @param {object} src - source object
 	 * @param {object} map - {"filename": ["upload", "files", 0, "filename"]}
-	 * @param {obj dst - destination
+	 * @param {object} dst - destination
 	 */
 	flat(src, map, dst){
 		const keys = Object.keys(map)
@@ -98,4 +108,15 @@ module.exports = {
 		Object.assign(output, object[key])
 		return this.next()
 	},
+
+	dup(org, output){
+		Object.assign(output, org)
+		return this.next()
+	},
+
+	extract(arr, key, outputs){
+		const list = arr.map(item => item[key])
+		outputs.push(...list)
+		return this.next()
+	}
 }

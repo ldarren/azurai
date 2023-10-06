@@ -1,25 +1,14 @@
 const { Configuration, OpenAIApi } = require('openai')
 const pico = require('pico-common')
 
-function convertHistory2Messages(history, approx_max_tokens=1000) {
-	const messages = [{role: 'system', content: 'if not mentioned otherwise, all output format should be in html'}]
-	history.forEach(h => {
-		if (h['user']) messages.push({
-		role: 'user',
-		content: h['user']
-		})
-		if (h['bot']) messages.push({
-		role: 'assistant',
-		content: h['bot']
-		})
-	})
+function convertHistory2Messages(history, approx_max_tokens=2000) {
 	let tokenCount = approx_max_tokens * 4
-	const index = messages.findLastIndex(m => {
+	const index = history.findLastIndex(m => {
 		tokenCount -= m.content.length
 		return tokenCount <= 0
 	})
 
-	return -1 === index ? messages : messages.slice(index)
+	return -1 === index ? history : history.slice(index)
 }
 
 function LLM({model, apiKey}, {merge, prompt}){
@@ -45,7 +34,7 @@ LLM.prototype = {
 			n: 1,
 			// stop: ['\n']
 		}, overrides))
-		console.log('#### chat:res.data ######', JSON.stringify(res))
+		console.log('#### chat:res.data ######', JSON.stringify(res.data))
 
 		return res
 	},
@@ -134,7 +123,7 @@ module.exports = {
 		const res = await llm.chat(history, overrides)
 		const completion = res.data
 
-		Object.assign(output, {usage: res.usage, data_points: '', answer: completion.choices[0].message.content, thoughts: 'Searched for:<br>{q}<br><br>Prompt:<br>'})
+		Object.assign(output, completion)
 		return this.next()
 	},
 	async ask(llm, question, overrides, output){
@@ -146,6 +135,7 @@ module.exports = {
 	},
 	async embed(llm, query, output){
 		const res = await llm.embed(query)
+		output.length = 0
 		output.push(...res)
 		return this.next()
 	},

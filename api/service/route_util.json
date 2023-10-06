@@ -1,0 +1,7 @@
+{
+	"routes": {
+		"/1/ping": [
+			[["web.output", "text/plain", "text"], "_.res", "pong"]
+		]
+	}
+}

@@ -54,6 +54,9 @@
 		"md": {
 			"mod": "md"
 		},
+		"embed": {
+			"mod": "embed"
+		},
 		"gh": {
 			"mod": "gh",
 			"clientId": "$mod_gh_client_id",

@@ -22,7 +22,7 @@ return {
 	},
 	authorize(){
 		const params = new URLSearchParams({
-			scope: 'project,repo',
+			scope: 'project,repo,pages',
 		})
 		window.location.href = this.domain + '/1/accounts/github/authorize?' + params.toString()
 	},

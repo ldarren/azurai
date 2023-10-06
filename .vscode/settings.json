@@ -28,7 +28,8 @@
             "G_SERP_ENG": "G_SERP_ENG_DEV",
             "GH_CLIENT_ID": "GH_CLIENT_ID_DEV",
             "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_DEV",
-            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_DEV"
+            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_DEV",
+            "ACCESS_TOKEN": "ACCESS_TOKEN"
         },
         "dev": {
             "BACKEND": "https://azurai-api-dev.onrender.com",
@@ -36,7 +37,8 @@
             "G_SERP_ENG": "G_SERP_ENG_DEV",
             "GH_CLIENT_ID": "GH_CLIENT_ID_DEV",
             "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_DEV",
-            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_DEV"
+            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_DEV",
+            "ACCESS_TOKEN": "ACCESS_TOKEN"
         },
         "prod": {
             "BACKEND": "https://azurai-api.onrender.com",
@@ -44,7 +46,8 @@
             "G_SERP_ENG": "G_SERP_ENG_PROD",
             "GH_CLIENT_ID": "GH_CLIENT_ID_PROD",
             "GH_CLIENT_SECRET": "GH_CLIENT_SECRET_PROD",
-            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_PROD"
+            "GH_ACCESS_TOKEN": "GH_ACCESS_TOKEN_PROD",
+            "ACCESS_TOKEN": "ACCESS_TOKEN"
         },
     }
 }
