@@ -11,7 +11,6 @@ async function register(client) {
 module.exports = {
 	async setup(cfg){
 		pgvector = await import('pgvector/pg')
-		console.log('######', cfg)
 		pool = new Pool(cfg)
 		pool.on('connect', register)
 	},
@@ -177,6 +176,12 @@ module.exports = {
 				RETURNING *;`,
 			[id, pgvector.toSql(embedding)])
 			if (output) Object.assign(output, res.rows[0])
+			return this.next()
+		},
+		async search(userId, embedding, outputs){
+			const res = await pool.query('SELECT * FROM memory_chunks WHERE cby = $1 ORDER BY embedding <=> $2 LIMIT 5',
+			[userId, pgvector.toSql(embedding)])
+			if (Array.isArray(outputs)) outputs.push(...res.rows)
 			return this.next()
 		},
 		async readNewByUserId(output){

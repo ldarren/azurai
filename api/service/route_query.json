@@ -1,18 +1,17 @@
 {
 	"routes": {
         "query/function/retrieve": [
-            []
+            ["util.log", "query/function/retrieve"]
         ],
         "query/rag": [
-            [],
-            ["llm.rag2", "$.llm", "_.body.history", "_.body.overrides", "_.output"]
+            ["llm.rag", "$.llm", "_.body.history", "_.body.overrides", "_.output"]
         ],
 		"/1/query": [
 			[["web.output"], "_.res", "_.:output"],
 			["web.bodyParser", "_.req", "_.body"],
-            [],
-            [],
-            ["util.branch"]
+			["jwt.validate", "_.req", "_.user"],
+            ["llm.embed", "$.llm", "_.body.content", "_.:embedding"],
+            ["pg.memory_chunks.search", "_.user.id", "_.:embedding", "_.:output"]
 		]
 	}
 }
