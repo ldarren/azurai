@@ -13,8 +13,8 @@
 		"/1/chain": [
 			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
-			["util.push", "_.:retrievals", "$.hnsw"],
-			["util.push", "_.:retrievals", "$.serp"],
+			["util.push", "$.hnsw", "_.:retrievals"],
+			["util.push", "$.serp", "_.:retrievals"],
 			["llm.rag", "$.llm", "_.body.query", "_.body.history", "_.:retrievals", "_.output"]
 		],
 		"GET/hnsw": [

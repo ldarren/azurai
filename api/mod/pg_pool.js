@@ -146,6 +146,11 @@ module.exports = {
 			outputs.push(...res.rows)
 			return this.next()
 		},
+		async readByIds(ids, userId, outputs){
+			const res = await pool.query('SELECT * FROM memories WHERE id IN ($1) and cby = $2 and s = 1;', [ids, userId])
+			outputs.push(...res.rows)
+			return this.next()
+		},
 		async save(memory, path, content, userId, output){
 			const res = await pool.query(`
 			INSERT INTO memories (agent_id, project, path, name, source, type, s, cby)
@@ -178,9 +183,9 @@ module.exports = {
 			if (output) Object.assign(output, res.rows[0])
 			return this.next()
 		},
-		async search(userId, embedding, outputs){
-			const res = await pool.query('SELECT * FROM memory_chunks WHERE cby = $1 ORDER BY embedding <=> $2 LIMIT 5',
-			[userId, pgvector.toSql(embedding)])
+		async search(userId, embedding, name, outputs){
+			const res = await pool.query('SELECT *, (1 - (embedding <=> $2)) as similarity FROM memory_chunks WHERE cby = $1 and name = $2 and ORDER BY embedding <=> $3 LIMIT 5',
+			[userId, name, pgvector.toSql(embedding)])
 			if (Array.isArray(outputs)) outputs.push(...res.rows)
 			return this.next()
 		},

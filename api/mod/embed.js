@@ -55,8 +55,8 @@ module.exports = {
     path
     text
     */
-    createCodeFileSummary(tpl, params, output){
-        output.push({
+    createCodeFileSummary(tpl, params, outputs){
+        outputs.push({
             role: 'system',
             content: replace(tpl.system, params)
         },{
@@ -65,8 +65,8 @@ module.exports = {
         })
         return this.next()
     },
-    createCodeQuestions(tpl, params, output){
-        output.push({
+    createCodeQuestions(tpl, params, outputs){
+        outputs.push({
             role: 'user',
             content: replace(tpl.user, params)
         })
@@ -83,4 +83,36 @@ module.exports = {
         })
         return this.next()
     },
+    queryPrompt(input, outputs){
+        outputs.push({
+            role: 'system',
+            content: 'You are a helpful github repository assistant.'
+        },{
+            role: 'user',
+            content: input.content
+        })
+        return this.next()
+    },
+    reorder(summaries, questions, outputs){
+        const all = summaries.concat(questions)
+        all.sort((a, b) => a.similarities - b.similarities)
+        all.forEach(m => {
+            if (outputs.includes(m.memory_id)) return
+            outputs.push(m.memory_id)
+        })
+        return this.next()
+    },
+    functionCall(user, prompts, completion, options, output){
+        const call = completion?.choices?.[0]?.function_call
+        if (call) return this.next(null, `function\${call.name}`, Object.assign(this.data, {user, ":prompts": prompts, arguments: call, options, output}))
+        Object.assign(output, completion)
+        return this.next()
+    },
+    functionReply(memories, outputs){
+        outputs.push({
+            role: 'function',
+            content: memories.join('\n\n')
+        })
+        return this.next()
+    }
 }

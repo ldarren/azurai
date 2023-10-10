@@ -144,6 +144,22 @@ Be concise. Include any information that may be relevant to a developer who is c
 Keep you response under 400 words. Output should be in markdown format.\n\
 Do not just list the files and folders in this folder.'"
 			}
+		},
+		plugins: {
+			kb_search: {
+				name: 'kb_search',
+				description: 'search internal knowledge base',
+				parameters: {
+					type: 'object',
+					properties: {
+						q: {
+							type: 'string',
+							description: 'query string'
+						}
+					},
+					required: ['q']
+				}
+			}
 		}
 	}
 }

@@ -3,15 +3,27 @@
         "query/function/retrieve": [
             ["util.log", "query/function/retrieve"]
         ],
-        "query/rag": [
-            ["llm.rag", "$.llm", "_.body.history", "_.body.overrides", "_.output"]
+        "function/kb_search": [
+            ["llm.embed", "$.llm", "_.arguments.q", "_.:embedding"],
+            ["pg.memory_chunks.search", "_.user.id", "_.:embedding", "summary", "_.:summaries"],
+            ["pg.memory_chunks.search", "_.user.id", "_.:embedding", "questions", "_.:questions"],
+            ["embed.reorder", "_.:summaries", "_.:questions", "_.:ids"],
+            ["util.extract", "_.:chunks", "memory_id", "_.:ids"],
+            ["pg.memories.readByIds", "_.:ids", "_.user.id", "_.:memories"],
+            ["embed.functionReply", "_.:memories", "_.prompts"],
+			["llm.chat", "$.llm", "_.:prompts", "_.options", "_.completion"],
+            ["embed.functionCall", "_.user", "_.:prompts", "_.completion", "_.options", "_.output"]
         ],
 		"/1/query": [
-			[["web.output"], "_.res", "_.:output"],
+			[["web.output"], "_.res", "_.output"],
 			["web.bodyParser", "_.req", "_.body"],
 			["jwt.validate", "_.req", "_.user"],
-            ["llm.embed", "$.llm", "_.body.content", "_.:embedding"],
-            ["pg.memory_chunks.search", "_.user.id", "_.:embedding", "_.:output"]
+			["util.push", "@.rsc.plugins.kb_search", "_.:plugins"],
+			["util.assign", "functions", "_.:plugins", "_.options"],
+			["util.assign", "function_call", "auto", "_.options"],
+            ["embed.queryPrompt", "_.body", "_.:prompts"],
+			["llm.chat", "$.llm", "_.:prompts", "_.options", "_.completion"],
+            ["embed.functionCall", "_.user", "_.:prompts", "_.completion", "_.options", "_.output"]
 		]
 	}
 }

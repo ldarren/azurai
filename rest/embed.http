@@ -21,5 +21,5 @@ Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
 Content-Type: application/json
 
 {
-    "content": "how to create PR template?"
+    "content": "content of `.github` folder in the ldarren/azurai project?"
 }

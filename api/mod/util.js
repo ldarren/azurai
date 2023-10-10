@@ -75,11 +75,6 @@ module.exports = {
 		return this.next()
 	},
 
-	push(array, item){
-		array.push(item)
-		return this.next()
-	},
-
 	log(...args){
 		console.log(...args)
 		return this.next()
@@ -96,6 +91,12 @@ module.exports = {
 		keys.forEach(key => {
 			dst[key] = pObj.dot(src, map[key])
 		})
+		return this.next()
+	},
+
+	push(item, array){
+		console.log('>>>', item, array)
+		array.push(item)
 		return this.next()
 	},
 

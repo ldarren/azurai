@@ -13,8 +13,23 @@ ssh-keygen -t rsa -b 4096 -m PEM -E SHA512 -f azurai.pem
 openssl rsa -in azurai.pem -pubout -outform PEM -out azurai.pub
 ```
 ### Index Process
+REF: https://juejin.cn/post/7286912324593598522
 - iterate with github files, create summary and question for each file
 - create folder summary and questions
 - convert summary and questions to MD
 - split MD to chunk
 - create vector from chunk
+
+# funciton calls
+		"/1/query2": [
+			[["web.output"], "_.res", "_.:output"],
+			["web.bodyParser", "_.req", "_.body"],
+			["jwt.validate", "_.req", "_.user"],
+            ["- straight answer or function call"],
+            ["llm.embed", "$.llm", "_.body.content", "_.:embedding"],
+            ["pg.memory_chunks.search", "_.user.id", "_.:embedding", "-name", "_.:output"],
+            ["- retrieve parent document"],
+            ["- document reorder"],
+            ["- ask orginal query with given answer"],
+            ["- repeat if more function calls?"]
+		],
