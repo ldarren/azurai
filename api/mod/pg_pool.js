@@ -147,7 +147,7 @@ module.exports = {
 			return this.next()
 		},
 		async readByIds(ids, userId, outputs){
-			const res = await pool.query('SELECT * FROM memories WHERE id IN ($1) and cby = $2 and s = 1;', [ids, userId])
+			const res = await pool.query('SELECT * FROM memories WHERE id = ANY($1::int[]) and cby = $2 and s = 1;', [ids, userId])
 			outputs.push(...res.rows)
 			return this.next()
 		},
@@ -184,7 +184,7 @@ module.exports = {
 			return this.next()
 		},
 		async search(userId, embedding, name, outputs){
-			const res = await pool.query('SELECT *, (1 - (embedding <=> $2)) as similarity FROM memory_chunks WHERE cby = $1 and name = $2 and ORDER BY embedding <=> $3 LIMIT 5',
+			const res = await pool.query('SELECT *, (1 - (embedding <=> $3)) as similarity FROM memory_chunks WHERE cby = $1 and name = $2 ORDER BY embedding <=> $3 LIMIT 5',
 			[userId, name, pgvector.toSql(embedding)])
 			if (Array.isArray(outputs)) outputs.push(...res.rows)
 			return this.next()

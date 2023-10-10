@@ -103,15 +103,34 @@ module.exports = {
         return this.next()
     },
     functionCall(user, prompts, completion, options, output){
-        const call = completion?.choices?.[0]?.function_call
-        if (call) return this.next(null, `function\${call.name}`, Object.assign(this.data, {user, ":prompts": prompts, arguments: call, options, output}))
+        const choice = completion?.choices?.[0]
+        if (choice && 'function_call' === choice.finish_reason) {
+            const call = choice?.message?.function_call
+            const arguments = JSON.parse(call?.arguments)
+            return this.next(
+                null,
+                `function/${call.name}`,
+                Object.assign({}, this.data, {
+                    user,
+                    ':prompts': prompts,
+                    arguments,
+                    options,
+                    output
+                })
+            )
+        }
         Object.assign(output, completion)
         return this.next()
     },
     functionReply(memories, outputs){
+        const content = memories.reduce((acc, m) => {
+            acc += JSON.stringify(m) + '\n\n'
+            return acc
+        }, '')
+        console.log('>>>', content)
         outputs.push({
             role: 'function',
-            content: memories.join('\n\n')
+            content,
         })
         return this.next()
     }
