@@ -95,7 +95,6 @@ module.exports = {
 	},
 
 	push(item, array){
-		console.log('>>>', item, array)
 		array.push(item)
 		return this.next()
 	},

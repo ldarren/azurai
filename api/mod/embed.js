@@ -104,6 +104,7 @@ module.exports = {
     },
     functionCall(user, prompts, completion, options, output){
         const choice = completion?.choices?.[0]
+        prompts.push(choice?.message)
         if (choice && 'function_call' === choice.finish_reason) {
             const call = choice?.message?.function_call
             const arguments = JSON.parse(call?.arguments)
@@ -122,16 +123,18 @@ module.exports = {
         Object.assign(output, completion)
         return this.next()
     },
-    functionReply(memories, outputs){
-        const content = memories.reduce((acc, m) => {
-            acc += JSON.stringify(m) + '\n\n'
-            return acc
-        }, '')
-        console.log('>>>', content)
-        outputs.push({
-            role: 'function',
-            content,
-        })
-        return this.next()
+    functionReply(name){
+        return function(memories, outputs){
+            const content = memories.reduce((acc, m) => {
+                acc += JSON.stringify(m) + '\n\n'
+                return acc
+            }, '')
+            outputs.push({
+                role: 'function',
+                name,
+                content,
+            })
+            return this.next()
+        }
     }
 }

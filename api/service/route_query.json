@@ -10,7 +10,7 @@
             ["embed.reorder", "_.:summaries", "_.:questions", "_.:ids"],
             ["util.extract", "_.:chunks", "memory_id", "_.:ids"],
             ["pg.memories.readByIds", "_.:ids", "_.user.id", "_.:memories"],
-            ["embed.functionReply", "_.:memories", "_.:prompts"],
+            [["embed.functionReply", "kb_search"], "_.:memories", "_.:prompts"],
 			["llm.chat", "$.llm", "_.:prompts", "_.model", "_.completion"],
             ["embed.functionCall", "_.user", "_.:prompts", "_.completion", "_.model", "_.output"]
         ],

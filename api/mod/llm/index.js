@@ -4,7 +4,7 @@ const pico = require('pico-common')
 function convertHistory2Messages(history, approx_max_tokens=2000) {
 	let tokenCount = approx_max_tokens * 4
 	const index = history.findLastIndex(m => {
-		tokenCount -= m.content.length
+		tokenCount -= (m.content ?? JSON.stringify(m.function_call)).length
 		return tokenCount <= 0
 	})
 
@@ -29,8 +29,7 @@ LLM.prototype = {
 		const res = await this.openai.createChatCompletion(Object.assign({
 			model: this.model,
 			messages: convertHistory2Messages(history),
-			temperature: 0.3,
-			max_tokens: 512,
+			temperature: 0.9,
 			n: 1,
 			// stop: ['\n']
 		}, overrides))
