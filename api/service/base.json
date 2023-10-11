@@ -57,6 +57,9 @@
 		"embed": {
 			"mod": "embed"
 		},
+		"query": {
+			"mod": "query"
+		},
 		"gh": {
 			"mod": "gh",
 			"clientId": "$mod_gh_client_id",

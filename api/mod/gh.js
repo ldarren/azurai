@@ -119,7 +119,6 @@ module.exports = {
 				switch(con.type){
 					case 'tree':
 						await this.next(null, `embed/${type}/tree`, {parent: content, content: con, cred, user, proj, ':output': output})
-						return this.next()
 						break
 					case 'blob':
 						await this.next(null, `embed/${type}/blob`, {parent: content, content: con, cred, user, proj, ':output': output})

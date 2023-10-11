@@ -2,6 +2,11 @@
 	"routes": {
 		"/1/ping": [
 			[["web.output", "text/plain", "text"], "_.res", "pong"]
+		],
+		"ERR": [
+			[["web.output", "application/json"], "_.res", "_.output"],
+			["util.assign", "url", "$.named", "_.output"],
+			["util.assign", "message", "not found", "_.output"]
 		]
 	}
 }
