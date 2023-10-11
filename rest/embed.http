@@ -14,3 +14,12 @@ Content-Type: application/json
     "targetAudience": "smart developer",
     "s": 1
 }
+
+### create an embed db
+POST {{BACKEND}}/1/query
+Authorization: Bearer {{$dotenv %ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+    "content": "content of `.github` folder in the ldarren/azurai project?"
+}

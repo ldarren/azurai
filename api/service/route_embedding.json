@@ -11,7 +11,7 @@
 			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
 			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
 			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
-			["util.push", "_.:output", "_.output"]
+			["util.push", "_.output", "_.:output"]
 		],
 		"embed/doc/blob": [
 			["util.dup", "_.proj", "_.fileParams"],
@@ -23,7 +23,7 @@
 			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
 			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
 			["pg.memory_chunks.save", "questions", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
-			["util.push", "_.:output", "_.output"]
+			["util.push", "_.output", "_.:output"]
 		],
 		"/1/embed/doc/:user/:repo/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],

@@ -55,8 +55,8 @@ module.exports = {
     path
     text
     */
-    createCodeFileSummary(tpl, params, output){
-        output.push({
+    createCodeFileSummary(tpl, params, outputs){
+        outputs.push({
             role: 'system',
             content: replace(tpl.system, params)
         },{
@@ -65,8 +65,8 @@ module.exports = {
         })
         return this.next()
     },
-    createCodeQuestions(tpl, params, output){
-        output.push({
+    createCodeQuestions(tpl, params, outputs){
+        outputs.push({
             role: 'user',
             content: replace(tpl.user, params)
         })

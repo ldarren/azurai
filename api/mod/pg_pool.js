@@ -11,8 +11,6 @@ async function register(client) {
 module.exports = {
 	async setup(cfg){
 		pgvector = await import('pgvector/pg')
-		const config = Object.assign({}, cfg)
-		config.port = parseInt(cfg.port)
 		pool = new Pool(cfg)
 		pool.on('connect', register)
 	},
@@ -148,6 +146,11 @@ module.exports = {
 			outputs.push(...res.rows)
 			return this.next()
 		},
+		async readByIds(ids, userId, outputs){
+			const res = await pool.query('SELECT * FROM memories WHERE id = ANY($1::int[]) and cby = $2 and s = 1;', [ids, userId])
+			outputs.push(...res.rows)
+			return this.next()
+		},
 		async save(memory, path, content, userId, output){
 			const res = await pool.query(`
 			INSERT INTO memories (agent_id, project, path, name, source, type, s, cby)
@@ -178,6 +181,12 @@ module.exports = {
 				RETURNING *;`,
 			[id, pgvector.toSql(embedding)])
 			if (output) Object.assign(output, res.rows[0])
+			return this.next()
+		},
+		async search(userId, embedding, name, outputs){
+			const res = await pool.query('SELECT *, (1 - (embedding <=> $3)) as similarity FROM memory_chunks WHERE cby = $1 and name = $2 ORDER BY embedding <=> $3 LIMIT 5',
+			[userId, name, pgvector.toSql(embedding)])
+			if (Array.isArray(outputs)) outputs.push(...res.rows)
 			return this.next()
 		},
 		async readNewByUserId(output){
