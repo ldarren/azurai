@@ -34,11 +34,11 @@ return {
             persona: 'give comprehensive github md answer',
             params: {
                 "model": "gpt-3.5-turbo-16k-0613",
-                "temperature": 0,
-                "top_p": 0,
+                "temperature": 1,
+                "top_p": 1,
                 "n": 1,
                 "stream": false,
-                "max_tokens": 100,
+                "max_tokens": 1024,
                 "presence_penalty":  0,
                 "frequency_penalty":  0
             },

@@ -13,9 +13,28 @@
 			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
 			["util.push", "_.output", "_.:output"]
 		],
-		"embed/doc/blob": [
-			["util.dup", "_.proj", "_.fileParams"],
-			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.fileParams"],
+		"embed/compress/js": [
+			["util.log", ">>>0"],
+			["embed.compressJS", "_.fileParams", "_.fileParams"],
+			["util.log", ">>>1"],
+			["embed.createCodeFileSummary", "@.rsc.embed.filePrompts", "_.fileParams", "_.:summaryPrompts"],
+			["util.log", ">>>2"],
+			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
+			["util.log", ">>>3"],
+			["embed.createCodeQuestions", "@.rsc.embed.questionPrompts", "_.fileParams", "_.:questionPrompts"],
+			["util.log", ">>>4"],
+			["llm.chat", "$.llm", "_.:questionPrompts", null, "_.questions"],
+			["util.log", ">>>5"],
+			["pg.memories.save", "_.fileParams", "_.parent.path", "_.content", "_.user.id", "_.output"],
+			["util.log", ">>>6"],
+			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
+			["util.log", ">>>7"],
+			["pg.memory_chunks.save", "questions", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
+			["util.log", ">>>8"],
+			["util.push", "_.output", "_.:output"],
+			["util.log", ">>>9"]
+		],
+		"embed/compress/others": [
 			["embed.createCodeFileSummary", "@.rsc.embed.filePrompts", "_.fileParams", "_.:summaryPrompts"],
 			["llm.chat", "$.llm", "_.:summaryPrompts", null, "_.summary"],
 			["embed.createCodeQuestions", "@.rsc.embed.questionPrompts", "_.fileParams", "_.:questionPrompts"],
@@ -24,6 +43,11 @@
 			["pg.memory_chunks.save", "summary", "_.output.id", "_.user.id", "_.summary.choices.0.message.content", "_.soutput"],
 			["pg.memory_chunks.save", "questions", "_.output.id", "_.user.id", "_.questions.choices.0.message.content", "_.qoutput"],
 			["util.push", "_.output", "_.:output"]
+		],
+		"embed/doc/blob": [
+			["util.dup", "_.proj", "_.fileParams"],
+			["gh.readContent", "_.cred", "_.parent.path", "_.content", "_.fileParams"],
+			["embed.compressRouter", "_.fileParams"]
 		],
 		"/1/embed/doc/:user/:repo/branches/:branch": [
 			[["web.output"], "_.res", "_.:output"],
@@ -41,7 +65,7 @@
 			["llm.embed", "$.llm", "_.mc.chunk", "_.:embedding"],
 			["pg.memory_chunks.updateEmbeddingById", "_.mc.id", "_.:embedding"]
 		],
-		"* * * * * *": [
+		"0 * * * * *": [
 			["util.branchOnce", "embed/index/"]
 		]
 	}

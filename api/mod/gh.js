@@ -58,27 +58,27 @@ module.exports = {
         client_secret = cfg.clientSecret
     },
     async authorize(query, output){
-			const reqBody = {
-				scope: query.scope,
-				client_id
-			}
-			const res = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers: auth_headers, redirect:0})
-			Object.assign(output, {
-				status: res.statusCode,
-				headers: res.headers
-			})
-			return this.next()
+		const reqBody = {
+			scope: query.scope,
+			client_id
+		}
+		const res = await ajax('GET', 'https://github.com/login/oauth/authorize', reqBody, {headers: auth_headers, redirect:0})
+		Object.assign(output, {
+			status: res.statusCode,
+			headers: res.headers
+		})
+		return this.next()
     },
     async token(input, output){
-			const reqBody = Object.assign({}, input, {
-				client_id,
-				client_secret,
-				accept: 'json'
-			})
-			const body = await ajax('GET', 'https://github.com/login/oauth/access_token', reqBody)
-			if (!body) this.next({status: 400})
-			Object.assign(output, body)
-			return this.next()
+		const reqBody = Object.assign({}, input, {
+			client_id,
+			client_secret,
+			accept: 'json'
+		})
+		const body = await ajax('GET', 'https://github.com/login/oauth/access_token', reqBody)
+		if (!body) this.next({status: 400})
+		Object.assign(output, body)
+		return this.next()
     },
 	async readUser(cred, output){
 		const headers = Object.assign({
@@ -115,7 +115,8 @@ module.exports = {
 	treeRouter(type){
 		return async function(cred, user, proj, content, ignores, output) {
 			for (const con of content.tree){
-				if (ignores.includes(content.path)) continue
+				if (con?.path?.at(0) === '.') continue
+				if (ignores.includes(con.path)) continue
 				switch(con.type){
 					case 'tree':
 						await this.next(null, `embed/${type}/tree`, {parent: content, content: con, cred, user, proj, ':output': output})

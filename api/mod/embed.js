@@ -1,4 +1,5 @@
 const path = require('node:path')
+const {minify} = require('terser')
 
 const replace = (tpl, obj) => {
 	let ret = tpl
@@ -83,4 +84,21 @@ module.exports = {
         })
         return this.next()
     },
+    async compressRouter(params){
+        const ext = path.extname(params.path)
+        switch(ext){
+            case '.js':
+                await this.next(null, 'embed/compress/js')
+                break
+            default:
+                await this.next(null, 'embed/compress/others')
+                break
+        }
+        return this.next()
+    },
+    async compressJS(params, output){
+        const result = await minify(params.text, { sourceMap: false });
+        output.text = result.code
+        return this.next()
+    }
 }

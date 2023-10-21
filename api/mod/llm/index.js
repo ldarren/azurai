@@ -23,7 +23,7 @@ function LLM({model, apiKey}, {merge, prompt}){
 
 LLM.prototype = {
 	async chat(history, overrides = {}){
-		console.log('#### chat:req ######', JSON.stringify(history))
+		//console.log('#### chat:req ######', JSON.stringify(history))
 
 		// STEP 1: Generate an optimized keyword search query based on the chat history and the last question
 		const res = await this.openai.createChatCompletion(Object.assign({
@@ -33,7 +33,7 @@ LLM.prototype = {
 			n: 1,
 			// stop: ['\n']
 		}, overrides))
-		console.log('#### chat:res.data ######', JSON.stringify(res.data))
+		//console.log('#### chat:res.data ######', JSON.stringify(res.data))
 
 		return res
 	},

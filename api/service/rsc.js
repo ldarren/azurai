@@ -95,7 +95,7 @@ return {
 			}
 		},
 		embed: {
-			ignores:['package-lock.json','node_modules','dist','build'],
+			ignores:['package-lock.json','node_modules','dist','build','rest'],
 			filePrompts: {
 				system:"You are acting as a {contentType} documentation expert for a project called {projectName}.\nBelow is the {contentType} from a file located at \`{path}\`. Do not say \"this file is a part of the {projectName} project\".",
 				user:
