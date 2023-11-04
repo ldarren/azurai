@@ -88,10 +88,10 @@ module.exports = {
         const ext = path.extname(params.path)
         switch(ext){
             case '.js':
-                await this.next(null, 'embed/compress/js')
+                await this.next(null, 'embed/squash/js')
                 break
             default:
-                await this.next(null, 'embed/compress/others')
+                await this.next(null, 'embed/squash/others')
                 break
         }
         return this.next()

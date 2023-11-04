@@ -33,7 +33,9 @@ return {
 												"enum": {
 													"type": "arr",
 													"spec": "str"
-												}
+												},
+												"items": "obj",
+												"properties": "obj"
 											}
 										}
 									}

@@ -16,3 +16,435 @@ Content-Type: application/json
         {"role":"user", "content":"Write a detailed technical explanation of what this code does. \nFocus on the high-level purpose of the code and how it may be used in the larger project.\nInclude code examples where appropriate. Keep you response between 100 and 300 words. \nDO NOT RETURN MORE THAN 300 WORDS.\nOutput should be in markdown format.\nDo not just list the methods and classes in this file.code:return{\n\tdeps:{\n\t\ttpl:['file','<%=d.message%>'],\n\t\tinfo:['map',{message:'Empty'}]\n\t},\n\tcreate: function(deps){\n\t\tthis.el.innerHTML=deps.tpl(deps.info)\n\t}\n}\n"}
     ]
 }
+
+### Source Code Extraction 1
+POST https://api.openai.com/v1/chat/completions
+Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
+Content-Type: application/json
+
+{
+    "model":"gpt-3.5-turbo-0613",
+    "messages": [
+        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities, imported entities and methods or properties used in a file. at the end of all extraction output 'DONE'."},
+        {"role":"user", "content":"```js\nconst path = require('node:path')\nmodule.exports = {\njoin(arr){return path.join(...arr)}\n}```"},
+        {"role": "assistant", "content": null, "function_call": {
+          "name": "exported_entity",
+          "arguments": "{\n  \"entity_name\": \"join\",\n  \"entity_method_names\": [\"path.join\"]\n}"
+        }},
+        {"role": "user", "content": "continue"},
+        {"role": "assistant", "content": null, "function_call": {
+          "name": "imported_entity",
+          "arguments": "{\n  \"entity_name\": \"path\",\n  \"entity_method_names\": [\"join\"]\n}"
+        }},
+        {"role": "user", "content": "continue"}
+    ],
+    "functions": [
+        {
+            "name": "exported_entity",
+            "description": "document an exported entity with entity name, entity methos or properties used",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity_name": {
+                        "type": "string",
+                        "description": "entity name"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "entity name type",
+                        "enum": ["class", "instance", "object", "function", "variable"]
+                    },
+                    "entity_method_names": {
+                        "type": "array",
+                        "description": "class or instance type entity method name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "entity_properties_names": {
+                        "type": "array",
+                        "description": "class or instance type entity properties name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["entity_name","type"]
+            }
+        },
+        {
+            "name": "non_exported_entity",
+            "description": "document an non exported entity (or private entity) with entity name, entity methos or properties used",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity_name": {
+                        "type": "string",
+                        "description": "entity name"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "entity name type",
+                        "enum": ["class", "instance", "object", "function", "variable"]
+                    },
+                    "entity_method_names": {
+                        "type": "array",
+                        "description": "class or instance type entity method name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "entity_properties_names": {
+                        "type": "array",
+                        "description": "class or instance type entity properties name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["entity_name", "type"]
+            }
+        },
+        {
+            "name": "imported_entity",
+            "description": "document an imported entity (or private entity) with entity name, entity methods or properties used",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity_name": {
+                        "type": "string",
+                        "description": "entity name"
+                    },
+                    "entity_method_names": {
+                        "type": "array",
+                        "description": "entity method name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "entity_properties_names": {
+                        "type": "array",
+                        "description": "entity properties name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["entity_name"]
+            }
+        }
+    ]
+}
+
+### Source Code Extraction 1a
+POST https://api.openai.com/v1/chat/completions
+Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
+Content-Type: application/json
+
+{
+    "model":"gpt-3.5-turbo-0613",
+    "messages": [
+        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities, imported entities and methods or properties used in a file. at the end of all extraction output 'DONE'."},
+        {"role":"user", "content":"```js\nconst path = require('node:path')\nmodule.exports = {\ncombine(arr){return path.join(...arr)}\n}```"}
+    ],
+    "functions": [
+        {
+            "name": "exported_entity",
+            "description": "document an exported entity with entity name, entity methos or properties used",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity_name": {
+                        "type": "string",
+                        "description": "entity name"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "entity name type",
+                        "enum": ["class", "instance", "object", "function", "variable"]
+                    },
+                    "entity_method_names": {
+                        "type": "array",
+                        "description": "only applicable to class or instance type entity, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "entity_properties_names": {
+                        "type": "array",
+                        "description": "only applicable to class or instance type entity, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["entity_name","type"]
+            }
+        },
+        {
+            "name": "non_exported_entity",
+            "description": "document an non exported entity (or private entity) with entity name, entity methos or properties used",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity_name": {
+                        "type": "string",
+                        "description": "entity name"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "entity name type",
+                        "enum": ["class", "instance", "object", "function", "variable"]
+                    },
+                    "entity_method_names": {
+                        "type": "array",
+                        "description": "class or instance type entity method name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "entity_properties_names": {
+                        "type": "array",
+                        "description": "class or instance type entity properties name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["entity_name", "type"]
+            }
+        },
+        {
+            "name": "imported_entity",
+            "description": "document an imported entity (or private entity) with entity name, entity methos or properties used",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity_name": {
+                        "type": "string",
+                        "description": "entity name"
+                    },
+                    "entity_method_names": {
+                        "type": "array",
+                        "description": "entity method name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "entity_properties_names": {
+                        "type": "array",
+                        "description": "entity properties name, if sub-entity involved include whole path",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["entity_name"]
+            }
+        }
+    ]
+}
+
+### Source Code Extraction 2
+## REF: https://community.openai.com/t/emulated-multi-function-calls-within-one-request/269582
+POST https://api.openai.com/v1/chat/completions
+Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
+Content-Type: application/json
+
+{
+    "model":"gpt-3.5-turbo-0613",
+    "messages": [
+        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities and imported entities along with the methods or properties used in a file. at the end of all extraction output 'DONE'."},
+        {"role":"user", "content":"```js\nconst path = require('node:path')\nmodule.exports = {\ncombine(arr){return path.join(...arr)}\n}```"}
+    ],
+    "functions": [
+        {
+            "name": "multi_Func",
+            "description": "Call three functions in one call",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "exported_entity": {
+                        "name": "exported_entity",
+                        "description": "document an exported entity with entity name, entity methods or properties used",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "entity_name": {
+                                    "type": "string",
+                                    "description": "entity name"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "entity name type",
+                                    "enum": ["class", "instance", "object", "function", "variable"]
+                                },
+                                "entity_method_names": {
+                                    "type": "array",
+                                    "description": "class or instance type entity method name, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "entity_properties_names": {
+                                    "type": "array",
+                                    "description": "class or instance type entity properties name, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": ["entity_name","type"]
+                        }
+                    },
+                    "non_exported_entity": {
+                        "name": "non_exported_entity",
+                        "description": "document an entity (or private entity) with entity name, entity methods or properties used",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "entity_name": {
+                                    "type": "string",
+                                    "description": "entity name"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "entity name type",
+                                    "enum": ["class", "instance", "object", "function", "variable"]
+                                },
+                                "entity_method_names": {
+                                    "type": "array",
+                                    "description": "class or instance type entity method name, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "entity_properties_names": {
+                                    "type": "array",
+                                    "description": "class or instance type entity properties name, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": ["entity_name","type"]
+                        }
+                    },
+                    "imported_entity": {
+                        "name": "imported_entity",
+                        "description": "example `import cry from 'node;crypto` imported entity will be `node:crypto`",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "entity_name": {
+                                    "type": "string",
+                                    "description": "entity name"
+                                },
+                                "entity_method_names": {
+                                    "type": "array",
+                                    "description": "entity method name, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "entity_properties_names": {
+                                    "type": "array",
+                                    "description": "entity properties name, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": ["entity_name"]
+                        }
+                    }
+                }, "required": ["exported_entity", "non_exported_entity", "imported_entity"]
+            }
+        }
+    ]
+}
+
+### Source Code Extraction 3
+POST https://api.openai.com/v1/chat/completions
+Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
+Content-Type: application/json
+
+{
+    "model":"gpt-3.5-turbo-0613",
+    "messages": [
+        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities, imported entities and methods or properties used in a file."},
+        {"role":"user", "content":"```js\nconst path = require('node:path')\nconst qs = require('node:querystring')\nmodule.exports = {\ncombine(arr){return path.join(...arr)}\n}```"}
+    ],
+    "functions": [
+        {
+            "name": "save_entities",
+            "description": "pass the entities as input parameters",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "exported_entities": {
+                        "type": "array",
+                        "description": "entities that is exported or public",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "entity name"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "entity name type",
+                                    "enum": ["class", "object", "function", "variable"]
+                                },
+                                "methods": {
+                                    "type": "array",
+                                    "description": "only applicable to class or object type entity, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "properties": {
+                                    "type": "array",
+                                    "description": "only applicable to class or object type entity, if sub-entity involved include whole path",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": ["name","type"]
+                        }
+                    },
+                    "imported_entities": {
+                        "type": "array",
+                        "description": "entities imported from external files",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "path": {
+                                    "type": "string",
+                                    "description": "path of the external entities"
+                                },
+                                "methods": {
+                                    "type": "array",
+                                    "description": "method names of the entity",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "properties": {
+                                    "type": "array",
+                                    "description": "property names of the entity",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": ["name"]
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

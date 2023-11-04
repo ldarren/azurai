@@ -36,6 +36,10 @@ module.exports = {
 		return this.next()
 	},
 
+	branch(route){
+		return this.next(null, route)
+	},
+
 	branchOnce(route){
 		return this.next(null, route + Date.now().toString(36))
 	},
