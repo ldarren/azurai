@@ -1,0 +1,83 @@
+[
+	["models", "type", "po/Collection", [
+		"data", 1, "options"
+	]],
+	["p/View", "view", [
+		["options", "map", {"el": ".__"}],
+		["html", "file", "Frame.html"],
+		["css", "file", "Frame.css"],
+		["env", "ref", "env"],
+		["todos", "models", [
+			["env", "ref", "env"]
+		], "ext/todos"],
+		["todoChats", "models", [
+			["env", "ref", "env"]
+		], "ext/chats"],
+		["Frame", "view", [
+			["options", "map", {"el":"#frame"}],
+			["env", "ref", "env"],
+			["models", "refs", "models"],
+			["pages","map",{
+				"chores": ["Chores","view",[
+					["options", "map", {"id":"pane0", "class": "page"}],
+					["todos", "ref", "todos"],
+					["Header", "view", [
+						["options", "map", {"tag": "header" }],
+						["tpl", "file", "Header.ejs"],
+						["css", "file", "Header.css"],
+						["data", "map", {
+							"leftText": "plus",
+							"title": "Chores",
+							"rightText": "search"
+						}]
+					]],
+					["TodoNew", "view", [
+						["css", "file", "TodoNew.css"],
+						["todos", "ref", "todos"]
+					]],
+					["Scrollable", "view", [
+						["todos", "ref", "todos"],
+						["Todo", "view", [
+							["css", "file", "Todo.css"],
+							["tpl", "file", "Todo.ejs"],
+							["todos", "ref", "todos"]
+						]]
+					]]
+				]],
+				"chore": ["Chore","view",[
+					["options", "map", {"id":"pane0", "class": "page"}],
+					["todos", "ref", "todos"],
+					["todoChats", "ref", "todoChats"],
+					["Header", "view", [
+						["options", "map", {"tag": "header" }],
+						["tpl", "file", "Header.ejs"],
+						["css", "file", "Header.css"],
+						["data", "map", {
+							"leftText": "back",
+							"title": "Mermaid integration",
+							"subtitle": "todo"
+						}]
+					]],
+					["Scrollable", "view", [
+						["todos", "ref", "todos"],
+						["todoChats", "ref", "todoChats"],
+						["Chat", "view", [
+							["css", "file", "Chat.css"],
+							["tpl", "file", "Chat.ejs"],
+							["todoChats", "ref", "todoChats"]
+						]]
+					]],
+					["ChatInput", "view", [
+						["css", "file", "ChatInput.css"],
+						["todos", "ref", "todos"]
+					]]
+				]]
+			}],
+			["routes","map",{
+				"chores":["chores"],
+				"chores/:id":["chore"],
+				"":["chores"]
+			}]
+		]]
+	]]
+]

@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS memory_chunks (
 CREATE UNIQUE INDEX IF NOT EXISTS uniq_memory_chunk_memory_id_name ON memory_chunks (memory_id, name);
 
 CREATE TABLE IF NOT EXISTS chat_sessions (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY,
   agent_id INT NOT NULL,
   title VARCHAR,
   model VARCHAR NOT NULL,
@@ -85,13 +85,13 @@ CREATE TABLE IF NOT EXISTS chat_sessions (
   uby INT,
   uat TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE INDEX IF NOT EXISTS chat_sessions_cby_s ON chat_sessions (cby, s);
+CREATE INDEX IF NOT EXISTS index_chat_sessions_cby_s ON chat_sessions (cby, s);
 
 CREATE TABLE IF NOT EXISTS chats (
-  id SERIAL PRIMARY KEY,
-  session_id INT NOT NULL,
-  parent_id INT,
-  function_id INT,
+  id UUID PRIMARY KEY,
+  session_id UUID NOT NULL,
+  parent_id UUID,
+  function_id UUID,
   role VARCHAR NOT NULL,
   content VARCHAR NOT NULL,
   tokens INT,
@@ -102,3 +102,4 @@ CREATE TABLE IF NOT EXISTS chats (
   uby INT,
   uat TIMESTAMPTZ DEFAULT NOW()
 );
+CREATE INDEX IF NOT EXISTS chat_sessions_cby_s ON chat_sessions (cby, s);

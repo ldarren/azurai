@@ -2,6 +2,7 @@
 *.pdf
 *_env
 aui.*.json
+chores.*.json
 env.json
 .DS_Store
 ref/

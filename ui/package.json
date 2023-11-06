@@ -1,0 +1,27 @@
+{
+  "name": "chore",
+  "version": "0.0.1",
+  "description": "Your trusted companion for streamlining and simplifying the management of chores. Chore is not just your ordinary to-do list app; it's your personal assistant powered by AI, designed to make chore management a breeze.",
+  "main": "main/chores.js",
+  "scripts": {
+    "test": "tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ldarren/azurai.git"
+  },
+  "keywords": [
+    "todo",
+    "ai",
+    "assistant"
+  ],
+  "author": "Darren Liew",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ldarren/azurai/issues"
+  },
+  "homepage": "https://github.com/ldarren/azurai#readme",
+  "dependencies": {
+    "pico-client": "^0.8.2"
+  }
+}
