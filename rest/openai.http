@@ -1,7 +1,6 @@
-###
-# @prompt openai_api_key
+### Get Model List
 GET https://api.openai.com/v1/models
-Authorization: Bearer {{openai_api_key}}
+Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
 
 ### chat completion
 # @prompt openai_api_key
@@ -17,7 +16,7 @@ Content-Type: application/json
     ]
 }
 
-### Source Code Extraction 1
+### Source Code Extraction
 POST https://api.openai.com/v1/chat/completions
 Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
 Content-Type: application/json
@@ -136,315 +135,19 @@ Content-Type: application/json
     ]
 }
 
-### Source Code Extraction 1a
+### Use Chat Completion for Translation
 POST https://api.openai.com/v1/chat/completions
 Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
 Content-Type: application/json
 
 {
-    "model":"gpt-3.5-turbo-0613",
+    "model":"gpt-4-1106-preview",
     "messages": [
-        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities, imported entities and methods or properties used in a file. at the end of all extraction output 'DONE'."},
-        {"role":"user", "content":"```js\nconst path = require('node:path')\nmodule.exports = {\ncombine(arr){return path.join(...arr)}\n}```"}
-    ],
-    "functions": [
-        {
-            "name": "exported_entity",
-            "description": "document an exported entity with entity name, entity methos or properties used",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "entity_name": {
-                        "type": "string",
-                        "description": "entity name"
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "entity name type",
-                        "enum": ["class", "instance", "object", "function", "variable"]
-                    },
-                    "entity_method_names": {
-                        "type": "array",
-                        "description": "only applicable to class or instance type entity, if sub-entity involved include whole path",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "entity_properties_names": {
-                        "type": "array",
-                        "description": "only applicable to class or instance type entity, if sub-entity involved include whole path",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "required": ["entity_name","type"]
-            }
-        },
-        {
-            "name": "non_exported_entity",
-            "description": "document an non exported entity (or private entity) with entity name, entity methos or properties used",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "entity_name": {
-                        "type": "string",
-                        "description": "entity name"
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "entity name type",
-                        "enum": ["class", "instance", "object", "function", "variable"]
-                    },
-                    "entity_method_names": {
-                        "type": "array",
-                        "description": "class or instance type entity method name, if sub-entity involved include whole path",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "entity_properties_names": {
-                        "type": "array",
-                        "description": "class or instance type entity properties name, if sub-entity involved include whole path",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "required": ["entity_name", "type"]
-            }
-        },
-        {
-            "name": "imported_entity",
-            "description": "document an imported entity (or private entity) with entity name, entity methos or properties used",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "entity_name": {
-                        "type": "string",
-                        "description": "entity name"
-                    },
-                    "entity_method_names": {
-                        "type": "array",
-                        "description": "entity method name, if sub-entity involved include whole path",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "entity_properties_names": {
-                        "type": "array",
-                        "description": "entity properties name, if sub-entity involved include whole path",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "required": ["entity_name"]
-            }
-        }
-    ]
-}
-
-### Source Code Extraction 2
-## REF: https://community.openai.com/t/emulated-multi-function-calls-within-one-request/269582
-POST https://api.openai.com/v1/chat/completions
-Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
-Content-Type: application/json
-
-{
-    "model":"gpt-3.5-turbo-0613",
-    "messages": [
-        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities and imported entities along with the methods or properties used in a file. at the end of all extraction output 'DONE'."},
-        {"role":"user", "content":"```js\nconst path = require('node:path')\nmodule.exports = {\ncombine(arr){return path.join(...arr)}\n}```"}
-    ],
-    "functions": [
-        {
-            "name": "multi_Func",
-            "description": "Call three functions in one call",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "exported_entity": {
-                        "name": "exported_entity",
-                        "description": "document an exported entity with entity name, entity methods or properties used",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "entity_name": {
-                                    "type": "string",
-                                    "description": "entity name"
-                                },
-                                "type": {
-                                    "type": "string",
-                                    "description": "entity name type",
-                                    "enum": ["class", "instance", "object", "function", "variable"]
-                                },
-                                "entity_method_names": {
-                                    "type": "array",
-                                    "description": "class or instance type entity method name, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "entity_properties_names": {
-                                    "type": "array",
-                                    "description": "class or instance type entity properties name, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "required": ["entity_name","type"]
-                        }
-                    },
-                    "non_exported_entity": {
-                        "name": "non_exported_entity",
-                        "description": "document an entity (or private entity) with entity name, entity methods or properties used",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "entity_name": {
-                                    "type": "string",
-                                    "description": "entity name"
-                                },
-                                "type": {
-                                    "type": "string",
-                                    "description": "entity name type",
-                                    "enum": ["class", "instance", "object", "function", "variable"]
-                                },
-                                "entity_method_names": {
-                                    "type": "array",
-                                    "description": "class or instance type entity method name, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "entity_properties_names": {
-                                    "type": "array",
-                                    "description": "class or instance type entity properties name, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "required": ["entity_name","type"]
-                        }
-                    },
-                    "imported_entity": {
-                        "name": "imported_entity",
-                        "description": "example `import cry from 'node;crypto` imported entity will be `node:crypto`",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "entity_name": {
-                                    "type": "string",
-                                    "description": "entity name"
-                                },
-                                "entity_method_names": {
-                                    "type": "array",
-                                    "description": "entity method name, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "entity_properties_names": {
-                                    "type": "array",
-                                    "description": "entity properties name, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "required": ["entity_name"]
-                        }
-                    }
-                }, "required": ["exported_entity", "non_exported_entity", "imported_entity"]
-            }
-        }
-    ]
-}
-
-### Source Code Extraction 3
-POST https://api.openai.com/v1/chat/completions
-Authorization: Bearer {{$dotenv %OPENAI_API_KEY_DEV}}
-Content-Type: application/json
-
-{
-    "model":"gpt-3.5-turbo-0613",
-    "messages": [
-        {"role":"system", "content":"You are a code documentation assistant.\nyou help extract all the exported entities, non-exported entities, imported entities and methods or properties used in a file."},
-        {"role":"user", "content":"```js\nconst path = require('node:path')\nconst qs = require('node:querystring')\nmodule.exports = {\ncombine(arr){return path.join(...arr)}\n}```"}
-    ],
-    "functions": [
-        {
-            "name": "save_entities",
-            "description": "pass the entities as input parameters",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "exported_entities": {
-                        "type": "array",
-                        "description": "entities that is exported or public",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                    "description": "entity name"
-                                },
-                                "type": {
-                                    "type": "string",
-                                    "description": "entity name type",
-                                    "enum": ["class", "object", "function", "variable"]
-                                },
-                                "methods": {
-                                    "type": "array",
-                                    "description": "only applicable to class or object type entity, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "properties": {
-                                    "type": "array",
-                                    "description": "only applicable to class or object type entity, if sub-entity involved include whole path",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "required": ["name","type"]
-                        }
-                    },
-                    "imported_entities": {
-                        "type": "array",
-                        "description": "entities imported from external files",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "path": {
-                                    "type": "string",
-                                    "description": "path of the external entities"
-                                },
-                                "methods": {
-                                    "type": "array",
-                                    "description": "method names of the entity",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "properties": {
-                                    "type": "array",
-                                    "description": "property names of the entity",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "required": ["name"]
-                        }
-                    }
-                }
-            }
-        }
+        {"role":"system", "content":"You are a translator"},
+        {"role":"user", "content":"translate this to english\n```桃花塢裡桃花庵，桃花庵下桃花仙。\n桃花仙人種桃樹，又摘桃花賣酒錢。\n酒醒只在花前坐，酒醉還來花下眠。\n半醒半醉日復日，花落花開年復年。\n但願老死花酒間，不願鞠躬車馬前。\n車塵馬足富者趣，酒盞花枝貧者緣。\n若將富貴比貧賤，一在平地一在天。\n若將貧賤比車馬，他得驅馳我得閒。\n別人笑我太瘋癲，我笑他人看不穿。\n不見五陵豪傑墓，無花無酒鋤作田。```"},
+        {"role": "assistant","content": "In Peach Blossom Hut lies Peach Blossom Hermitage, beneath which dwells the Peach Blossom Immortal. \nThe Peach Blossom Immortal plants peach trees, picks their blossoms to sell for wine money. \nAwake, he sits before the flowers; drunk, he sleeps beneath them too. \nDay by day, half-sober, half-drunk; year by year, as flowers fall and bloom anew. \nHe simply wishes to die amidst wine and flowers, with no desire to bow before the wealthy's carriages. \nCarriages and horses kick up dust—it’s the pursuit of the rich; wine cups and flower branches are the lot of the poor. \nIf we compare riches to poverty, one is on the ground, the other soars to the heavens. \nIf we compare poverty to carriages and horses, they have the drive, while I have leisure. \nOthers mock me for being overly mad; I laugh at them, unseen through their opaque view. \nThey fail to see the graves of the eminent and mighty; without flowers, without wine, they plow the fields."},
+        {"role":"user", "content":"`無花無酒鋤作田` should it be translated as the graves have no flowers and wine and had been plow to farm fields?"},
+        {"role": "assistant","content": "Yes, the line `無花無酒鋤作田` suggests that the graves of once-great individuals, who no longer receive flowers or wine in tribute or remembrance, are now forgotten and reclaimed by the land to be plowed like ordinary fields. The presence of flowers and wine at a grave typically indicates that the person buried there was honored and remembered. The absence of these tributes and the act of plowing indicate that the person has been forgotten, and the land is simply being used for agriculture, stripping away any former glory.\n\nSo, the more contextually accurate translation for `無花無酒鋤作田` would be, \"The graves of the mighty lack flowers and wine; they're now just fields to be plowed.\""},
+        {"role":"user","content": "please update the translation"}
     ]
 }

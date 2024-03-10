@@ -12,6 +12,7 @@ ssh-keygen -t rsa -b 4096 -m PEM -E SHA512 -f azurai.pem
 # Don't add passphrase
 openssl rsa -in azurai.pem -pubout -outform PEM -out azurai.pub
 ```
+
 ### Index Process
 REF: https://juejin.cn/post/7286912324593598522
 - iterate with github files, create summary and question for each file
